@@ -1,0 +1,15 @@
+
+.fullscreen {
+    width: 100vw;
+    max-height: 100vh;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.new-book-form {
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    margin: 5vh;
+}

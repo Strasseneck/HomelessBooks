@@ -1,0 +1,56 @@
+{% extends "books/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="fullscreen">
+
+    <div class="page-header">
+        <strong>Add new book</strong>
+    </div>
+    
+
+    <labe for="search-form">Enter a valid ISBN to retrieve book details</labe>
+    <div class="search-form">
+        <label for="isbn-search">ISBN</label>
+        <input type="text" id="isbn-search" name="isbn-search" max-length="15">
+        <input type="submit" id="isbn-submit" value="ISBN Search" name="isbn-submit">
+    </div>
+
+    
+    <form class="new-book-form">
+        <label for="new-book-form"><strong>New Book</strong></label>
+        <label for="book-title">Title</label>
+        <input type="text" id="book-title" name="book-title">
+        <label for="book-subtitles">Subtitle(s)</label>
+        <input type="text" id="book-subtitles" name="book-subtitles">
+        <label for="book-authors">Author(s)</label>
+        <input type="text" id="book-authors" name="book-authors">
+        <label for="book-publisher">Publisher</label>
+        <input type="text" id="book-publisher" name="book-publisher">
+        <label for="book-category">Category</label>
+        <input type="text" id="book-category" name="book-category">
+        <label for="book-publication-date">Publication Date</label>
+        <input type="text" id="book-publication-date" name="book-publication-date">
+        <label for="book-page-count">Page Count</label>
+        <input type="textfield" id="book-page-count" name="book-page-count">
+        <label for="book-height">Height</label>
+        <input type="text" id="book-height" name="book-height">
+        <label for="book-width">Width</label>
+        <input type="text" id="book-width" name="book-width">
+        <label for="book-thickness">Thickness</label>
+        <input type="text" id="book-thickness" name="book-thickness">
+        <label for="book-print-type">Print Type</label>
+        <input type="text" id="book-print-type" name="book-print-type">
+        <label for="book-description">Description</label>
+        <textarea id="book-description" name="book-description" cols="50" rows="7"></textarea>
+    </form>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
