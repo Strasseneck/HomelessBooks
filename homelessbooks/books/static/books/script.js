@@ -84,8 +84,9 @@ function getBookData(bookId) {
 
 // Display returned book data in form
 function displayBookData(bookData) {
-   
+
     const bookInfo = bookData.volumeInfo;
+    console.log(bookInfo);
 
     // Get form elements and display info
     const $title = $('#book-title').val(bookInfo.title);
@@ -97,10 +98,13 @@ function displayBookData(bookData) {
     const $pageCount = $('#book-page-count').val(bookInfo.printedPageCount);
     const $height = $('#book-height').val(bookInfo.dimensions.height);
     const $width = $('#book-width').val(bookInfo.dimensions.width);
-    const $thickness = $('#book-thickness').val(bookInfo.dimensions.$thickness);
+    const $thickness = $('#book-thickness').val(bookInfo.dimensions.thickness);
     const $printType = $('#book-print-type').val(bookInfo.printType);
-    const $description = $('#book-description').val(bookInfo.description);
-a
+    const $description = $('#book-description');
 
+    // Generate book description
+    const bookLanguage = bookInfo.language
 
+    let descriptionText = `CONDITION, HARDBACK OR PAPERBACK, ${bookLanguage}, ${bookInfo.printedPageCount}, ${bookInfo.dimensions.height} high, ${bookInfo.dimensions.width} wide, ${bookInfo.dimensions.thickness}, thick. ${bookInfo.description}`;
+    $description.val(descriptionText);
 }
