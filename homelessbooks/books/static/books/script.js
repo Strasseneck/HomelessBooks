@@ -1,4 +1,30 @@
-// Get book info function
+// Get api key via fetch function
+let googleApiKey;
+
+function getApiKey() {
+    console.log('function get api key');
+    fetch('/get_api_key')
+        .then(response => {
+            if(!response.ok) {
+                throw new Error('Error retrieving API key');
+            }
+            return response.json();
+        })
+        .then(data => {
+            let apiKey = data.api_key;
+            console.log(apiKey);
+            // assign to global variable
+            googleApiKey = apiKey;
+        })
+        .catch(error => {
+            console.error(error);
+            return null;
+        })
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    getApiKey();
+})
 
 // Get button click
 $('#isbn-submit').on('click', function () {
@@ -26,7 +52,7 @@ async function getBookDataIsbn(isbn) {
 
     try {
         // Request book data using isbn
-        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleApiKey}`);
     
         if(!response.ok) {
             throw new Error(`HTTP error! Status ${response.status}`)
@@ -64,8 +90,9 @@ async function getBookId(isbn) {
 function getBookData(bookId) {
     console.log('get book data with bookid function')
     let bookData;
+
     // Get book volume resource using book id
-    fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
+    fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}&key=${googleApiKey}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -103,8 +130,8 @@ function displayBookData(bookData) {
     const $description = $('#book-description');
 
     // Generate book description
-    const bookLanguage = bookInfo.language
+    const bookLanguage = bookInfo.language;
 
-    let descriptionText = `CONDITION, HARDBACK OR PAPERBACK, ${bookLanguage}, ${bookInfo.printedPageCount}, ${bookInfo.dimensions.height} high, ${bookInfo.dimensions.width} wide, ${bookInfo.dimensions.thickness}, thick. ${bookInfo.description}`;
+    let descriptionText = bookInfo.description;
     $description.val(descriptionText);
 }
