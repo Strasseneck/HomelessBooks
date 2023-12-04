@@ -3,79 +3,92 @@
 
 {% block body %}
 
-<div class="fullscreen">
-<!--header-->
-    <div class="page-header">
-        <strong>Add new book</strong>
-    </div>
+<div class="container-fluid">
+  <!--header-->
+  <div class="page-header">
+      <p>Enter ISBN to retrieve book details. If book doesn't have an ISBN enter the book's title, author and the year it was published to retrieve book details.</p>
+  </div>
+  <!--searches container-->
+  <div class="container" id="searches-container">
     <!--isbn search form-->
-    <label for="isbn-search-form">Enter a valid ISBN to retrieve book details</label>
-    <div class="isbn-search-form">
-        <label for="isbn-search">ISBN:</label>
-        <input type="text" id="isbn-search" name="isbn-search" max-length="15">
-        <input type="submit" id="isbn-submit" value="Search" name="isbn-submit">
+    <div class="input-group" id="isbn-search-form">
+      <span class="input-group-text">ISBN</span>
+      <input type="text" class="form-control form-control-sm" id="isbn-search" name="isbn-search" max-length="15">      
+      <input type="submit" class="btn btn-primary btn-sm" id="isbn-submit" value="Search" name="isbn-submit">
     </div>
     <!--author title search form-->
-    <label for="title-author-search-form">Alternatively, if the book has no ISBN,  enter title, author and year published to retrieve book details</label>
-    <div class="title-author-search-form">
-        <label for="title-search">Title:</label>
-        <input type="text" id="title-search" name="title-search">
-        <label for="title-search">Author:</label>
-        <input type="text" id="author-search" name="author-search">
-        <label for="published-search">Year:</label>
-        <input type="text" id="published-search" name="published-search">
-        <input type="submit" id="title-author-submit" value="Search" name="title-author-submit">
+    <div class="input-group" id="title-author-search-form">
+      <span class="input-group-text">Title, Author, Year</span>
+      <input type="text" class="form-control form-control-sm" id="title-search" name="title-search">
+      <input type="text" class="form-control form-control-sm" id="author-search" name="author-search">
+      <input type="text" class="form-control form-control-sm" id="published-search" name="published-search">
+      <input type="submit" class="btn btn-primary btn-sm" id="title-author-submit" value="Search" name="title-author-submit">
     </div>
-    <!--new book form-->
-    <form class="new-book-form">
-      <div>     
-        <label for="book-title">Title</label>
-        <input type="text" class="form-control" id="book-title" name="book-title">
-        <label for="book-subtitles">Subtitle(s)</label>
-        <input type="text" class="form-control" id="book-subtitles" name="book-subtitles">
-        <label for="book-authors">Author(s)</label>
-        <input type="text" class="form-control" id="book-authors" name="book-authors">
-        <label for="book-publisher">Publisher</label>
-        <input type="text" class="form-control" id="book-publisher" name="book-publisher">
-        <label for="book-category">Category</label>
-        <input type="text" class="form-control" id="book-category" name="book-category">
-        <label for="book-publication-date">Publication Date</label>
-        <input type="text" class="form-control" id="book-publication-date" name="book-publication-date">
-        <label for="book-page-count">Page Count</label>
-        <input type="text" class="form-control" id="book-page-count" name="book-page-count">
-        <label for="book-height">Height</label>
-        <input type="text" class="form-control" id="book-height" name="book-height">
-        <label for="book-width">Width</label>
-        <input type="text" class="form-control" id="book-width" name="book-width">
-        <label for="book-thickness">Thickness</label>
-        <input type="text" class="form-control" id="book-thickness" name="book-thickness">
-        <label for="book-print-type">Print Type</label>
-        <input type="text" class="form-control" id="book-print-type" name="book-print-type">
+  </div>
+  <!--new book form-->
+  <div class="container-fluid" id="new-book-forms-container">
+      <div class="mb-3">
+        <div class="row">
+          <div class="col">
+            <label for="book-title">Title</label>
+            <input type="text" class="form-control form-control-sm" id="book-title" name="book-title">
+            <label for="book-subtitles">Subtitle(s)</label>
+            <input type="text" class="form-control form-control-sm" id="book-subtitles" name="book-subtitles">
+            <label for="book-authors">Author(s)</label>
+            <input type="text" class="form-control form-control-sm" id="book-authors" name="book-authors">
+            <label for="book-publisher">Publisher</label>
+            <input type="text" class="form-control form-control-sm" id="book-publisher" name="book-publisher">
+            <label for="book-category">Category</label>
+            <input type="text" class="form-control form-control-sm" id="book-category" name="book-category">
+            <label for="book-publication-date">Publication Date</label>
+            <input type="text" class="form-control form-control-sm" id="book-publication-date" name="book-publication-date">
+          </div>
+          <div class="col">
+            <label for="book-page-count">Page Count</label>
+            <input type="text" class="form-control form-control-sm" id="book-page-count" name="book-page-count">
+            <label for="book-height">Height</label>
+            <input type="text" class="form-control form-control-sm" id="book-height" name="book-height">
+            <label for="book-width">Width</label>
+            <input type="text" class="form-control form-control-sm" id="book-width" name="book-width">
+            <label for="book-thickness">Thickness</label>
+            <input type="text" class="form-control form-control-sm" id="book-thickness" name="book-thickness">
+            <label for="book-print-type">Print Type</label>
+            <input type="text" class="form-control form-control-sm" id="book-print-type" name="book-print-type">
+          </div>
+          <div class="col">           
+            <label for="book-description">Description</label>
+            <textarea class="form-control form-control-sm" id="book-description" name="book-description" cols="50" rows="7"></textarea>
+            <div class="input-group mb-3" id="book-binding-form">
+              <label class="input-group-text" for="book-binding-dropdown">Binding</label>
+              <select class="form-select form-select-sm" id="book-binding-dropdown">
+                <option selected>Choose...</option>
+                <option value="hardback">Hardback</option>
+                <option value="paperback">Paperback</option>
+              </select>
+            </div>
+            <div class="input-group mb-3" id="book-condition-form">
+              <label class="input-group-text" for="book-condition">Condition</label>
+              <select class="form-select form-select-sm" id="book-condition">
+                <option selected>Choose...</option>
+                <option value="asnew">As New</option>
+                <option value="fine">Fine</option>
+                <option value="verygood">Very Good</option>
+                <option value="good">Good</option>
+                <option value="fair">Fair</option>
+                <option value="poor">Poor</option>
+              </select>
+            </div> 
+          </div>
+          <div class="col">
+            <!--image upload form-->
+            <label for="image-upload-form">Upload Images</label>
+            <div class="input-group mb-3">
+              <input type="file" class="form-control form-control-sm" id="book-image-upload" accept="image/*" multiple>
+              <button type="submit" class="btn btn-primary btn-sm">Upload</button>
+            </div>
+          </div>
+        </div>  
       </div>
-      <div>
-        <label class="input-group-text" for="book-binding-dropdown">Binding</label>
-        <select class="form-select" id="book-binding-dropdown">
-          <option selected>Choose...</option>
-          <option value="hardback">Hardback</option>
-          <option value="paperback">Paperback</option>
-        </select>
-      </div>
-      <div>
-        <label class="input-group-text" for="book-condition">Condition</label>
-        <select class="form-select" id="book-condition">
-          <option selected>Choose...</option>
-          <option value="asnew">As New</option>
-          <option value="fine">Fine</option>
-          <option value="verygood">Very Good</option>
-          <option value="good">Good</option>
-          <option value="fair">Fair</option>
-          <option value="poor">Poor</option>
-        </select>
-      </div>
-      <div>
-        <label for="book-description">Description</label>
-        <textarea class="form-control" id="book-description" name="book-description" cols="50" rows="7"></textarea>
-      </div>
-    </form>
-</div>
+  </div>
+
 {% endblock %}

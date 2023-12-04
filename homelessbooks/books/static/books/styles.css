@@ -1,3 +1,4 @@
+/* Add Book Page */
 
 .fullscreen {
     width: 100vw;
@@ -7,9 +8,28 @@
     align-items: center;
 }
 
-.new-book-form {
+#new-book-form {
     display: flex;
     flex-direction: column;
     width: 40vw;
     margin: 5vh;
+}
+#searches-container {
+  margin-left: 0;
+}
+
+#new-book-forms-container {
+    display: flex;
+}
+
+#isbn-search-form {
+    margin: 1vh;
+}
+
+#title-author-search-form {
+    margin: 1vh;
+}
+
+#book-binding-form {
+    margin-top: 1vh;
 }
