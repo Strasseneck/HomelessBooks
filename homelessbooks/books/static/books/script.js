@@ -92,7 +92,7 @@ function getBookData(bookId) {
     let bookData;
 
     // Get book volume resource using book id
-    fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}&key=${googleApiKey}`)
+    fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
