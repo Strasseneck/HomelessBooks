@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
     getApiKey();
 })
 
-// Get button click
+// ISBN search button
 $('#isbn-submit').on('click', function () {
     console.log('ISBN search clicked');
     // Define isbn variable
@@ -36,13 +36,28 @@ $('#isbn-submit').on('click', function () {
     console.log(isbn)
     if(isbn !== '') {
         // Call get book id function
-        getBookId(isbn);
+        getBookIdIsbn(isbn);
     }
     else {
         console.log('no ISBN input');
         return;
     }
     
+})
+
+// Title author search button
+$('#title-author-submit').on('click', function () {
+    console.log('title author search clicked');
+    // define title and author
+    let title = $('#title-search').val();
+    let author = $('#author-search').val();
+    if(title !== "" && author !== "") {
+        getBookIdTitleAuthor(title, author);
+    }
+    else {
+        console.log('Title or author missing');
+        return;
+    }
 })
 
 // Get google volume id via ISBN
@@ -69,8 +84,57 @@ async function getBookDataIsbn(isbn) {
         }
 }
 
-// Get bookId function
-async function getBookId(isbn) {
+// Get book data title and author
+async function getBookDataTitleAuthor(title, author) {
+    console.log('Title author search function called');
+    console.log(`Title: ${title}`);
+    console.log(`Author: ${author}`);
+    try {
+        // Request book data using isbn
+        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${title}+inauthor:${author}&key=${googleApiKey}`);
+    
+        if(!response.ok) {
+            throw new Error(`HTTP error! Status ${response.status}`)
+        }
+
+        // If response is okay store result and return
+        const result = await response.json();
+        return result;
+        }
+        catch(error) {
+            // Catch errors
+            console.error('Error getting book data:', error);
+            return null;
+        }
+}
+
+// Get google volume id via title and author
+async function getBookIdTitleAuthor(title, author) {
+    let bookId;
+    // Call async function to get data
+    const result = await getBookDataTitleAuthor(title, author);
+
+    if(result !== null && result.items[0].id !== undefined) {
+        // Get year
+        let year = $('#published-search').val();
+        let results = result.items;
+        console.log(results);
+        // Loop through results to find published in year
+        for(let i = 0; i < results.length; i++) {
+            if(results[i].volumeInfo.publishedDate.includes(year)) {
+                bookId = results[i].id;
+                getBookData(bookId);
+            };
+        }
+    }
+    else {
+        console.log('Search returned no bookId')
+    }
+
+}
+
+// Get bookId with ISBN function
+async function getBookIdIsbn(isbn) {
     let bookId;
     // Call async function to get data
     const result = await getBookDataIsbn(isbn);
@@ -89,6 +153,7 @@ async function getBookId(isbn) {
 // Get book data with bookId function
 function getBookData(bookId) {
     console.log('get book data with bookid function')
+    console.log(bookId);
     let bookData;
 
     // Get book volume resource using book id
