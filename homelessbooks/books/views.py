@@ -1,4 +1,5 @@
 import json
+import os
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -13,6 +14,10 @@ def index(request):
 
 def add_book(request):
     return render(request, "books/addbook.html")
+
+def get_api_key(request):
+    api_key = os.environ.get("GOOGLE_BOOKS_API_KEY")
+    return JsonResponse({'api_key': api_key})
 
 def inventory(request):
     return 
