@@ -120,11 +120,9 @@ async function getBookIdTitleAuthor(title, author) {
         let results = result.items;
         console.log(results);
         // Loop through results to find published in year
-        for(let i = 0; i < results.length; i++) {
-            if(results[i].volumeInfo.publishedDate.includes(year)) {
-                bookId = results[i].id;
-                getBookData(bookId);
-            };
+        const book = results.find(result => result.volumeInfo.publishedDate.includes(year));
+        if(book) {
+            return getBookData(book.id);
         }
     }
     else {
@@ -188,9 +186,13 @@ function displayBookData(bookData) {
     const $category = $('#book-category')
     const $publicationDate = $('#book-publication-date').val(bookInfo.publishedDate);
     const $pageCount = $('#book-page-count').val(bookInfo.printedPageCount);
-    const $height = $('#book-height').val(bookInfo.dimensions.height);
-    const $width = $('#book-width').val(bookInfo.dimensions.width);
-    const $thickness = $('#book-thickness').val(bookInfo.dimensions.thickness);
+
+    // Check if dimensions included
+    if(bookInfo.dimensions) {
+        const $height = $('#book-height').val(bookInfo.dimensions.height);
+        const $width = $('#book-width').val(bookInfo.dimensions.width);
+        const $thickness = $('#book-thickness').val(bookInfo.dimensions.thickness);
+    }
     const $printType = $('#book-print-type').val(bookInfo.printType);
     const $description = $('#book-description');
 
@@ -202,6 +204,7 @@ function displayBookData(bookData) {
 
     // Check for image src
     if(bookInfo.imageLinks.smallThumbnail !== undefined) {
+        console.log("There is an image associated")
         let image = bookInfo.imageLinks.smallThumbnail;
         createImagePreview(image);
     }
