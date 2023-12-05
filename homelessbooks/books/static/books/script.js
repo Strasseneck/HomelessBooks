@@ -140,8 +140,7 @@ async function getBookIdIsbn(isbn) {
     if(result !== null && result.items[0].id !== undefined) {
         // If valid book data returned get book id call function
         bookId = result.items[0].id;
-        console.log(`Book Volume ID : ${bookId}`);
-        getBookData(bookId);
+        return getBookData(bookId);
     }
     else {
         console.log('Search returned no bookId')
@@ -199,20 +198,27 @@ function displayBookData(bookData) {
     // Generate book description
     const bookLanguage = bookInfo.language;
 
-    let descriptionText = bookInfo.description;
+    let descriptionText = stripHtmlTags(bookInfo.description);
     $description.val(descriptionText);
 
     // Check for image src
     if(bookInfo.imageLinks.smallThumbnail !== undefined) {
         console.log("There is an image associated")
         let image = bookInfo.imageLinks.smallThumbnail;
+        // Call function to create image preview
         createImagePreview(image);
     }
 }
-
+// Preview image
 function createImagePreview(image) {
-    let $imagePreview = $('<img>')
+    // create element and append to images container
+    $('<img>')
     .addClass('img-thumbnail')
     .attr('src', `${image}`)
     .appendTo('#image-previews');
+}
+
+// Strip html tags
+function stripHtmlTags(text) {
+    return text.replace(/<[^>]*>/g, '');
 }
