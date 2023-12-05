@@ -54,11 +54,24 @@
             <input type="text" class="form-control form-control-sm" id="book-thickness" name="book-thickness">
             <label for="book-print-type">Print Type</label>
             <input type="text" class="form-control form-control-sm" id="book-print-type" name="book-print-type">
+            <div class="input-group mb-3 drop-down-form">
+              <label class="input-group-text" for="dust-jacket-dropdown">Dust Jacket Condition</label>
+              <select class="form-select form-select-sm" id="dust-jacket-dropdown">
+                <option selected>Choose...</option>
+                <option value="none">None</option>
+                <option value="asnew">As New</option>
+                <option value="fine">Fine</option>
+                <option value="verygood">Very Good</option>
+                <option value="good">Good</option>
+                <option value="fair">Fair</option>
+                <option value="poor">Poor</option>
+              </select>
+            </div>
           </div>
           <div class="col">           
             <label for="book-description">Description</label>
             <textarea class="form-control form-control-sm" id="book-description" name="book-description" cols="50" rows="7"></textarea>
-            <div class="input-group mb-3" id="book-binding-form">
+            <div class="input-group mb-3 drop-down-form">
               <label class="input-group-text" for="book-binding-dropdown">Binding</label>
               <select class="form-select form-select-sm" id="book-binding-dropdown">
                 <option selected>Choose...</option>
@@ -66,7 +79,7 @@
                 <option value="paperback">Paperback</option>
               </select>
             </div>
-            <div class="input-group mb-3" id="book-condition-form">
+            <div class="input-group mb-3 drop-down-form">
               <label class="input-group-text" for="book-condition">Condition</label>
               <select class="form-select form-select-sm" id="book-condition">
                 <option selected>Choose...</option>
@@ -80,8 +93,10 @@
             </div> 
           </div>
           <div class="col">
+            <p>Book Images</p>
+            <!--image preview-->
+            <div id="image-previews"></div>
             <!--image upload form-->
-            <label for="image-upload-form">Upload Images</label>
             <div class="input-group mb-3">
               <input type="file" class="form-control form-control-sm" id="book-image-upload" accept="image/*" multiple>
               <button type="submit" class="btn btn-primary btn-sm">Upload</button>

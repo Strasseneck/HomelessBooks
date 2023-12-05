@@ -199,4 +199,17 @@ function displayBookData(bookData) {
 
     let descriptionText = bookInfo.description;
     $description.val(descriptionText);
+
+    // Check for image src
+    if(bookInfo.imageLinks.smallThumbnail !== undefined) {
+        let image = bookInfo.imageLinks.smallThumbnail;
+        createImagePreview(image);
+    }
+}
+
+function createImagePreview(image) {
+    let $imagePreview = $('<img>')
+    .addClass('img-thumbnail')
+    .attr('src', `${image}`)
+    .appendTo('#image-previews');
 }
