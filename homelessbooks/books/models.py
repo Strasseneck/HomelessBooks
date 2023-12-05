@@ -19,9 +19,15 @@ class Book(models.Model):
     condition = models.CharField(max_length=10)
     images = models.ManyToManyField('BookImage', blank=True, related_name='photos')
 
+    def __str__(self):
+        return self.title
+
 class BookImage(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='book_images/')
+
+    def __str__(self):
+        return f"{self.book.title} - Image{self.id}"
 
 
 
