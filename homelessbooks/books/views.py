@@ -14,16 +14,17 @@ def index(request):
     return render(request, "books/index.html")
 
 def add_book(request):
-     # Check for POST
+    # Check for POST
     if request.method == "POST":
         # Create form populate with data
-        form = ImageUploadForm(request.POST)
+        form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            return HttpResponseRedirect()
+            # Save image
+            form.save()
     # If any other method, blank form
     else:
         form = ImageUploadForm()
-    return render(request, "books/addbook.html", {'form': form})
+        return render(request, "books/addbook.html", {'form': form})
 
 def get_api_keys(request):
     google_api_key = os.environ.get("GOOGLE_BOOKS_API_KEY")

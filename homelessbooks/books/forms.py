@@ -7,5 +7,5 @@ class ImageUploadForm(forms.ModelForm):
         fields = ['image']
 
         widget = { 
-            'image': forms.Select(attrs={'class': 'form-control form-control-sm'})
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'})
         }
