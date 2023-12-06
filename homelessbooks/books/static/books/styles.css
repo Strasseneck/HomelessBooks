@@ -34,3 +34,8 @@
 .drop-down-form {
     margin-top: 1vh;
 }
+
+.img-thumbnail {
+    width: 150px;
+    height: 200px;
+}

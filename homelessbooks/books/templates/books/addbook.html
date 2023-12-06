@@ -14,7 +14,7 @@
     <div class="input-group" id="isbn-search-form">
       <span class="input-group-text">ISBN</span>
       <input type="text" class="form-control form-control-sm" id="isbn-search" name="isbn-search" max-length="15">      
-      <input type="submit" class="btn btn-primary btn-sm" id="isbn-submit" value="Search" name="isbn-submit">
+      <input type="submit" class="btn btn-outline-primary btn-sm" id="isbn-submit" value="Search" name="isbn-submit">
     </div>
     <!--author title search form-->
     <div class="input-group" id="title-author-search-form">
@@ -22,14 +22,16 @@
       <input type="text" class="form-control form-control-sm" id="title-search" name="title-search">
       <input type="text" class="form-control form-control-sm" id="author-search" name="author-search">
       <input type="text" class="form-control form-control-sm" id="published-search" name="published-search">
-      <input type="submit" class="btn btn-primary btn-sm" id="title-author-submit" value="Search" name="title-author-submit">
+      <input type="submit" class="btn btn-outline-primary btn-sm" id="title-author-submit" value="Search" name="title-author-submit">
     </div>
   </div>
   <!--new book form-->
   <div class="container-fluid" id="new-book-forms-container">
       <div class="mb-3">
+        {% csrf_token %}
         <div class="row">
           <div class="col">
+            <input type="hidden" id="book-uid" name="book-uid" value="">
             <label for="book-title">Title</label>
             <input type="text" class="form-control form-control-sm" id="book-title" name="book-title">
             <label for="book-subtitles">Subtitle(s)</label>
@@ -56,7 +58,7 @@
             <input type="text" class="form-control form-control-sm" id="book-print-type" name="book-print-type">
             <div class="input-group mb-3 drop-down-form">
               <label class="input-group-text" for="dust-jacket-dropdown">Dust Jacket Condition</label>
-              <select class="form-select form-select-sm" id="dust-jacket-dropdown">
+              <select class="form-select form-select-sm" id="dust-jacket" name="book-dust-jacket">
                 <option selected>Choose...</option>
                 <option value="none">None</option>
                 <option value="asnew">As New</option>
@@ -73,7 +75,7 @@
             <textarea class="form-control form-control-sm" id="book-description" name="book-description" cols="50" rows="7"></textarea>
             <div class="input-group mb-3 drop-down-form">
               <label class="input-group-text" for="book-binding-dropdown">Binding</label>
-              <select class="form-select form-select-sm" id="book-binding-dropdown">
+              <select class="form-select form-select-sm" id="book-binding" name="book-binding">
                 <option selected>Choose...</option>
                 <option value="hardback">Hardback</option>
                 <option value="paperback">Paperback</option>
@@ -81,7 +83,7 @@
             </div>
             <div class="input-group mb-3 drop-down-form">
               <label class="input-group-text" for="book-condition">Condition</label>
-              <select class="form-select form-select-sm" id="book-condition">
+              <select class="form-select form-select-sm" id="book-condition" name="book-condition">
                 <option selected>Choose...</option>
                 <option value="asnew">As New</option>
                 <option value="fine">Fine</option>
@@ -96,16 +98,17 @@
             <p>Book Images</p>
             <!--image preview-->
             <div id="image-previews"></div>
-            <!--image upload form-->
+            <!--image upload form-->         
             <div class="input-group mb-3">
-              <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form }}
-              <button type="submit" class="btn btn-primary btn-sm">Upload</button> 
-            </div>
-          </div>
-        </div>  
+              {% csrf_token %}
+              <input type="file" accept="image/*" class="form-control" id="image-upload" name="image">
+              <input type="hidden" id="bookid-image-upload" name="bookid-image-upload" value="">
+              <button class="btn btn-outline-primary btn-sm" id="image-upload-button" type="button">Upload</button>
+            </div>    
+        </div>
+        <button class="btn btn-outline-primary btn-sm" formaction="{% url 'save_book' %}" method="post" id="save-book-button" type="submit">Save Book</button>
       </div>
   </div>
+</div>
 
 {% endblock %}

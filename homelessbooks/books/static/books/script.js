@@ -2,6 +2,7 @@
 let googleApiKey;
 let deeplApiKey;
 
+// Get api keys if it's add_book page
 function getApiKeys() {
     console.log('function get api keys');
     fetch('/get_api_keys')
@@ -25,7 +26,10 @@ function getApiKeys() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    getApiKeys();
+    if(window.location.pathname === '/add_book') {
+        getApiKeys();
+        generateRandomUid();
+    }  
 })
 
 // ISBN search button
@@ -223,8 +227,9 @@ async function translateDescription(lang, text) {
     // replace with translated text
 }
 
-// Preview uploaded images
+// Create image preview
 $('#image-upload-button').on('click', function () {
+    // Create preview
     const $input = $('#image-upload')[0];
     console.log($input);
     const file = $input.files;
@@ -237,5 +242,39 @@ $('#image-upload-button').on('click', function () {
         }
         fileReader.readAsDataURL(file[0]);
     }
-
+    saveImage($input);
 })
+
+// Save image function
+async function saveImage(input) {
+
+    // Get token
+    const token = $('[name="csrfmiddlewaretoken"]').val();
+    const bookId = $('#bookid-image-upload').val();
+    // Create form data
+    const formData = new FormData();
+    formData.append('image', input.files[0]);
+    formData.append('bookId', bookId);
+
+    // Make Fetch request
+    fetch('/upload_image', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': token,
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    })
+}
+
+// Generate random book id for linking images and book
+function generateRandomUid() {
+    $('#book-uid').val(Math.random().toString(36).substring(2,9));
+    $('#bookid-image-upload').val($('#book-uid').val());
+}
