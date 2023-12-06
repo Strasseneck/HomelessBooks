@@ -1,9 +1,10 @@
 // Get api key via fetch function
 let googleApiKey;
+let deeplApiKey;
 
-function getApiKey() {
-    console.log('function get api key');
-    fetch('/get_api_key')
+function getApiKeys() {
+    console.log('function get api keys');
+    fetch('/get_api_keys')
         .then(response => {
             if(!response.ok) {
                 throw new Error('Error retrieving API key');
@@ -11,10 +12,11 @@ function getApiKey() {
             return response.json();
         })
         .then(data => {
-            let apiKey = data.api_key;
-            console.log(apiKey);
-            // assign to global variable
-            googleApiKey = apiKey;
+            const gApiKey = data.google_api_key;
+            const dApiKey = data.deepl_api_key;
+            // Assign to global variables
+            googleApiKey = gApiKey;
+            deeplApiKey = dApiKey;    
         })
         .catch(error => {
             console.error(error);
@@ -23,16 +25,14 @@ function getApiKey() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    getApiKey();
+    getApiKeys();
 })
 
 // ISBN search button
 $('#isbn-submit').on('click', function () {
     console.log('ISBN search clicked');
-    // Define isbn variable
-    let isbn = $('#isbn-search').val();
-    // Remove hypens
-    isbn = isbn.replace(/-/g, '');
+    // Define isbn variable and remove hyphens
+    isbn = $('#isbn-search').val().replace(/-/g, '');
     console.log(isbn)
     if(isbn !== '') {
         // Call get book id function
@@ -49,8 +49,8 @@ $('#isbn-submit').on('click', function () {
 $('#title-author-submit').on('click', function () {
     console.log('title author search clicked');
     // define title and author
-    let title = $('#title-search').val();
-    let author = $('#author-search').val();
+    const title = $('#title-search').val();
+    const author = $('#author-search').val();
     if(title !== "" && author !== "") {
         getBookIdTitleAuthor(title, author);
     }
@@ -110,7 +110,6 @@ async function getBookDataTitleAuthor(title, author) {
 
 // Get google volume id via title and author
 async function getBookIdTitleAuthor(title, author) {
-    let bookId;
     // Call async function to get data
     const result = await getBookDataTitleAuthor(title, author);
 
@@ -133,14 +132,12 @@ async function getBookIdTitleAuthor(title, author) {
 
 // Get bookId with ISBN function
 async function getBookIdIsbn(isbn) {
-    let bookId;
     // Call async function to get data
     const result = await getBookDataIsbn(isbn);
 
     if(result !== null && result.items[0].id !== undefined) {
         // If valid book data returned get book id call function
-        bookId = result.items[0].id;
-        return getBookData(bookId);
+        return getBookData(result.items[0].id);
     }
     else {
         console.log('Search returned no bookId')
@@ -151,8 +148,6 @@ async function getBookIdIsbn(isbn) {
 function getBookData(bookId) {
     console.log('get book data with bookid function')
     console.log(bookId);
-    let bookData;
-
     // Get book volume resource using book id
     fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
         .then((response) => {
@@ -162,8 +157,7 @@ function getBookData(bookId) {
             return response.json();
         })
         .then((json) => {
-            bookData = json;
-            displayBookData(bookData);
+            displayBookData(json);
         })
         .catch((error) => {
             // Handle error
@@ -198,15 +192,14 @@ function displayBookData(bookData) {
     // Generate book description
     const bookLanguage = bookInfo.language;
 
-    let descriptionText = stripHtmlTags(bookInfo.description);
+    const descriptionText = stripHtmlTags(bookInfo.description);
     $description.val(descriptionText);
 
     // Check for image src
     if(bookInfo.imageLinks.smallThumbnail !== undefined) {
         console.log("There is an image associated")
-        let image = bookInfo.imageLinks.smallThumbnail;
         // Call function to create image preview
-        createImagePreview(image);
+        createImagePreview(bookInfo.imageLinks.smallThumbnail);
     }
 }
 // Preview image
@@ -221,4 +214,11 @@ function createImagePreview(image) {
 // Strip html tags
 function stripHtmlTags(text) {
     return text.replace(/<[^>]*>/g, '');
+}
+
+// Translate description to book's language
+async function translateDescription(lang, text) {
+    // check for books lang
+    // send to deepl api
+    // replace with translated text
 }
