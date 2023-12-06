@@ -222,3 +222,20 @@ async function translateDescription(lang, text) {
     // send to deepl api
     // replace with translated text
 }
+
+// Preview uploaded images
+$('#image-upload-button').on('click', function () {
+    const $input = $('#image-upload')[0];
+    console.log($input);
+    const file = $input.files;
+    let image;
+    if(file) {
+        const fileReader = new FileReader();
+        fileReader.onload = event => {
+            image = event.target.result;
+            createImagePreview(image);
+        }
+        fileReader.readAsDataURL(file[0]);
+    }
+
+})
