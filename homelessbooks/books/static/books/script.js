@@ -122,7 +122,6 @@ async function getBookIdTitleAuthor(title, author) {
         // Get year
         let year = $('#published-search').val();
         let results = result.items;
-        console.log(results);
         // Loop through results to find published in year
         const book = results.find(result => result.volumeInfo.publishedDate.includes(year));
         if(book) {
@@ -177,28 +176,32 @@ function displayBookData(bookData) {
     console.log(bookInfo);
 
     // Get form elements and display info
-    const $title = $('#book-title').val(bookInfo.title);
-    const $subtitles = $('#book-subtitles').val(bookInfo.subtitle);
-    const $authors = $('#book-authors').val(bookInfo.authors);
-    const $publisher = $('#book-publisher').val(bookInfo.publisher);
-    const $category = $('#book-category')
-    const $publicationDate = $('#book-publication-date').val(bookInfo.publishedDate);
-    const $pageCount = $('#book-page-count').val(bookInfo.printedPageCount);
+    $('#book-title').val(bookInfo.title);
+    
+    // check for possible isbns
+    if(bookInfo.industryIdentifiers) {
+       $('#book-isbn-10').val(bookInfo.industryIdentifiers[0].identifier);
+       $('#book-isbn-13').val(bookInfo.industryIdentifiers[1].identifier);
+    }
+     
+    $('#book-language').val(bookInfo.language)
+    $('#book-subtitles').val(bookInfo.subtitle);
+    $('#book-authors').val(bookInfo.authors);
+    $('#book-publisher').val(bookInfo.publisher);
+    $('#book-category')
+    $('#book-publication-date').val(bookInfo.publishedDate);
+    $('#book-page-count').val(bookInfo.printedPageCount);
+    
 
     // Check if dimensions included
     if(bookInfo.dimensions) {
-        const $height = $('#book-height').val(bookInfo.dimensions.height);
-        const $width = $('#book-width').val(bookInfo.dimensions.width);
-        const $thickness = $('#book-thickness').val(bookInfo.dimensions.thickness);
+        $('#book-height').val(bookInfo.dimensions.height);
+        $('#book-width').val(bookInfo.dimensions.width);
+        $('#book-thickness').val(bookInfo.dimensions.thickness);
     }
-    const $printType = $('#book-print-type').val(bookInfo.printType);
-    const $description = $('#book-description');
-
-    // Generate book description
-    const bookLanguage = bookInfo.language;
-
+    $('#book-print-type').val(bookInfo.printType);
     const descriptionText = stripHtmlTags(bookInfo.description);
-    $description.val(descriptionText);
+    $('#book-description').val(descriptionText);
 
     // Check for image src
     if(bookInfo.imageLinks.smallThumbnail !== undefined) {

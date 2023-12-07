@@ -2,7 +2,10 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 class Book(models.Model):
+    isbn_10 = models.CharField(max_length=10)
+    isbn_13 = models.CharField(max_length=13)
     title = models.CharField(max_length=750)
+    language = models.CharField(max_length=2)
     subtitle = models.CharField(max_length=750)
     authors = models.CharField(max_length=750)
     publisher = models.CharField(max_length=750)
