@@ -21,6 +21,7 @@ def save_book(request):
      if request.method == "POST":
           
           # Get book data from form
+          bookid = request.POST["book-id"]
           title = request.POST["book-title"]
           subtitle = request.POST["book-subtitles"]
           authors = request.POST["book-authors"]
@@ -32,10 +33,42 @@ def save_book(request):
           width = request.POST["book-width"]
           thickness = request.POST["book-thickness"]
           print_type = request.POST["book-print-type"]
-          dust_jacket = request.POST["book-dust-jacket"]
+          dust_jacket = request.POST.get("book-dust-jacket", None)
           description = request.POST["book-description"]
-          binding = request.POST["book-binding"]
-          condition = request.POST["book-condition"]
+          binding = request.POST.get("book-binding", None)
+          condition = request.POST.get("book-condition", None)
+
+          # Get associated images
+          images = BookImage.objects.filter(bookid=bookid)
+
+          # Create data dict to pass
+          data = {
+               "title": title,
+               "subtitle": subtitle,
+               "authors": authors,
+               "publisher": publisher,
+               "category": category, 
+               "published_date": published_date,
+               "page_count": page_count, 
+               "height": height,
+               "width": width, 
+               "thickness": thickness,
+               "print_type": print_type,
+               "dust_jacket": dust_jacket, 
+               "description": description,
+               "binding": binding,
+               "condition": condition, 
+          }
+          
+          # Save book
+          book = Book(**data)
+          book.save()
+          book.images.set(images)
+          book.save()
+          return JsonResponse({"message" : "Book saved successfully"})
+     else:
+          # For none post requests
+          return HttpResponseBadRequest("Invalid request method")
 
 
 def upload_image(request):
