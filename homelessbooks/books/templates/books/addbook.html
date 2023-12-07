@@ -42,7 +42,15 @@
             <label for="book-publisher">Publisher</label>
             <input type="text" class="form-control form-control-sm" id="book-publisher" name="book-publisher">
             <label for="book-category">Category</label>
-            <input type="text" class="form-control form-control-sm" id="book-category" name="book-category">
+            <div class="input-group" id="book-category">
+              <select class="form-select" id="category-dropdown" aria-label="Select book category">
+                <option id="choose-category" selected>Choose...</option>
+                {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+              </select>
+              <button class="btn btn-outline-secondary" id="add-category-button" type="button">Add category</button>
+            </div>
             <label for="book-publication-date">Publication Date</label>
             <input type="text" class="form-control form-control-sm" id="book-publication-date" name="book-publication-date">
           </div>

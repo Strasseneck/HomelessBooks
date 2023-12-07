@@ -14,7 +14,11 @@ def index(request):
     return render(request, "books/index.html")
 
 def add_book(request):
-        return render(request, "books/addbook.html")
+        # Get categories
+        categories = list(Book.objects.values_list("category", flat=True))
+        return render(request, "books/addbook.html", {
+             "categories": categories
+        })
 
 def save_book(request):
      # Check it's post

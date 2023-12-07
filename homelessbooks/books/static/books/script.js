@@ -25,6 +25,7 @@ function getApiKeys() {
         })
 }
 
+// Call get api keys function when the add_book page is loaded
 document.addEventListener('DOMContentLoaded', function () {
     if(window.location.pathname === '/add_book') {
         getApiKeys();
@@ -277,4 +278,25 @@ async function saveImage(input) {
 function generateRandomUid() {
     $('#book-uid').val(Math.random().toString(36).substring(2,9));
     $('#bookid-image-upload').val($('#book-uid').val());
+}
+
+// Add category button
+$('#add-category-button').on('click', addCategory);
+
+// Add category function
+function addCategory() {
+    console.log('Add category function clicked')
+    // Remove dropdown
+    $('#category-dropdown').remove()
+
+    // Create input and insert
+    $('<input>')
+    .addClass('form-control form-control-sm')
+    .attr('type', 'text')
+    .attr('id', 'new-category-input')
+    .prependTo('#book-category');
+
+    // Add new onlick listener
+    $('#add-category-button')
+    .off('click', addCategory)
 }
