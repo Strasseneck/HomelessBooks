@@ -188,7 +188,16 @@ function displayBookData(bookData) {
     $('#book-subtitles').val(bookInfo.subtitle);
     $('#book-authors').val(bookInfo.authors);
     $('#book-publisher').val(bookInfo.publisher);
-    $('#book-category')
+
+    // Check for category
+    if(bookInfo.mainCategory) {
+        addCategory(bookInfo.mainCategory);
+    }
+    else if(bookInfo.categories) {
+       const category = (bookInfo.categories[0]).split('/')[0];
+       addCategory(category);
+    }
+   
     $('#book-publication-date').val(bookInfo.publishedDate);
     $('#book-page-count').val(bookInfo.printedPageCount);
     
@@ -200,16 +209,22 @@ function displayBookData(bookData) {
         $('#book-thickness').val(bookInfo.dimensions.thickness);
     }
     $('#book-print-type').val(bookInfo.printType);
-    const descriptionText = stripHtmlTags(bookInfo.description);
+
+    // Check for html tags in description
+    if(bookInfo.description) {
+    const descriptionText = bookInfo.description.match(/<[^>]*>/g, '')
+        ? bookInfo.description.replace(/<[^>]*>/g, '')
+        : bookInfo.description;
     $('#book-description').val(descriptionText);
+    }
 
     // Check for image src
-    if(bookInfo.imageLinks.smallThumbnail !== undefined) {
-        console.log("There is an image associated")
+    if(bookInfo.imageLinks) {
         // Call function to create image preview
         createImagePreview(bookInfo.imageLinks.smallThumbnail);
     }
 }
+
 // Preview image
 function createImagePreview(image) {
     // create element and append to images container
@@ -222,13 +237,6 @@ function createImagePreview(image) {
 // Strip html tags
 function stripHtmlTags(text) {
     return text.replace(/<[^>]*>/g, '');
-}
-
-// Translate description to book's language
-async function translateDescription(lang, text) {
-    // check for books lang
-    // send to deepl api
-    // replace with translated text
 }
 
 // Create image preview
@@ -251,7 +259,6 @@ $('#image-upload-button').on('click', function () {
 
 // Save image function
 async function saveImage(input) {
-
     // Get token
     const token = $('[name="csrfmiddlewaretoken"]').val();
     const bookId = $('#bookid-image-upload').val();
@@ -287,19 +294,24 @@ function generateRandomUid() {
 $('#add-category-button').on('click', addCategory);
 
 // Add category function
-function addCategory() {
+function addCategory(returnedCategory) {
     console.log('Add category function clicked')
+    
     // Remove dropdown
-    $('#category-dropdown').remove()
+    $('#category-dropdown').remove();
+
+    // Check for category
+    const category = returnedCategory !== undefined ? returnedCategory : '';
 
     // Create input and insert
     $('<input>')
-    .addClass('form-control form-control-sm')
-    .attr('type', 'text')
-    .attr('id', 'new-category-input')
-    .prependTo('#book-category');
+        .addClass('form-control form-control-sm')
+        .attr('type', 'text')
+        .attr('id', 'new-category-input')
+        .val(category)
+        .prependTo('#book-category');
 
     // Add new onlick listener
     $('#add-category-button')
-    .off('click', addCategory)
+        .off('click', addCategory)
 }
