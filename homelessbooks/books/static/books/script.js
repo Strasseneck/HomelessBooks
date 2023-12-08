@@ -1,3 +1,5 @@
+// Add book page
+
 // Get api key via fetch function
 let googleApiKey;
 let deeplApiKey;
@@ -80,6 +82,7 @@ async function getBookDataIsbn(isbn) {
 
         // If response is okay store result and return
         const result = await response.json();
+        console.log(result);
         return result;
         }
         catch(error) {
@@ -221,27 +224,13 @@ function displayBookData(bookData) {
     // Check for image src
     if(bookInfo.imageLinks) {
         // Call function to create image preview
-        createImagePreview(bookInfo.imageLinks.smallThumbnail);
+        createImageThumbnail(bookInfo.imageLinks.thumbnail);
     }
 }
 
-// Preview image
-function createImagePreview(image) {
-    // create element and append to images container
-    $('<img>')
-    .addClass('img-thumbnail')
-    .attr('src', `${image}`)
-    .appendTo('#image-previews');
-}
-
-// Strip html tags
-function stripHtmlTags(text) {
-    return text.replace(/<[^>]*>/g, '');
-}
-
-// Create image preview
+// Handle image uploads
 $('#image-upload-button').on('click', function () {
-    // Create preview
+    // Get image
     const $input = $('#image-upload')[0];
     console.log($input);
     const file = $input.files;
@@ -250,13 +239,61 @@ $('#image-upload-button').on('click', function () {
         const fileReader = new FileReader();
         fileReader.onload = event => {
             image = event.target.result;
-            createImagePreview(image);
+            // Create thumbnail
+            createImageThumbnail(image);
+            createImage(image);
         }
         fileReader.readAsDataURL(file[0]);
     }
-    saveImage($input);
 })
 
+// Create thumbnail
+function createImageThumbnail(image) {
+    // Create thumbnail container
+    const $thumbnailContainer = $('<div>')
+    $thumbnailContainer.addClass('thumbnail-container')
+    $thumbnailContainer.prependTo('#image-previews'); 
+    
+    // Create thumbnail 
+    const $thumbnail = $('<img>')
+    $thumbnail.addClass('img-thumbnail')
+    $thumbnail.attr('src', `${image}`)
+    $thumbnail.on({ 
+        mouseenter: function() {
+        console.log("mouse over");
+        
+        // Create button
+        const $button = $('<button>')
+        $button.addClass('btn-close thumbnail-close')
+        // add remove image functionality 
+        $button.on('click', function() {
+            $thumbnailContainer.remove();
+        })
+        // Append to the thumbnail container
+        $thumbnailContainer.append($button); 
+    }        
+    })
+    // Add button to container
+    .appendTo($thumbnailContainer)
+
+    // Remove button when mouse leaves previews
+    const $imagePreviews = $('#image-previews').on({
+        mouseleave: function() {
+            // Remove button on mouseleave
+            $imagePreviews.find('.thumbnail-close').remove()
+        }
+    })
+}
+
+// Create image 
+function createImage(image) {
+    $('<img>')
+        .addClass('img')
+        .attr('src', `${image}`)
+        .attr('hidden', 'hidden')
+        .appendTo('#image-previews');
+}
+  
 // Save image function
 async function saveImage(input) {
     // Get token
