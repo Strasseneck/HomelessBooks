@@ -261,6 +261,11 @@ function createImageThumbnail(image) {
     $thumbnail.on({ 
         mouseenter: function() {
         console.log("mouse over");
+
+        // Check if button already exists
+        if($thumbnailContainer.find('.thumbnail-close').length !== 0) {
+            return;
+        }
         
         // Create button
         const $button = $('<button>')
