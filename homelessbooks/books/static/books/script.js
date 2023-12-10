@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get api keys function
         function getApiKey() {
-            console.log('function get api key');
             fetch('/get_api_key')
                 .then(response => {
                     if(!response.ok) {
@@ -70,6 +69,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
         }
 
+        // Add category function
+        function addCategory(returnedCategory) {
+            // Remove dropdown
+            $('#category-dropdown').remove();
+
+            // Check for category
+            const category = returnedCategory !== undefined ? returnedCategory : '';
+
+            // Create input and insert
+            $('<input>')
+                .addClass('form-control form-control-sm')
+                .attr('type', 'text')
+                .attr('id', 'new-category-input')
+                .val(category)
+                .prependTo('#book-category');
+
+            // Remove listener
+            $('#add-category-button')
+                .off('click', addCategory)
+        }
+        
         // SEARCH FUNCTIONS
 
         // Get google volume id via ISBN
@@ -239,7 +259,6 @@ document.addEventListener('DOMContentLoaded', function () {
         function uploadImage() {
             // Get image
             const $input = $('#image-upload')[0];
-            console.log($input);
             const file = $input.files;
             if(file) {
                 const fileReader = new FileReader();
@@ -303,12 +322,9 @@ document.addEventListener('DOMContentLoaded', function () {
         function saveImage(input) {
             // Get token
             const token = $('[name="csrfmiddlewaretoken"]').val();
-            const bookId = $('#bookid-image-upload').val();
             // Create form data
             const formData = new FormData();
-            formData.append('image', input.files[0]);
-            formData.append('bookId', bookId);
-
+            formData.append('images', bookImages);
             // Make Fetch request
             fetch('/upload_image', {
                 method: 'POST',
@@ -332,31 +348,5 @@ document.addEventListener('DOMContentLoaded', function () {
             const indexToRemove = bookImages.indexOf(toDelete);
             bookImages.splice(indexToRemove, 1)  
         }
-
-        // CATEGORIES
-
-        // Add category function
-        function addCategory(returnedCategory) {
-            console.log('Add category function clicked')
-            
-            // Remove dropdown
-            $('#category-dropdown').remove();
-
-            // Check for category
-            const category = returnedCategory !== undefined ? returnedCategory : '';
-
-            // Create input and insert
-            $('<input>')
-                .addClass('form-control form-control-sm')
-                .attr('type', 'text')
-                .attr('id', 'new-category-input')
-                .val(category)
-                .prependTo('#book-category');
-
-            // Add new onlick listener
-            $('#add-category-button')
-                .off('click', addCategory)
-        }
-
     }
 })
