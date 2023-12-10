@@ -1,5 +1,8 @@
 // Add book page
 
+// Book images array 
+const bookImages = [];
+
 // Get api key via fetch function
 let googleApiKey;
 let deeplApiKey;
@@ -31,7 +34,7 @@ function getApiKeys() {
 document.addEventListener('DOMContentLoaded', function () {
     if(window.location.pathname === '/add_book') {
         getApiKeys();
-        generateRandomUid();
+        generateRandomUid();  
     }  
 })
 
@@ -228,27 +231,31 @@ function displayBookData(bookData) {
     }
 }
 
+
 // Handle image uploads
+
+// Upload image button
 $('#image-upload-button').on('click', function () {
     // Get image
     const $input = $('#image-upload')[0];
     console.log($input);
     const file = $input.files;
-    let image;
     if(file) {
         const fileReader = new FileReader();
+        const fileName = file[0].name;
         fileReader.onload = event => {
-            image = event.target.result;
+            const image = event.target.result;
             // Create thumbnail
-            createImageThumbnail(image);
-            createImage(image);
+            createImageThumbnail(image, fileName);
         }
         fileReader.readAsDataURL(file[0]);
+        // Store image for database
+        bookImages.push(file[0]);
     }
 })
 
 // Create thumbnail
-function createImageThumbnail(image) {
+function createImageThumbnail(image, fileName) {
     // Create thumbnail container
     const $thumbnailContainer = $('<div>')
     $thumbnailContainer.addClass('thumbnail-container')
@@ -266,16 +273,17 @@ function createImageThumbnail(image) {
         if($thumbnailContainer.find('.thumbnail-close').length !== 0) {
             return;
         }
-        
         // Create button
         const $button = $('<button>')
         $button.addClass('btn-close thumbnail-close')
         // add remove image functionality 
         $button.on('click', function() {
+            // Delete image function
+            deleteImage(fileName);
             $thumbnailContainer.remove();
         })
         // Append to the thumbnail container
-        $thumbnailContainer.append($button); 
+        $thumbnailContainer.prepend($button); 
     }        
     })
     // Add button to container
@@ -290,17 +298,8 @@ function createImageThumbnail(image) {
     })
 }
 
-// Create image 
-function createImage(image) {
-    $('<img>')
-        .addClass('img')
-        .attr('src', `${image}`)
-        .attr('hidden', 'hidden')
-        .appendTo('#image-previews');
-}
-  
 // Save image function
-async function saveImage(input) {
+function saveImage(input) {
     // Get token
     const token = $('[name="csrfmiddlewaretoken"]').val();
     const bookId = $('#bookid-image-upload').val();
@@ -324,6 +323,14 @@ async function saveImage(input) {
     .catch(error => {
         console.error('Error:', error);
     })
+}
+
+// Delete image function
+function deleteImage(fileName) {
+    const toDelete = bookImages.find((element) => element.name === fileName);
+    const indexToRemove = bookImages.indexOf(toDelete);
+    bookImages.splice(indexToRemove, 1)
+    console.log(bookImages);   
 }
 
 // Generate random book id for linking images and book
