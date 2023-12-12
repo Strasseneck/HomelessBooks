@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#image-upload-button').on('click', uploadImage);
 
         // Add category button
-        $('#add-category-button').on('click', addCategory(""));
+        $('#add-category-button').on('click', addCategory);
 
         // Save book and images on click Event listener
         $('#save-book-button').on('click', saveBook);
@@ -81,13 +81,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Add category function
-        function addCategory(returnedCategory) {
-            console.log(returnedCategory);
+        function addCategory() {
+            console.log("add category function")
             // Remove dropdown
             $('#category-dropdown').remove();
-
-            // Check for category
-            const category = returnedCategory !== undefined ? returnedCategory : '';
 
             // Create input and insert
             $('<input>')
@@ -95,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 .attr('type', 'text')
                 .attr('id', 'new-category-input')
                 .attr('name', 'book-category')
-                .val(category)
                 .prependTo('#book-category');
 
             // Remove listener
@@ -235,8 +231,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 addCategory(bookInfo.mainCategory);
             }
             else if(bookInfo.categories) {
-            const category = (bookInfo.categories[0]).split('/')[0];
-            addCategory(category);
+                const category = (bookInfo.categories[0]).split('/')[0].trim();
+                $('#choose-category').remove()
+                    $('<option>')
+                    .val(category)
+                    .text(category)
+                    .attr('selected', "")
+                    .prependTo('#category-dropdown')
             }
         
             $('#book-publication-date').val(bookInfo.publishedDate);
@@ -369,11 +370,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error:', error);
             })
-        }
-
-        // Load book view function
-        function loadBookView(id) {
-            window.location.href = `/book/?id=${id}/`
         }
     }
 })
