@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Check for image src
             if(bookInfo.imageLinks) {
                 // Call function to create image preview
-                createImageThumbnail(bookInfo.imageLinks.thumbnail);
+                createImageThumbnail(bookInfo.imageLinks.thumbnail);               
             }
         }
 
@@ -364,11 +364,16 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                console.log(data) 
             })
             .catch(error => {
                 console.error('Error:', error);
             })
+        }
+
+        // Load book view function
+        function loadBookView(id) {
+            window.location.href = `/book/?id=${id}/`
         }
     }
 })

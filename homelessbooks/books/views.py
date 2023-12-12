@@ -19,28 +19,7 @@ def add_book(request):
         return render(request, "books/addbook.html", {
              "categories": categories
         })
-
-def save_images(request):
-     # Check it's post
-     if request.method == "POST": 
-          # Get book id
-          bookid = request.POST.get("bookId")
-
-          # Extract images
-          image_keys = [key for key in request.FILES.keys() if key.startswith("image")]
-
-          # Loop over and save
-          for key in image_keys:
-               image = request.FILES[key]
-               book_image = BookImage(image=image, bookid=bookid)
-               book_image.save()
-
-          # Return response if succesful
-          return JsonResponse({"message" : "Image saved successfully"})
-     else:
-          # For none post requests
-          return HttpResponseBadRequest("Invalid request method")
-     
+   
 def save_book(request):
      # Check it's post
      if request.method == "POST":
@@ -71,8 +50,6 @@ def save_book(request):
 
           # Extract images
           image_keys = [key for key in request.FILES.keys() if key.startswith("image_")]
-
-          print(image_keys)
 
           # Loop over and save images
           for key in image_keys:
@@ -114,11 +91,17 @@ def save_book(request):
           book = Book.objects.get(bookid=bookid)
           book.images.set(images)
           book.save()
+          
+          # Loop through images to connect book
+          for image in images:
+              image.book = book
+              image.save()
 
-          return JsonResponse({"message" : "Book saved successfully"})
+          return JsonResponse({"message": "Book saved successfully"})
      else:
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
+   
 
 def get_api_key(request):
     google_api_key = os.environ.get("GOOGLE_BOOKS_API_KEY")
