@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 class Book(models.Model):
+    bookid = models.CharField(max_length=8)
     isbn_10 = models.CharField(max_length=10)
     isbn_13 = models.CharField(max_length=13)
     title = models.CharField(max_length=750)

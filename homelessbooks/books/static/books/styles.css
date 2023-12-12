@@ -8,12 +8,6 @@
     align-items: center;
 }
 
-#new-book-form {
-    display: flex;
-    flex-direction: column;
-    width: 40vw;
-    margin: 5vh;
-}
 #searches-container {
   margin-left: 0;
   padding: 0;

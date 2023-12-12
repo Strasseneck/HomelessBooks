@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // Book images array 
         const bookImages = [];
 
+        // Generate random uid for books and images
+        generateRandomUid();
+
         // Get api key via fetch function
         let googleApiKey = getApiKey();
 
@@ -47,7 +50,10 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#image-upload-button').on('click', uploadImage);
 
         // Add category button
-        $('#add-category-button').on('click', addCategory);
+        $('#add-category-button').on('click', addCategory(""));
+
+        // Save book and images on click Event listener
+        $('#save-book-button').on('click', saveBook);
 
         // FUNCTIONS
 
@@ -69,8 +75,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
         }
 
+        // Generate random book id for linking images and book
+        function generateRandomUid() {
+            $('#book-id').val(Math.random().toString(36).substring(2,9));
+        }
+
         // Add category function
         function addCategory(returnedCategory) {
+            console.log(returnedCategory);
             // Remove dropdown
             $('#category-dropdown').remove();
 
@@ -82,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .addClass('form-control form-control-sm')
                 .attr('type', 'text')
                 .attr('id', 'new-category-input')
+                .attr('name', 'book-category')
                 .val(category)
                 .prependTo('#book-category');
 
@@ -89,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#add-category-button')
                 .off('click', addCategory)
         }
-        
+    
         // SEARCH FUNCTIONS
 
         // Get google volume id via ISBN
@@ -318,15 +331,31 @@ document.addEventListener('DOMContentLoaded', function () {
             })
         }
 
-        // Save image function
-        function saveImage(input) {
+        // Delete image function
+        function deleteImage(fileName) {
+            const toDelete = bookImages.find((element) => element.name === fileName);
+            const indexToRemove = bookImages.indexOf(toDelete);
+            bookImages.splice(indexToRemove, 1)  
+        }
+
+        // Save book function
+        function saveBook() {
+            console.log('save book function called')
             // Get token
             const token = $('[name="csrfmiddlewaretoken"]').val();
+
             // Create form data
-            const formData = new FormData();
-            formData.append('images', bookImages);
+            const newBookForm = $('#new-book-form')[0];
+            const formData =  new FormData(newBookForm);
+            const bookTitle = $('#book-title').val();
+
+            // Loop to append each image
+            bookImages.forEach((bookImage, index) => {
+                formData.append(`image_${bookTitle}_${index}`, bookImage)
+            })
+
             // Make Fetch request
-            fetch('/upload_image', {
+            fetch('/save_book', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -340,13 +369,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error:', error);
             })
-        }
-
-        // Delete image function
-        function deleteImage(fileName) {
-            const toDelete = bookImages.find((element) => element.name === fileName);
-            const indexToRemove = bookImages.indexOf(toDelete);
-            bookImages.splice(indexToRemove, 1)  
         }
     }
 })
