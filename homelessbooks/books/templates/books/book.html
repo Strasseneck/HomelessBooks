@@ -2,6 +2,34 @@
 {% load static %}
 
 {% block body %}
-{{ book.title }}
-{{ book.description }}
+<div class="container-fluid" id="book-view">
+    <!--header-->
+    <div class="page-header">
+        <strong>Book Title</strong>
+    </div>
+    <!--book container-->
+    <div class="container-fluid" id="book-container">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  Description
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">{{ book.description }}</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                  Details
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">{{ book.title }} {{ book.authors }}</div>
+              </div>
+          </div>
+
+</div>
 {% endblock %}

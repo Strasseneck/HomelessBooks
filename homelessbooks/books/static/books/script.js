@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // ISBN search button event listener
         $('#isbn-submit').on('click', function () {
-            console.log('ISBN search clicked');
             // Define isbn variable and remove hyphens
             isbn = $('#isbn-search').val().replace(/-/g, '');
             console.log(isbn)
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Title author search button event listener
         $('#title-author-submit').on('click', function () {
-            console.log('title author search clicked');
             // define title and author
             const title = $('#title-search').val();
             const author = $('#author-search').val();
@@ -82,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Add category function
         function addCategory() {
-            console.log("add category function")
             // Remove dropdown
             $('#category-dropdown').remove();
 
@@ -103,9 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get google volume id via ISBN
         async function getBookDataIsbn(isbn) {
-            console.log(googleApiKey);
-            console.log('isbn search function called');
-            console.log(`ISBN: ${isbn}`);
 
             try {
                 // Request book data using isbn
@@ -129,9 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get book data title and author
         async function getBookDataTitleAuthor(title, author) {
-            console.log('Title author search function called');
-            console.log(`Title: ${title}`);
-            console.log(`Author: ${author}`);
             try {
                 // Request book data using isbn
                 const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${title}+inauthor:${author}&key=${googleApiKey}`);
@@ -210,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Display returned book data in form
         function displayBookData(bookData) {
             const bookInfo = bookData.volumeInfo;
-            console.log(bookInfo);
 
             // Get form elements and display info
             $('#book-title').val(bookInfo.title);
@@ -301,8 +291,6 @@ document.addEventListener('DOMContentLoaded', function () {
             $thumbnail.attr('src', `${image}`)
             $thumbnail.on({ 
                 mouseenter: function() {
-                console.log("mouse over");
-
                 // Check if button already exists
                 if($thumbnailContainer.find('.thumbnail-close').length !== 0) {
                     return;
@@ -341,7 +329,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Save book function
         function saveBook() {
-            console.log('save book function called')
             // Get token
             const token = $('[name="csrfmiddlewaretoken"]').val();
 
@@ -365,11 +352,37 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data) 
+                console.log(data)
+                const id = data.id
+                // Load book saved
+                bookSaved(id);
             })
             .catch(error => {
                 console.error('Error:', error);
             })
+        }
+
+        // Display book saved view
+        function bookSaved(id) {
+            // Remove the add book view
+            $('#add-new-book-view').remove()
+
+            // Add success message and button and form
+            $('<div>')
+                .addClass('container')
+                .attr('id', 'success-message-container')
+                .appendTo('body');
+
+            $('<strong>')
+                .text('Book succesfully saved')
+                .prependTo('#success-message-container');
+
+            $('<a>')
+                .addClass('btn btn-outline-primary')
+                .attr('role', 'button')
+                .attr('href', `book/${id}`)
+                .text('View Book')
+                .appendTo('#success-message-container');
         }
     }
 })

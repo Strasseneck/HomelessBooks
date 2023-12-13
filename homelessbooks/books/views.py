@@ -15,7 +15,7 @@ def index(request):
 
 def add_book(request):
         # Get categories
-        categories = list(Book.objects.values_list("category", flat=True))
+        categories = sorted(set(Book.objects.values_list("category", flat=True)))
         return render(request, "books/addbook.html", {
              "categories": categories
         })
@@ -91,17 +91,26 @@ def save_book(request):
           book = Book.objects.get(bookid=bookid)
           book.images.set(images)
           book.save()
+
+          # Get id 
+          id = book.id
           
           # Loop through images to connect book
           for image in images:
               image.book = book
               image.save()
 
-          return JsonResponse({"message": "Book saved successfully"})
+          return JsonResponse({"message": "Book saved successfully", "id": id})
      else:
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
-   
+
+def book(request, id):
+     # Get book object
+     book = Book.objects.get(id=id)
+     return render(request, "books/book.html", {
+          "book" : book
+     })
 
 def get_api_key(request):
     google_api_key = os.environ.get("GOOGLE_BOOKS_API_KEY")
