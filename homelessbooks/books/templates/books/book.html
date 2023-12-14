@@ -2,16 +2,17 @@
 {% load static %}
 
 {% block body %}
-<div class="card" style="width: 18rem;">
+<div class="container-fluid" id="book-container">
+  <div class="card" style="width: 40vw;">
   <!--image carousel-->
   <div id="carouselExampleIndicators" class="carousel slide">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="/media/{{ first_image }}" class="d-block w-100" alt="...">
+        <img src="/media/{{ first_image }}" class="d-block w-50" alt="...">
       </div>
       {% for image in images %}
       <div class="carousel-item">
-        <img src="/media/{{ image }}" class="d-block w-100" alt="...">
+        <img src="/media/{{ image }}" class="d-block w-50" alt="...">
       </div>
       {% endfor %}
     </div>
@@ -25,17 +26,61 @@
     </button>
   </div>
   <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <h5 class="card-title">{{ book.title }}</h5>
   </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">An item</li>
-    <li class="list-group-item">A second item</li>
-    <li class="list-group-item">A third item</li>
-  </ul>
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
+          Description
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <p>By {{ book.authors }}</p>
+          <p>Publisher: {{ book.publisher }}</p>
+          <p>{{ book.description }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-controls="collapseTwo">
+          Condition
+        </button>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <p>A {{ book.binding }} copy in {{ book.condition }} condition. See photos.</p>
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Details
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <p>Language: {{ book.language }}</p>
+          <p>Category: {{ book.category }}</p>
+          <p>{{ book.page_count }} pages</p>
+          <p>Height: {{ book.height }}</p>
+          <p>Width: {{ book.width }}</p>
+          <p>Thickness: {{ book.thickness }}</p>
+          <p>ISBN-10: {{ book.isbn_10 }}</p>
+          <p>ISBN-13: {{ book.isbn_13 }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="card-body">
-    <a href="#" class="card-link">Card link</a>
-    <a href="#" class="card-link">Another link</a>
+    <a href="#" class="card-link">Edit</a>
+    <a href="#" class="card-link">Delete</a>
+    <a href="#" class="card-link">List</a>
+  </div>
   </div>
 </div>
 {% endblock %}

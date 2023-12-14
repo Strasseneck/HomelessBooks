@@ -36,7 +36,7 @@
 
 /* Book Page */
 
-.image-carousel-container {
-    width: 20vw;
-    height: 25vh;
+#book-container {
+    display: flex;
+    justify-content: center;
 }
