@@ -108,8 +108,17 @@ def save_book(request):
 def book(request, id):
      # Get book object
      book = Book.objects.get(id=id)
+
+     # Get images
+     images = list(book.images.values_list('image', flat=True))
+     image_count = len(images)
+     first_image = images.pop(0)
+
      return render(request, "books/book.html", {
-          "book" : book
+          "book": book,
+          "image_count": image_count,
+          "first_image": first_image,
+          "images": images
      })
 
 def get_api_key(request):

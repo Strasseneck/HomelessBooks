@@ -33,3 +33,10 @@
     width: 150px;
     height: 200px;
 }
+
+/* Book Page */
+
+.image-carousel-container {
+    width: 20vw;
+    height: 25vh;
+}
