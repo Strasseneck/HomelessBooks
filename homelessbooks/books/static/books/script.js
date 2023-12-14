@@ -1,8 +1,9 @@
+// GLOBAL VARIABLES
+const currentPath = window.location.pathname;
+
 // ADD BOOK PAGE 
 document.addEventListener('DOMContentLoaded', function () {
-    if(window.location.pathname === '/add_book') {
-        // GLOBAL VARIABLES
-
+    if(currentPath.startsWith ('/add_book')) {
         // Book images array 
         const bookImages = [];
 
@@ -384,5 +385,52 @@ document.addEventListener('DOMContentLoaded', function () {
                 .text('View Book')
                 .appendTo('#success-message-container');
         }
+    }
+})
+
+// INVENTORY PAGE
+document.addEventListener('DOMContentLoaded', function () {
+    if(currentPath.startsWith ('/inventory')) {
+        
+
+    }
+})
+
+// BOOK PAGE
+document.addEventListener('DOMContentLoaded', function () {
+    if(currentPath.startsWith('/book')){
+       
+    // Delete book button event listener
+    $('#delete-book-button').on('click', function () {
+        const id = $(this).val();
+        console.log(id);
+
+    });
+
+    // Delete book function
+    function deleteBook(id) {
+        // Get token
+        const token = $('[name="csrfmiddlewaretoken"]').val();
+
+        // Make Fetch request
+        fetch('/delete_book', {
+            method: 'POST',
+            body: id,
+            headers: {
+                'X-CSRFToken': token,
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        })
+
+
+    }
+
+
     }
 })

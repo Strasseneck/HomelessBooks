@@ -40,3 +40,8 @@
     display: flex;
     justify-content: center;
 }
+
+.button-container {
+    padding: 1vw;
+    margin-top: 1vh;
+}

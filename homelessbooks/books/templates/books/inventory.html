@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-<!--navbar-->
+<!-- inventory navbar-->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Inventory</a>
@@ -17,7 +17,7 @@
             </a>
             <ul class="dropdown-menu">
                 {% for condition in conditions %}
-                    <li><a class="dropdown-item" href="#">{{ condition }}</a></li>
+                    <li><a class="dropdown-item condition-sort">{{ condition }}</a></li>
                 {% endfor %}  
             </ul>
           </li>
@@ -44,7 +44,7 @@
 <table class="table table-light table-striped">
     <thead>
       <tr>
-        <th scope="col">Id</th>
+        <th scope="col">Inventory Id</th>
         <th scope="col">Title</th>
         <th scope="col">Author</th>
         <th scope="col">Publisher</th>
@@ -57,12 +57,14 @@
     {% for book in books %}
       <tr>
         <td>{{ book.id }}</td>
-        <td>{{ book.title }}</td>
+        <td><a href="book/{{ book.id }}">{{ book.title }}</a></td>
         <td>{{ book.authors }}</td>
         <td>{{ book.publisher }}</td>
         <td>{{ book.category }}</td>
         <td>{{ book.condition }}</td>
-        <td>book thumbnail</td>
+        {% if book.images.all %}
+            <td><a href="{{ book.images.first.image.url }}">Thumbnail</a></td>
+        {% endif %}
       </tr>
       {% endfor %}
     </tbody>

@@ -7,10 +7,10 @@
   <!--image carousel-->
     <div class="row g-0">
       <div class="col-md-4">
-        <div id="carouselExampleIndicators" class="carousel slide">
+        <div id="image-carousel-indicators" class="carousel slide">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="/media/{{ first_image }}" class="d-block w-100" alt="{{book.title}} image ">
+              <img src="/media/{{ first_image }}" class="d-block w-100" alt="{{book.title}} image">
             </div>
             {% for image in images %}
             <div class="carousel-item">
@@ -18,11 +18,11 @@
             </div>
             {% endfor %}
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel-indicators" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
           </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <button class="carousel-control-next" type="button" data-bs-target="#image-carousel-indicators" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>
@@ -31,58 +31,75 @@
       <div class="col-md-8">
         <!--book card body-->
         <div class="card-body">
-          <h3 class="card-title">{{ book.title }}</h3>
+          <h3 class="card-title">{{ book.title }}</h3>  
           {% if book.subtitle != "" %}
             <p>{{ book.subtitle }}</p>
           {% endif %}
           <p>Author: {{ book.authors }}</p>
           <p>Publisher: {{ book.publisher }}</p>
-        </div>
-        <div class="accordion" id="accordionExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
-                Description
-              </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <p>{{ book.description }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-controls="collapseTwo">
-                Condition
-              </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <p>A {{ book.binding }} copy in {{ book.condition }} condition. See photos.</p>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Details
-              </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <p>Language: {{ book.language }}</p>
-                <p>Category: {{ book.category }}</p>
-                <p>{{ book.page_count }} pages</p>
-                <p>Height: {{ book.height }}</p>
-                <p>Width: {{ book.width }}</p>
-                <p>Thickness: {{ book.thickness }}</p>
-                <p>ISBN-10: {{ book.isbn_10 }}</p>
-                <p>ISBN-13: {{ book.isbn_13 }}</p>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
+                  Description
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <p>{{ book.description }}</p>
                 </div>
               </div>
             </div>
-        </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-controls="collapseTwo">
+                  Condition
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <p>A {{ book.binding }} copy in {{ book.condition }} condition. See photos.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Details
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <p>Language: {{ book.language }}</p>
+                  <p>Category: {{ book.category }}</p>
+                  <p>{{ book.page_count }} pages</p>
+                  <p>Height: {{ book.height }}</p>
+                  <p>Width: {{ book.width }}</p>
+                  <p>Thickness: {{ book.thickness }}</p>
+                  <p>ISBN-10: {{ book.isbn_10 }}</p>
+                  <p>ISBN-13: {{ book.isbn_13 }}</p>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="button-container">
+            {% csrf_token %}
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <p>Are you sure you want to delete this copy of {{ book.title }} ? </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" value="{{ book.id }}" id="delete-book-button" data-bs-dismiss="modal" class="btn btn-outline-primary">Understood</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-outline-primary" value="{{ book.id }}" id="edit-book-button">Edit Book</button>
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete Book</button>
+          </div>
       </div>
     </div>
   </div>

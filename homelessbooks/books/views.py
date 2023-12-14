@@ -105,18 +105,29 @@ def save_book(request):
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
 
+def delete_book(request, id):#
+     if request.method == "POST":
+          # Get book
+          book = Book.objects.get(id=id)
+
+          # Delete book
+          book.delete()
+
+          return JsonResponse({"message": "Book saved deleted", "id": id})
+     else:
+          # For none post requests
+          return HttpResponseBadRequest("Invalid request method")
+
 def book(request, id):
      # Get book object
      book = Book.objects.get(id=id)
 
      # Get images
      images = list(book.images.values_list('image', flat=True))
-     image_count = len(images)
      first_image = images.pop(0)
 
      return render(request, "books/book.html", {
           "book": book,
-          "image_count": image_count,
           "first_image": first_image,
           "images": images
      })
@@ -126,4 +137,14 @@ def get_api_key(request):
     return JsonResponse({"google_api_key": google_api_key})
 
 def inventory(request):
-    return 
+    # Get all books and categories
+    books = Book.objects.all()
+    categories = sorted(set(Book.objects.values_list("category", flat=True)))
+    conditions = sorted(set(Book.objects.values_list("condition", flat=True)))
+
+
+    return render(request,"books/inventory.html", {
+         "books": books,
+         "categories": categories,
+         "conditions": conditions
+    } )
