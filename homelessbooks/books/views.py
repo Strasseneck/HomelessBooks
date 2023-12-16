@@ -1,5 +1,6 @@
 import json
 import os
+from html import unescape
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -11,14 +12,22 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Book, BookImage
 
 def index(request):
-    return render(request, "books/index.html")
-
+    if request.method == "GET":
+         return render(request, "books/index.html")
+    else:
+          # For none get requests
+          return HttpResponseBadRequest("Invalid request method")
+         
 def add_book(request):
-        # Get categories
-        categories = sorted(set(Book.objects.values_list("category", flat=True)))
-        return render(request, "books/addbook.html", {
-             "categories": categories
-        })
+        if request.method == "GET":       
+             # Get categories
+             categories = sorted(set(Book.objects.values_list("category", flat=True)))
+             return render(request, "books/addbook.html", {
+                    "categories": categories
+             })
+        else:
+          # For none get requests
+          return HttpResponseBadRequest("Invalid request method")
    
 def save_book(request):
      # Check it's post
@@ -126,34 +135,65 @@ def edit_book(request, id):
           return render(request, "books/editbook.html" , {
                "book": book
           })
+     else:
+          # For none get requests
+          return HttpResponseBadRequest("Invalid request method")
 
 def book(request, id):
-     # Get book object
-     book = Book.objects.get(id=id)
+     if request.method == "GET":
+          # Get book object
+          book = Book.objects.get(id=id)
 
-     # Get images
-     images = list(book.images.values_list('image', flat=True))
-     first_image = images.pop(0)
+          # Get images
+          images = list(book.images.values_list('image', flat=True))
+          first_image = images.pop(0)
 
-     return render(request, "books/book.html", {
-          "book": book,
-          "first_image": first_image,
-          "images": images
-     })
+          return render(request, "books/book.html", {
+               "book": book,
+               "first_image": first_image,
+               "images": images
+          })
+     else:
+          # For none get requests
+          return HttpResponseBadRequest("Invalid request method")
 
 def get_api_key(request):
-    google_api_key = os.environ.get("GOOGLE_BOOKS_API_KEY")
-    return JsonResponse({"google_api_key": google_api_key})
+    if request.method == "GET":
+          google_api_key = os.environ.get("GOOGLE_BOOKS_API_KEY")
+          return JsonResponse({"google_api_key": google_api_key})
+    else:
+          # For none get requests
+          return HttpResponseBadRequest("Invalid request method")
 
 def inventory(request):
-    # Get all books and categories
-    books = Book.objects.all()
-    categories = sorted(set(Book.objects.values_list("category", flat=True)))
-    conditions = sorted(set(Book.objects.values_list("condition", flat=True)))
+    if request.method == "GET":
+          # Get all books and categories
+          books = Book.objects.all()
+          categories = sorted(set(Book.objects.values_list("category", flat=True)))
+          conditions = sorted(set(Book.objects.values_list("condition", flat=True)))
+          return render(request,"books/inventory.html", {
+               "books": books,
+               "categories": categories,
+               "conditions": conditions
+          })
+    else:
+         # For none get requests
+         return HttpResponseBadRequest("Invalid request method")
 
+def get_images(request, id):
+      if request.method == "GET":
+          # Get book
+          book = Book.objects.get(id=id)
 
-    return render(request,"books/inventory.html", {
-         "books": books,
-         "categories": categories,
-         "conditions": conditions
-    } )
+          # Get associated images
+          bookImages = BookImage.objects.filter(book=book)
+          images = []
+          for image in bookImages:
+               data = {
+                    'image': unescape(image.image.url)
+               }
+               images.append(data)
+          return JsonResponse({"images": images})
+      else:
+          # For none get requests
+          return HttpResponseBadRequest("Invalid request method")

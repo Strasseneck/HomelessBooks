@@ -2,12 +2,14 @@
 {% load static %}
 
 {% block body %}
+
 <div class="container-fluid" id="edit-book-forms-container">
     <div class="mb-3">
       <form name="new-book-form" id="edit-book-form">
         {% csrf_token %}
         <div class="row">
         <div class="col">
+          <input hidden value="{{ book.id }}" id="book-id" name="book-id">
           <label for="book-language">Language</label>
           <input type="text" class="form-control fomr-control-sm" id="book-language" name="book-language" value="{{ book.language }}">
           <label for="book-title">Title</label>
