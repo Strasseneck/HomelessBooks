@@ -48,7 +48,7 @@ function createImageThumbnail(image, fileName) {
         // add remove image functionality 
         $button.on('click', function() {
             // Delete image function
-            if(filename !== undefined) {
+            if(fileName !== undefined) {
                 deleteImage(fileName);  
             }
             $thumbnailContainer.remove();
@@ -455,8 +455,9 @@ document.addEventListener('DOMContentLoaded', function () {
             // Get images
             getImages(id)
                 .then(response => {
+                console.log(response);
                 // Loop to create thumbnails
-                response.forEach(createImageThumbnail);
+                response.forEach(image => createImageThumbnail(image, undefined));
                 })
                 .catch(error => {
                     console.error('Error:', error);
