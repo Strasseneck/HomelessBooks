@@ -1,0 +1,92 @@
+{% extends "books/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container-fluid" id="edit-book-forms-container">
+    <div class="mb-3">
+      <form name="new-book-form" id="edit-book-form">
+        {% csrf_token %}
+        <div class="row">
+        <div class="col">
+          <label for="book-language">Language</label>
+          <input type="text" class="form-control fomr-control-sm" id="book-language" name="book-language" value="{{ book.language }}">
+          <label for="book-title">Title</label>
+          <input type="text" class="form-control form-control-sm" id="book-title" name="book-title" value="{{ book.title }}">
+          <label for="book-subtitles">Subtitle(s)</label>
+          <input type="text" class="form-control form-control-sm" id="book-subtitles" name="book-subtitles" value="{{ book.subtitle }}">
+          <label for="book-authors">Author(s)</label>
+          <input type="text" class="form-control form-control-sm" id="book-authors" name="book-authors" value="{{ book.authors }}">
+          <label for="book-publisher">Publisher</label>
+          <input type="text" class="form-control form-control-sm" id="book-publisher" name="book-publisher" value="{{ book.publisher }}">
+          <label for="book-category">Category</label>
+          <input type="text" class="form-control form-control-sm" id="book-category" name="book-category" value="{{ book.category }}">
+          <label for="book-publication-date">Publication Date</label>
+          <input type="text" class="form-control form-control-sm" id="book-publication-date" name="book-publication-date" value="{{ book.published_date }}">
+        </div>
+        <div class="col">
+          <label for="book-page-count">Page Count</label>
+          <input type="text" class="form-control form-control-sm" id="book-page-count" name="book-page-count" value="{{ book.page_count}}">
+          <label for="book-height">Height</label>
+          <input type="text" class="form-control form-control-sm" id="book-height" name="book-height" value="{{ book.height }}">
+          <label for="book-width">Width</label>
+          <input type="text" class="form-control form-control-sm" id="book-width" name="book-width" value="{{ book.width }}">
+          <label for="book-thickness">Thickness</label>
+          <input type="text" class="form-control form-control-sm" id="book-thickness" name="book-thickness" value="{{ book.thickness }}">
+          <label for="book-print-type">Print Type</label>
+          <input type="text" class="form-control form-control-sm" id="book-print-type" name="book-print-type" value="{{ book.print_type }}">
+          <div class="input-group mb-3 drop-down-form">
+            <label class="input-group-text" for="dust-jacket-dropdown">Dust Jacket Condition</label>
+            <select class="form-select form-select-sm" id="dust-jacket" name="book-dust-jacket" value="{{ book.dust_jacket }}">
+              <option value="{{ book.dust_jacket }}" selected>{{ book.dust_jacket }}</option>
+              <option value="none">None</option>
+              <option value="as new">As New</option>
+              <option value="fine">Fine</option>
+              <option value="very good">Very Good</option>
+              <option value="good">Good</option>
+              <option value="fair">Fair</option>
+              <option value="poor">Poor</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">           
+          <label for="book-description">Description</label>
+          <textarea class="form-control form-control-sm" id="book-description" name="book-description" cols="50" rows="7">{{ book.description }}</textarea>
+          <div class="input-group mb-3 drop-down-form">
+            <label class="input-group-text" for="book-binding-dropdown">Binding</label>
+            <select class="form-select form-select-sm" id="book-binding" name="book-binding">
+              <option selected>Choose...</option>
+              <option value="hardback">Hardback</option>
+              <option value="paperback">Paperback</option>
+            </select>
+          </div>
+          <div class="input-group mb-3 drop-down-form">
+            <label class="input-group-text" for="book-condition">Condition</label>
+            <select class="form-select form-select-sm" id="book-condition" name="book-condition">
+              <option selected>Choose...</option>
+              <option value="asnew">As New</option>
+              <option value="fine">Fine</option>
+              <option value="verygood">Very Good</option>
+              <option value="good">Good</option>
+              <option value="fair">Fair</option>
+              <option value="poor">Poor</option>
+            </select>
+          </div> 
+        </div>
+        <div class="col">
+          <p>Book Images</p>
+          <!--image preview-->
+          <div id="image-previews"></div>
+          <!--image upload form-->         
+          <div class="input-group mb-3">
+            {% csrf_token %}
+            <input type="file" accept="image/*" class="form-control" id="image-upload" name="image">
+            <button class="btn btn-outline-primary btn-sm" id="image-upload-button" type="button">Upload</button>
+          </div>    
+      </div>
+    </form>
+      <div class="container">
+        <button class="btn btn-outline-primary btn-sm" id="save-book-button" type="button">Save Book</button>
+      </div>
+    </div>
+</div>
+{% endblock %}

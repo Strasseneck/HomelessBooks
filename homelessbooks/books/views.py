@@ -105,7 +105,7 @@ def save_book(request):
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
 
-def delete_book(request, id):#
+def delete_book(request, id):
      if request.method == "POST":
           # Get book
           book = Book.objects.get(id=id)
@@ -117,6 +117,15 @@ def delete_book(request, id):#
      else:
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
+
+def edit_book(request, id):
+     if request.method == "GET":
+          # Get book
+          book = Book.objects.get(id=id)
+
+          return render(request, "books/editbook.html" , {
+               "book": book
+          })
 
 def book(request, id):
      # Get book object
