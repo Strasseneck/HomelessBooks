@@ -37,14 +37,14 @@
           {% endif %}
           <p>Author: {{ book.authors }}</p>
           <p>Publisher: {{ book.publisher }}</p>
-          <div class="accordion" id="accordionExample">
+          <div class="accordion" id="book-accordian">
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
                   Description
                 </button>
               </h2>
-              <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#book-accordian">
                 <div class="accordion-body">
                   <p>{{ book.description }}</p>
                 </div>
@@ -56,9 +56,9 @@
                   Condition
                 </button>
               </h2>
-              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#book-accordian">
                 <div class="accordion-body">
-                  <p>A {{ book.binding }} copy in {{ book.condition }} condition. See photos.</p>
+                  <p>A {{ book.binding }} copy in {{ book.condition }} condition. Dustjacket: {{ book.dust_jacket }} See photos.</p>
                 </div>
               </div>
             </div>
@@ -68,7 +68,7 @@
                   Details
                 </button>
               </h2>
-              <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#book-accordian">
                 <div class="accordion-body">
                   <p>Language: {{ book.language }}</p>
                   <p>Category: {{ book.category }}</p>

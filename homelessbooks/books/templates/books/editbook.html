@@ -3,13 +3,19 @@
 
 {% block body %}
 
-<div class="container-fluid" id="edit-book-forms-container">
+<div class="container-fluid" id="edit-book-view">
+  <div class="container-fluid" id="edit-book-forms-container">
     <div class="mb-3">
-      <form name="new-book-form" id="edit-book-form">
+      <form name="edit-book-form" id="edit-book-form">
         {% csrf_token %}
         <div class="row">
         <div class="col">
-          <input hidden value="{{ book.id }}" id="book-id" name="book-id">
+          <input type="hidden" id="book-id" name="book-id" value="{{ book.bookid}}">
+          <input hidden value="{{ book.id }}" id="id" name="id">
+          <label for="book-isbn-10">ISBN10</label>
+          <input type="hidden" class="form-control form-control-sm" id="book-isbn-10" name="book-isbn-10">
+          <label for="book-isbn-13">ISBN13</label>
+          <input type="hidden" class="form-control form-control-sm" id="book-isbn-13" name="book-isbn-13">
           <label for="book-language">Language</label>
           <input type="text" class="form-control fomr-control-sm" id="book-language" name="book-language" value="{{ book.language }}">
           <label for="book-title">Title</label>
@@ -20,8 +26,14 @@
           <input type="text" class="form-control form-control-sm" id="book-authors" name="book-authors" value="{{ book.authors }}">
           <label for="book-publisher">Publisher</label>
           <input type="text" class="form-control form-control-sm" id="book-publisher" name="book-publisher" value="{{ book.publisher }}">
-          <label for="book-category">Category</label>
-          <input type="text" class="form-control form-control-sm" id="book-category" name="book-category" value="{{ book.category }}">
+          <div class="input-group" id="book-category">
+            <select class="form-select" id="category-dropdown" name="book-category" aria-label="Select book category">
+              {% for category in categories %}
+              <option value="{{ category }}" {% if book.category == category %}selected{% endif %}>{{ category }}</option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary" id="add-category-button" type="button">Add category</button>
+          </div>
           <label for="book-publication-date">Publication Date</label>
           <input type="text" class="form-control form-control-sm" id="book-publication-date" name="book-publication-date" value="{{ book.published_date }}">
         </div>
@@ -38,15 +50,14 @@
           <input type="text" class="form-control form-control-sm" id="book-print-type" name="book-print-type" value="{{ book.print_type }}">
           <div class="input-group mb-3 drop-down-form">
             <label class="input-group-text" for="dust-jacket-dropdown">Dust Jacket Condition</label>
-            <select class="form-select form-select-sm" id="dust-jacket" name="book-dust-jacket" value="{{ book.dust_jacket }}">
-              <option value="{{ book.dust_jacket }}" selected>{{ book.dust_jacket }}</option>
-              <option value="none">None</option>
-              <option value="as new">As New</option>
-              <option value="fine">Fine</option>
-              <option value="very good">Very Good</option>
-              <option value="good">Good</option>
-              <option value="fair">Fair</option>
-              <option value="poor">Poor</option>
+            <select class="form-select form-select-sm" id="dust-jacket" name="book-dust-jacket">
+              <option value="none" {% if book.dust_jacket == "none" %}selected{% endif %}>None</option>
+              <option value="as new"{% if book.dust_jacket == "as new" %}selected{% endif %}>As New</option>
+              <option value="fine"{% if book.dust_jacket == "fine" %}selected{% endif %}>Fine</option>
+              <option value="very good"{% if book.dust_jacket == "very good" %}selected{% endif %}>Very Good</option>
+              <option value="good"{% if book.dust_jacket == "good" %}selected{% endif %}>Good</option>
+              <option value="fair"{% if book.dust_jacket == "fair" %}selected{% endif %}>Fair</option>
+              <option value="poor"{% if book.dust_jacket == "poor" %}selected{% endif %}>Poor</option>
             </select>
           </div>
         </div>
@@ -56,21 +67,19 @@
           <div class="input-group mb-3 drop-down-form">
             <label class="input-group-text" for="book-binding-dropdown">Binding</label>
             <select class="form-select form-select-sm" id="book-binding" name="book-binding">
-              <option selected>Choose...</option>
-              <option value="hardback">Hardback</option>
-              <option value="paperback">Paperback</option>
+              <option value="hardback" {% if book.binding == 'hardback' %}selected{% endif %}>Hardback</option>
+              <option value="paperback" {% if book.binding == 'paperback' %}selected{% endif %}>Paperback</option>
             </select>
           </div>
           <div class="input-group mb-3 drop-down-form">
             <label class="input-group-text" for="book-condition">Condition</label>
             <select class="form-select form-select-sm" id="book-condition" name="book-condition">
-              <option selected>Choose...</option>
-              <option value="asnew">As New</option>
-              <option value="fine">Fine</option>
-              <option value="verygood">Very Good</option>
-              <option value="good">Good</option>
-              <option value="fair">Fair</option>
-              <option value="poor">Poor</option>
+              <option value="as new" {% if book.condition == 'as new' %}selected{% endif %}>As New</option>
+              <option value="fine" {% if book.condition == 'fine' %}selected{% endif %}>Fine</option>
+              <option value="very good" {% if book.condition == 'very good' %}selected{% endif %}>Very Good</option>
+              <option value="good" {% if book.condition == 'good' %}selected{% endif %}>Good</option>
+              <option value="fair" {% if book.condition == 'fair' %}selected{% endif %}>Fair</option>
+              <option value="poor" {% if book.condition == 'poor' %}selected{% endif %}>Poor</option>
             </select>
           </div> 
         </div>
@@ -90,5 +99,7 @@
         <button class="btn btn-outline-primary btn-sm" id="save-book-button" type="button">Save Book</button>
       </div>
     </div>
+  </div>
 </div>
+
 {% endblock %}

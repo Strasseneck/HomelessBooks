@@ -1,10 +1,12 @@
 // GLOBAL VARIABLES
+
+// Book images array 
+const bookImages = [];
+
+// Current path
 const currentPath = window.location.pathname;
 
 // GLOBAL FUNCTIONS
-
-
-// HANDLE IMAGE UPLOADS
 
 // Upload image function
 function uploadImage() {
@@ -81,57 +83,77 @@ function saveBook() {
     // Get token
     const token = $('[name="csrfmiddlewaretoken"]').val();
 
-    // Create form data
-    const newBookForm = $('#new-book-form')[0];
-    const formData =  new FormData(newBookForm);
-    const bookTitle = $('#book-title').val();
+    // Check if it's new or edit book
 
-    // Loop to append each image
-    bookImages.forEach((bookImage, index) => {
-        formData.append(`image_${bookTitle}_${index}`, bookImage)
-    })
+    if ($('#new-book-form').length > 0) {
+        // It's a new book
 
-    // Make Fetch request
-    fetch('/save_book', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': token,
+        // Create form data
+        const newBookForm = $('#new-book-form')[0];
+        const formData =  new FormData(newBookForm);
+        const bookTitle = $('#book-title').val();
+
+        // Loop to append each image
+        bookImages.forEach((bookImage, index) => {
+            formData.append(`image_${bookTitle}_${index}`, bookImage)
+        })
+
+        // Make Fetch request
+        fetch('/save_book', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': token,
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            const id = data.id
+            // Redirect to book
+            window.location.href = `/book/${id}`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        })
+    }
+
+    else {
+        // It's an update of an existing book
+
+        // Create form data
+        const editBookForm = $('#edit-book-form')[0];
+        const formData =  new FormData(editBookForm);
+        const bookTitle = $('#book-title').val();
+
+        // Check for new image uploads
+        if(typeof bookImages !== 'undefined') {
+            // Loop to append each image
+            bookImages.forEach((bookImage, index) => {
+                formData.append(`image_${bookTitle}_${index}`, bookImage)
+            })
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
-        const id = data.id
-        // Load book saved
-        bookSaved(id);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    })
-}
 
-// Display book saved view
-function bookSaved(id) {
-    // Remove the add book view
-    $('#add-new-book-view').remove()
+        // Make Fetch request
+        fetch('/save_book', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': token,
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            const id = data.id
+            // Load book saved
+            window.location.href = `/book/${id}`
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        })
 
-    // Add success message and button and form
-    $('<div>')
-        .addClass('container')
-        .attr('id', 'success-message-container')
-        .appendTo('body');
-
-    $('<strong>')
-        .text('Book succesfully saved')
-        .prependTo('#success-message-container');
-
-    $('<a>')
-        .addClass('btn btn-outline-primary')
-        .attr('role', 'button')
-        .attr('href', `book/${id}`)
-        .text('View Book')
-        .appendTo('#success-message-container');
+    }  
 }
 
 // Get images for book 
@@ -162,11 +184,7 @@ async function getImages(id) {
 document.addEventListener('DOMContentLoaded', function () {
     // ADD BOOK PAGE
     if(currentPath.startsWith ('/add_book')) {
-        // VARIABLES 
-
-        // Book images array 
         const bookImages = [];
-
         // Generate random uid for books and images
         generateRandomUid();
 
@@ -443,6 +461,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                window.location.href = '/inventory'
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -451,19 +470,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // EDIT BOOK PAGE
         if(currentPath.startsWith('/book/edit_book')) {
-            const id = $('#book-id').val()
+            // Book images array 
+            const bookImages = [];
+            // Add category button
+            $('#add-category-button').on('click', addCategory);
+
+            // Save book and images on click Event listener
+            $('#save-book-button').on('click', saveBook);
+
+            // Upload image button event listener
+            $('#image-upload-button').on('click', uploadImage);
+
+            const id = $('#id').val()
             // Get images
             getImages(id)
                 .then(response => {
-                console.log(response);
                 // Loop to create thumbnails
                 response.forEach(image => createImageThumbnail(image, undefined));
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                });
-            
-           
+                });   
         }
     }
 })
