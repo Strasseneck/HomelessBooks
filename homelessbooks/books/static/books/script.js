@@ -208,29 +208,29 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#isbn-submit').on('click', function () {
             // Define isbn variable and remove hyphens
             isbn = $('#isbn-search').val().replace(/-/g, '');
-            console.log(isbn)
             if(isbn !== '') {
                 // Call get book id function
                 getBookIdIsbn(isbn);
             }
             else {
-                console.log('no ISBN input');
-                return;
+                $('#isbn-search').attr('placeholder', 'Please enter a valid ISBN number!')
             }
             
         })
 
         // Title author search button event listener
-        $('#title-author-submit').on('click', function () {
+        $('#title-author-publisher-submit').on('click', function () {
             // define title and author
             const title = $('#title-search').val();
             const author = $('#author-search').val();
-            if(title !== "" && author !== "") {
-                getBookIdTitleAuthor(title, author);
+            const publisher = $('#publisher-search').val();
+            if(title !== "" && author !== "" && publisher !== "") {
+                getBookIdTitleAuthorPublisher(title, author, publisher);
             }
             else {
-                console.log('Title or author missing');
-                return;
+                $('#title-search').attr('placeholder', "Please enter a title...");
+                $('#author-search').attr('placeholder', "and author...");
+                $('#publisher-search').attr('placeholder', "...and publisher!")
             }
         })
 
@@ -311,10 +311,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Get book data title and author
-        async function getBookDataTitleAuthor(title, author) {
+        async function getBookDataTitleAuthorPublisher(title, author, publisher) {
             try {
                 // Request book data using isbn
-                const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${title}+inauthor:${author}&key=${googleApiKey}`);
+                const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${title}+inauthor:${author}+inpublisher:${publisher}&key=${googleApiKey}`);
             
                 if(!response.ok) {
                     throw new Error(`HTTP error! Status ${response.status}`)
@@ -332,13 +332,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Get google volume id via title and author
-        async function getBookIdTitleAuthor(title, author) {
+        async function getBookIdTitleAuthorPublisher(title, author, publisher) {
             // Call async function to get data
-            const result = await getBookDataTitleAuthor(title, author);
+            const result = await getBookDataTitleAuthorPublisher(title, author, publisher);
 
             if(result !== null && result.items[0].id !== undefined) {
                 // Get year
-                let year = $('#published-search').val();
+                let year = $('#year-search').val();
                 let results = result.items;
                 // Loop through results to find published in year
                 const book = results.find(result => result.volumeInfo.publishedDate.includes(year));
@@ -368,8 +368,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get book data with bookId function
         function getBookData(bookId) {
-            console.log('get book data with bookid function')
-            console.log(bookId);
             // Get book volume resource using book id
             fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
                 .then((response) => {

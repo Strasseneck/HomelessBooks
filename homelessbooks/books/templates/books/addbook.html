@@ -6,23 +6,24 @@
 <div class="container-fluid" id="add-new-book-view">
   <!--header-->
   <div class="page-header">
-      <p>Enter ISBN to retrieve book details. If book doesn't have an ISBN enter the book's title, author and the year it was published to retrieve book details.</p>
+      <p>Enter ISBN to retrieve book details. If book doesn't have an ISBN enter the book's title, author, publisher and the year it was published to retrieve book details.</p>
   </div>
   <!--searches container-->
   <div class="container" id="searches-container">
     <!--isbn search form-->
     <div class="input-group" id="isbn-search-form">
       <span class="input-group-text">ISBN</span>
-      <input type="text" class="form-control form-control-sm" id="isbn-search" name="isbn-search" max-length="15">      
+      <input type="text" class="form-control form-control-sm" placeholder="ISBN number"id="isbn-search" name="isbn-search" max-length="15">      
       <input type="submit" class="btn btn-outline-primary btn-sm" id="isbn-submit" value="Search" name="isbn-submit">
     </div>
     <!--author title search form-->
     <div class="input-group" id="title-author-search-form">
-      <span class="input-group-text">Title, Author, Year</span>
-      <input type="text" class="form-control form-control-sm" id="title-search" name="title-search">
-      <input type="text" class="form-control form-control-sm" id="author-search" name="author-search">
-      <input type="text" class="form-control form-control-sm" id="year-search" name="year-search">
-      <input type="submit" class="btn btn-outline-primary btn-sm" id="title-author-submit" value="Search" name="title-author-submit">
+      <span class="input-group-text">Title, Author, Publisher, Year</span>
+      <input type="text" class="form-control form-control-sm" placeholder="Book's title" id="title-search" name="title-search">
+      <input type="text" class="form-control form-control-sm" placeholder="Book's author" id="author-search" name="author-search">
+      <input type="text" class="form-control form-control-sm" placeholder="Book's publisher" id="publisher-search" name="publisher-search">
+      <input type="text" class="form-control form-control-sm" placeholder="Year published" id="year-search" name="year-search">
+      <input type="submit" class="btn btn-outline-primary btn-sm" id="title-author-publisher-submit" value="Search" name="title-author-publisher-submit">
     </div>
   </div>
   <!--new book form-->
