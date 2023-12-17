@@ -69,18 +69,34 @@ def save_book(request):
                     # Update where necessary
                     for key, value in book_data.items():
                          setattr(book, key, value)
-                         book.save()
+
+               book.save()
                
                # Check for new images
                image_keys = [key for key in request.FILES.keys() if key.startswith("image_")]
 
-               if len(image_keys) > 0:
-                    # Loop over and save images
-                    for key in image_keys:
-                         image = request.FILES[key]
-                         book_image = BookImage(image=image, book=book)
-                         book_image.save()
+               # Loop over and save images
+               for key in image_keys:
+                    image = request.FILES[key]
+                    book_image = BookImage(image=image, book=book)
+                    book_image.save()
                
+                # Get associated images
+               images = BookImage.objects.filter(book=book)
+
+               # Get the just added book
+               book = Book.objects.get(id=book.id)
+               book.images.set(images)
+               book.save()
+
+               # Check for images to delete
+               for key in request.POST.keys():
+                    if key.startswith('delete_'):
+                         # Retrieve book image instance and delete
+                         id = request.POST[key]
+                         bookImage = BookImage.objects.get(id=id)
+                         bookImage.delete()
+
                # Get id          
                id = book.id
                return JsonResponse({"message": "Book updated successfully", "id": id})
@@ -196,7 +212,8 @@ def get_images(request, id):
           images = []
           for image in bookImages:
                data = {
-                    'image': unescape(image.image.url)
+                    'path': unescape(image.image.url),
+                    'id': image.id
                }
                images.append(data)
           return JsonResponse({"images": images})

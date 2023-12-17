@@ -1,10 +1,13 @@
 // GLOBAL VARIABLES
 
-// Book images array 
-const bookImages = [];
-
 // Current path
 const currentPath = window.location.pathname;
+
+// Book array
+const bookImages = [];
+
+// Images to delete array
+const deleteImages = [];
 
 // GLOBAL FUNCTIONS
 
@@ -19,7 +22,7 @@ function uploadImage() {
         fileReader.onload = event => {
             const image = event.target.result;
             // Create thumbnail
-            createImageThumbnail(image, fileName);
+            createImageThumbnail(image, null, fileName);
         }
         fileReader.readAsDataURL(file[0]);
         // Store image for database
@@ -28,7 +31,7 @@ function uploadImage() {
 }
 
 // Create thumbnail
-function createImageThumbnail(image, fileName) {
+function createImageThumbnail(image, id = null , fileName = null) {
     // Create thumbnail container
     const $thumbnailContainer = $('<div>')
     $thumbnailContainer.addClass('thumbnail-container')
@@ -50,8 +53,11 @@ function createImageThumbnail(image, fileName) {
         // add remove image functionality 
         $button.on('click', function() {
             // Delete image function
-            if(fileName !== undefined) {
+            if(fileName !== null) {
                 deleteImage(fileName);  
+            }
+            if(id !== null) {
+                deleteImages.push(id)
             }
             $thumbnailContainer.remove();
         })
@@ -108,7 +114,6 @@ function saveBook() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             const id = data.id
             // Redirect to book
             window.location.href = `/book/${id}`;
@@ -120,11 +125,18 @@ function saveBook() {
 
     else {
         // It's an update of an existing book
-
         // Create form data
         const editBookForm = $('#edit-book-form')[0];
         const formData =  new FormData(editBookForm);
         const bookTitle = $('#book-title').val();
+
+        // Check for images to delete
+        if(deleteImages.length !== 0) {
+            // Loop to append each image
+            deleteImages.forEach((deleteImage, index) => {
+                formData.append(`delete_id_${index}`, deleteImage)
+            })
+        }
 
         // Check for new image uploads
         if(typeof bookImages !== 'undefined') {
@@ -144,7 +156,6 @@ function saveBook() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             const id = data.id
             // Load book saved
             window.location.href = `/book/${id}`
@@ -166,11 +177,10 @@ async function getImages(id) {
         }
 
         const data = await response.json();
-        const paths = data.images;
-        returnedImages = []
-        paths.forEach(el => {
-            returnedImages.push(el.image)
-        })
+        
+        // Convert to array
+        const returnedImages = data.images;
+
         return returnedImages;     
         }
     catch (error) {
@@ -180,10 +190,11 @@ async function getImages(id) {
     }
 }
 
-// CONDITIONAL FUNCTIONS
+// PAGE SPECIFIC FUNCTIONS
 document.addEventListener('DOMContentLoaded', function () {
     // ADD BOOK PAGE
     if(currentPath.startsWith ('/add_book')) {
+        
         const bookImages = [];
         // Generate random uid for books and images
         generateRandomUid();
@@ -255,6 +266,24 @@ document.addEventListener('DOMContentLoaded', function () {
         // Generate random book id for linking images and book
         function generateRandomUid() {
             $('#book-id').val(Math.random().toString(36).substring(2,9));
+        }
+
+        // Add category function
+        function addCategory() {
+            // Remove dropdown
+            $('#category-dropdown').remove();
+
+            // Create input and insert
+            $('<input>')
+                .addClass('form-control form-control-sm')
+                .attr('type', 'text')
+                .attr('id', 'new-category-input')
+                .attr('name', 'book-category')
+                .prependTo('#book-category');
+
+            // Remove listener
+            $('#add-category-button')
+                .off('click', addCategory)
         }
            
         // SEARCH FUNCTIONS
@@ -416,24 +445,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 createImageThumbnail(bookInfo.imageLinks.thumbnail);               
             }
         }
-
-        // Add category function
-        function addCategory() {
-            // Remove dropdown
-            $('#category-dropdown').remove();
-
-            // Create input and insert
-            $('<input>')
-                .addClass('form-control form-control-sm')
-                .attr('type', 'text')
-                .attr('id', 'new-category-input')
-                .attr('name', 'book-category')
-                .prependTo('#book-category');
-
-            // Remove listener
-            $('#add-category-button')
-                .off('click', addCategory)
-        }
     }   
     // BOOK PAGE
     else if(currentPath.startsWith('/book')){
@@ -466,32 +477,38 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error:', error);
             })
-        }
+        }      
+    }
+    // EDIT BOOK PAGE
+    else if(currentPath.startsWith('/edit_book')) {
+        // Book images array 
+        const bookImages = [];
+        // Images to delete array
+        const deleteImages = []
 
-        // EDIT BOOK PAGE
-        if(currentPath.startsWith('/book/edit_book')) {
-            // Book images array 
-            const bookImages = [];
-            // Add category button
-            $('#add-category-button').on('click', addCategory);
+        // Add category button
+        $('#add-category-button').on('click', addCategory);
 
-            // Save book and images on click Event listener
-            $('#save-book-button').on('click', saveBook);
+        // Save book and images on click Event listener
+        $('#save-book-button').on('click', saveBook);
 
-            // Upload image button event listener
-            $('#image-upload-button').on('click', uploadImage);
+        // Upload image button event listener
+        $('#image-upload-button').on('click', uploadImage);
 
-            const id = $('#id').val()
-            // Get images
-            getImages(id)
-                .then(response => {
-                // Loop to create thumbnails
-                response.forEach(image => createImageThumbnail(image, undefined));
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });   
-        }
+        const id = $('#id').val()
+        // Get images
+        getImages(id)
+            .then(response => {
+            // Loop to create thumbnails
+            response.forEach(image => createImageThumbnail(image.path, image.id, null));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });   
+    }
+    // INVENTORY PAGE
+    else if(currentPath.startsWith('/inventory')) {
+
     }
 })
     

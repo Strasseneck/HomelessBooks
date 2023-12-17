@@ -58,7 +58,7 @@
               </h2>
               <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#book-accordian">
                 <div class="accordion-body">
-                  <p>A {{ book.binding }} copy in {{ book.condition }} condition. Dustjacket: {{ book.dust_jacket }} See photos.</p>
+                  <p>A {{ book.binding }} copy in {{ book.condition }} condition{% if book.dust_jacket != 'none' %} with dust jacket in {{ book.dust_jacket }} condition.{% else %}.{% endif %} See photos.</p>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@
                 </div>
               </div>
             </div>
-              <a class="btn btn-outline-primary" href="edit_book/{{ book.id }}" role="button">Edit Book</a>  
+              <a class="btn btn-outline-primary" href="/edit_book/{{ book.id }}" role="button">Edit Book</a>  
               <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete Book</button>
           </div>
       </div>
