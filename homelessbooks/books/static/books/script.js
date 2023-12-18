@@ -1,4 +1,4 @@
-// GLOBAL VARIABLES
+// Global Variables
 
 // Current path
 const currentPath = window.location.pathname;
@@ -9,7 +9,7 @@ const bookImages = [];
 // Images to delete array
 const deleteImages = [];
 
-// GLOBAL FUNCTIONS
+// Global Functions
 
 // Upload image function
 function uploadImage() {
@@ -23,7 +23,7 @@ function uploadImage() {
             const image = event.target.result;
             // Create thumbnail
             createImageThumbnail(image, null, fileName);
-        }
+            }
         fileReader.readAsDataURL(file[0]);
         // Store image for database
         bookImages.push(file[0]);
@@ -194,7 +194,8 @@ async function getImages(id) {
 document.addEventListener('DOMContentLoaded', function () {
     // ADD BOOK PAGE
     if(currentPath.startsWith ('/add_book')) {
-        
+        // Variables
+
         const bookImages = [];
         // Generate random uid for books and images
         generateRandomUid();
@@ -202,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Get api key via fetch function
         let googleApiKey = getApiKey();
 
-        // EVENT LISTENERS
+        // Event listeners
 
         // ISBN search button event listener
         $('#isbn-submit').on('click', function () {
@@ -243,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Save book and images on click Event listener
         $('#save-book-button').on('click', saveBook);
 
-        // FUNCTIONS
+        // Functions
 
         // Get api keys function
         function getApiKey() {
@@ -446,13 +447,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }   
     // BOOK PAGE
     else if(currentPath.startsWith('/book')){
-        //EVENT LISTENERS
-       
+        //Event listeners
+
         // Delete book button event listener
         $('#delete-book-button').on('click', function () {
             const id = $(this).val();
             deleteBook(id);
         });
+        
+        // Functions
 
         // Delete book function
         function deleteBook(id) {
@@ -479,10 +482,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // EDIT BOOK PAGE
     else if(currentPath.startsWith('/edit_book')) {
+        // Variables
+
         // Book images array 
         const bookImages = [];
+
         // Images to delete array
         const deleteImages = []
+
+        // Event listeners
 
         // Add category button
         $('#add-category-button').on('click', addCategory);
@@ -506,7 +514,68 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // INVENTORY PAGE
     else if(currentPath.startsWith('/inventory')) {
+        // Variables
+        let returnedInventory = []
 
+
+        // Event listeners
+        
+        // Search bar
+        $('#inventory-search').on('input', function () {
+            console.log("input triggered")
+            const query = $(this).val().toLowerCase();
+            console.log(`query: ${query}`);
+            searchInventory(query);
+        })
+
+        // Functions
+
+        // Search inventory
+        function searchInventory(query) {
+            returnedInventory = [];
+            const inventoryRows = $('.inventory-row').toArray();
+            inventoryRows.forEach((row) => {
+                const cells = Array.from(row.cells);
+                const containsQuery = cells.some((cell) => {
+                    console.log('Checking cell:', cell.textContent, `for ${query}`);
+                    return cell.textContent.toLowerCase().includes(query);
+                  });
+                console.log(containsQuery)
+                if(containsQuery) {
+                    returnedInventory.push(row);
+                }
+            })
+            if(returnedInventory.length > 0) {
+                return displayResult(returnedInventory);
+            }
+        }
+
+        // Display result function
+        function displayResult(inventory) {
+            console.log("display result triggered")
+            // remove current body
+            $('#inventory-table-body').remove()
+            // create new
+            const $newBody = $('<tbody>').attr('id', 'inventory-table-body');
+            
+            // Create rows
+            inventory.forEach((row) => {
+                // Create array of cells
+                const cells = Array.from(row.cells);
+
+                // Create row
+                const $newRow = $('<tr>').addClass('inventory-row')
+
+                // Create cells
+                cells.forEach((cell) => {
+                    $('<td>').text(cell.textContent).appendTo($newRow);
+                })
+
+                // Append row to new body
+                $newRow.appendTo($newBody)
+            })
+            // Append to table
+            $newBody.appendTo('#inventory-table');
+        }
     }
 })
-    

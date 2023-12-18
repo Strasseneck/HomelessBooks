@@ -34,16 +34,15 @@
           </li>
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Title, author, publisher" aria-label="Search">
-          <button class="btn btn-outline-primary" type="submit">Search</button>
+          <input class="form-control me-2" id="inventory-search" type="search" placeholder="Title, author, publisher" aria-label="Search">
         </form>
       </div>
     </div>
   </nav>
 <!--inventory table-->
-<table class="table table-light table-striped">
+<table class="table table-light table-striped" id="inventory-table">
     <thead>
-      <tr>
+      <tr id="inventory-header-row">
         <th scope="col">Inventory Id</th>
         <th scope="col">Title</th>
         <th scope="col">Author</th>
@@ -53,17 +52,17 @@
         <th scope="col">Thumbnail</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="inventory-table-body">
     {% for book in books %}
-      <tr>
-        <td>{{ book.id }}</td>
-        <td><a href="book/{{ book.id }}">{{ book.title }}</a></td>
-        <td>{{ book.authors }}</td>
-        <td>{{ book.publisher }}</td>
-        <td>{{ book.category }}</td>
-        <td>{{ book.condition }}</td>
+      <tr class="inventory-row" id="row-{{ forloop.counter }}">
+        <td id="id-{{ forloop.counter }}">{{ book.id }}</td>
+        <td id="link-{{ forloop.counter }}"><a href="book/{{ book.id }}">{{ book.title }}</a></td>
+        <td id="author-{{ forloop.counter }}">{{ book.authors }}</td>
+        <td id="publisher-{{ forloop.counter }}">{{ book.publisher }}</td>
+        <td id="category-{{ forloop.counter }}">{{ book.category }}</td>
+        <td id="condition-{{ forloop.counter }}">{{ book.condition }}</td>
         {% if book.images.all %}
-            <td><a href="{{ book.images.first.image.url }}">Thumbnail</a></td>
+            <td id="image-{{ forloop.counter }}"><a href="{{ book.images.first.image.url }}">Thumbnail</a></td>
         {% endif %}
       </tr>
       {% endfor %}
