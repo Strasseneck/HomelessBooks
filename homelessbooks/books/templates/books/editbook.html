@@ -12,10 +12,10 @@
         <div class="col">
           <input type="hidden" id="book-id" name="book-id" value="{{ book.bookid}}">
           <input hidden value="{{ book.id }}" id="id" name="id">
-          <label for="book-isbn-10">ISBN10</label>
-          <input type="hidden" class="form-control form-control-sm" value="{{ book.isbn_10}}" id="book-isbn-10" name="book-isbn-10">
-          <label for="book-isbn-13">ISBN13</label>
-          <input type="hidden" class="form-control form-control-sm" id="book-isbn-13" value="{{ book.isbn_13 }}"name="book-isbn-13">
+          <label for="book-isbn-10">ISBN 10</label>
+          <input type="text" class="form-control form-control-sm" value="{{ book.isbn_10}}" id="book-isbn-10" name="book-isbn-10"> 
+          <label for="book-isbn-13">ISBN 13</label>
+          <input type="text" class="form-control form-control-sm" id="book-isbn-13" value="{{ book.isbn_13 }}"name="book-isbn-13">
           <label for="book-language">Language</label>
           <input type="text" class="form-control fomr-control-sm" id="book-language" name="book-language" value="{{ book.language }}">
           <label for="book-title">Title</label>
