@@ -522,12 +522,8 @@ document.addEventListener('DOMContentLoaded', function () {
         
         // Search bar
         $('#inventory-search').on('input', function () {
-            console.log("input triggered")
             const query = $(this).val().toLowerCase();
-            console.log(`query: ${query}`);
-            if(query !== "") {
-                searchInventory(query);
-            }
+            searchInventory(query);
         })
 
         // Functions
@@ -538,6 +534,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const inventoryRows = $('.inventory-row').toArray();
             inventoryRows.forEach((row) => {
                 const cells = Array.from(row.cells);
+                console.log(query)
                 const containsQuery = cells.some((cell) => cell.textContent.toLowerCase().includes(query));
                 if(containsQuery) {
                     returnedInventory.push(row);
@@ -555,6 +552,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(!(inventory.includes(row))) {
                     const $toHide = $(`#${row.id}`);
                     $toHide.attr('hidden', true);
+                }
+                else {
+                    const $toShow = $(`#${row.id}`);
+                    $toShow.attr('hidden', false);
                 }
             })
         }
