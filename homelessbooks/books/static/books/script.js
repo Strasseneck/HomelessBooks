@@ -525,7 +525,9 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("input triggered")
             const query = $(this).val().toLowerCase();
             console.log(`query: ${query}`);
-            searchInventory(query);
+            if(query !== "") {
+                searchInventory(query);
+            }
         })
 
         // Functions
@@ -536,11 +538,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const inventoryRows = $('.inventory-row').toArray();
             inventoryRows.forEach((row) => {
                 const cells = Array.from(row.cells);
-                const containsQuery = cells.some((cell) => {
-                    console.log('Checking cell:', cell.textContent, `for ${query}`);
-                    return cell.textContent.toLowerCase().includes(query);
-                  });
-                console.log(containsQuery)
+                const containsQuery = cells.some((cell) => cell.textContent.toLowerCase().includes(query));
                 if(containsQuery) {
                     returnedInventory.push(row);
                 }
@@ -552,30 +550,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Display result function
         function displayResult(inventory) {
-            console.log("display result triggered")
-            // remove current body
-            $('#inventory-table-body').remove()
-            // create new
-            const $newBody = $('<tbody>').attr('id', 'inventory-table-body');
-            
-            // Create rows
-            inventory.forEach((row) => {
-                // Create array of cells
-                const cells = Array.from(row.cells);
-
-                // Create row
-                const $newRow = $('<tr>').addClass('inventory-row')
-
-                // Create cells
-                cells.forEach((cell) => {
-                    $('<td>').text(cell.textContent).appendTo($newRow);
-                })
-
-                // Append row to new body
-                $newRow.appendTo($newBody)
+            const currentRows = Array.from($('.inventory-row'));
+            currentRows.forEach((row) => {
+                if(!(inventory.includes(row))) {
+                    const $toHide = $(`#${row.id}`);
+                    $toHide.attr('hidden', true);
+                }
             })
-            // Append to table
-            $newBody.appendTo('#inventory-table');
         }
     }
 })
