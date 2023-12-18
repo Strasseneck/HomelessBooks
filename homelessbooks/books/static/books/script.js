@@ -515,8 +515,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // INVENTORY PAGE
     else if(currentPath.startsWith('/inventory')) {
         // Variables
-        let returnedInventory = []
-
+        let returnedInventory = [];
+        let conditionsChecked = [];
 
         // Event listeners
         
@@ -526,34 +526,67 @@ document.addEventListener('DOMContentLoaded', function () {
             searchInventory(query);
         })
 
+        // Condition sort dropdown   
+        $('.condition-checkbox').on('click', function () {
+            // Check if the value is currently clicked
+            const checkbox = $(this).val()
+            checkboxClicked(checkbox);
+        })
+
         // Functions
+
+        // Condition checkboxes 
+        function checkboxClicked(checkbox) {
+            if(conditionsChecked.includes(checkbox)){
+                // If it's already clicked remove
+                const index = conditionsChecked.indexOf(checkbox);
+                conditionsChecked.splice(index, 1);
+            }
+            else{
+                // If not add to array
+                conditionsChecked.push(checkbox)
+            }
+            sortByCondition(conditionsChecked);
+        }
+
+        // Sort by condition
+        function sortByCondition(conditionsChecked) {
+            const currentRows = Array.from($('.inventory-row'));
+            // Check for condition    
+        }
 
         // Search inventory
         function searchInventory(query) {
+            // Clear out array
             returnedInventory = [];
+            // Get current rows
             const inventoryRows = $('.inventory-row').toArray();
             inventoryRows.forEach((row) => {
+                // Make array of cells per row
                 const cells = Array.from(row.cells);
-                console.log(query)
+                // Check if search query is in cells
                 const containsQuery = cells.some((cell) => cell.textContent.toLowerCase().includes(query));
                 if(containsQuery) {
+                    // if it contains search add to array
                     returnedInventory.push(row);
                 }
             })
-            if(returnedInventory.length > 0) {
-                return displayResult(returnedInventory);
-            }
+            // Display / hide inventory rows
+            return displayResult(returnedInventory);   
         }
 
         // Display result function
         function displayResult(inventory) {
+            // Get currently showing rows
             const currentRows = Array.from($('.inventory-row'));
             currentRows.forEach((row) => {
                 if(!(inventory.includes(row))) {
+                    // Hide row
                     const $toHide = $(`#${row.id}`);
                     $toHide.attr('hidden', true);
                 }
                 else {
+                    // Show row
                     const $toShow = $(`#${row.id}`);
                     $toShow.attr('hidden', false);
                 }
