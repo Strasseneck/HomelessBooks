@@ -35,6 +35,9 @@
                 <li><a class="dropdown-item" href="#">Date added ascending</a></li>
             </ul>
           </li>
+          <li>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="multiple-delete-button">Multiple Delete</button>
+          </li>
         </ul>
         <div class="container-fluid" id="inventory-search-container">
           <input class="form-control me-2" id="inventory-search" type="search" placeholder="Search by keyword..." aria-label="Search">
@@ -46,7 +49,6 @@
 <table class="table table-light table-striped" id="inventory-table">
     <thead>
       <tr id="inventory-header-row">
-        <th scope="col">Id</th>
         <th scope="col">Title</th>
         <th scope="col">Author</th>
         <th scope="col">Publisher</th>
@@ -58,14 +60,13 @@
     <tbody id="inventory-table-body">
     {% for book in books %}
       <tr class="inventory-row" id="row-{{ forloop.counter }}">
-        <td id="id-{{ forloop.counter }}">{{ book.id }}</td>
         <td id="link-{{ forloop.counter }}"><a href="book/{{ book.id }}">{{ book.title }}</a></td>
         <td id="author-{{ forloop.counter }}">{{ book.authors }}</td>
         <td id="publisher-{{ forloop.counter }}">{{ book.publisher }}</td>
         <td id="category-{{ forloop.counter }}">{{ book.category }}</td>
-        <td id="condition-{{ forloop.counter }}">{{ book.condition }}</td>
+        <td id="condition-{{ forloop.counter }}">{{ book.condition|capfirst }}</td>
         {% if book.images.all %}
-            <td id="image-{{ forloop.counter }}"><a href="{{ book.images.first.image.url }}">Thumbnail</a></td>
+            <td id="image-{{ forloop.counter }}"><img class="img-thumbnail-inventory" src="{{ book.images.first.image.url }}"></td>
         {% endif %}
       </tr>
       {% endfor %}
