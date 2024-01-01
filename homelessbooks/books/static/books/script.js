@@ -527,32 +527,54 @@ document.addEventListener('DOMContentLoaded', function () {
         })
 
         // Condition sort dropdown   
-        $('.condition-checkbox').on('click', function () {
+        $('.condition-checkbox').on('change', function () {
             // Check if the value is currently clicked
             const checkbox = $(this).val()
-            checkboxClicked(checkbox);
+            if (this.checked) {
+                // Box selected
+                checkboxSelected(checkbox);
+            }
+            else {
+                // Box deselected
+                checkboxDeselected(checkbox);
+            }
         })
 
         // Functions
 
-        // Condition checkboxes 
-        function checkboxClicked(checkbox) {
-            if(conditionsChecked.includes(checkbox)){
-                // If it's already clicked remove
-                const index = conditionsChecked.indexOf(checkbox);
-                conditionsChecked.splice(index, 1);
-            }
-            else{
-                // If not add to array
-                conditionsChecked.push(checkbox)
-            }
+        // Condition checkbox clicked
+        function checkboxSelected(checkbox) {
+            // Add to array call sorting function
+            conditionsChecked.push(checkbox);
+            sortByCondition(conditionsChecked);
+        }
+
+        // Condition checkbox unclicked
+        function checkboxDeselected(checkbox) {
+            // Remove from array call sorting function
+            const index = conditionsChecked.indexOf(checkbox);
+            conditionsChecked.splice(index, 1);
             sortByCondition(conditionsChecked);
         }
 
         // Sort by condition
         function sortByCondition(conditionsChecked) {
-            const currentRows = Array.from($('.inventory-row'));
-            // Check for condition    
+            returnedInventory = [];
+            const rows = Array.from($('.inventory-row'));
+            if (conditionsChecked.length !== 0) {
+                rows.forEach(row => {
+                    const condition = `${row.cells[4].innerText.toLowerCase()}`;
+                    if(conditionsChecked.includes(condition)) {
+                        returnedInventory.push(row);
+                    };
+                })
+            }
+            else {
+                rows.forEach(row => {
+                    returnedInventory.push(row);
+                })
+            }
+            displayResult(returnedInventory);
         }
 
         // Search inventory
