@@ -59,10 +59,11 @@
       </tr>
     </thead>
     <tbody id="inventory-table-body">
+    {% csrf_token %}
     {% for book in books %}
       <tr class="inventory-row" id="row-{{ forloop.counter }}" data-book-id="{{ book.id }}" >
-        <td class="inventory-checkbox" id="checkbox-{{ forloop.counter }}" hidden="hidden">
-          <input class="form-check-input" type="checkbox" value="{{ book.id }}" id="select-{{ book.id }}-checkbox">
+        <td class="checkbox-row" id="checkbox-{{ forloop.counter }}" hidden="hidden">
+          <input class="form-check-input inventory-checkbox" type="checkbox" data-book-id="{{ book.id }}" id="select-{{ book.id }}-checkbox">
         </td>
         <td id="link-{{ forloop.counter }}"><a href="book/{{ book.id }}">{{ book.title }}</a></td>
         <td id="author-{{ forloop.counter }}">{{ book.authors }}</td>

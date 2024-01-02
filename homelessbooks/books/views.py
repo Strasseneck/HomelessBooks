@@ -131,19 +131,46 @@ def save_book(request):
 
 def delete_book(request):
      if request.method == "POST":
-          # Extract id
-          id = request.body.decode('utf-8')
+          try:
+               # Extract content of body
+               body = request.body.decode("utf-8")
+               ids = json.loads(body)
+               
+               if isinstance(ids, list):
+                    # List means multiple to delete
+                    for id in ids:
+                         # Get book
+                         book = Book.objects.get(id=id)
+                         # Delete book
+                         book.delete()
+
+                         deleted_ids = json.dumps(ids)
+                         # Return json response
+                         return JsonResponse({"message": "Books deleted", "ids": deleted_ids})
+
+               elif isinstance(ids, str):
+                    # String means single id
+                    # Get book
+                    book = Book.objects.get(id=ids)
+
+                    # Delete book
+                    book.delete()
+
+                    # Return json response
+                    return JsonResponse({"message": "Book deleted", "id": id})
+               else:
+                    # Invalid format
+                    return HttpResponseBadRequest("Invalid IDs format")
+               
+          except json.JSONDecodeError:
+               return HttpResponseBadRequest("Invalid JSON format")
           
-          # Get book
-          book = Book.objects.get(id=id)
-
-          # Delete book
-          book.delete()
-
-          return JsonResponse({"message": "Book deleted", "id": id})
+          except Book.DoesNotExist:
+               return JsonResponse({"message": "Book or books not found"})
      else:
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
+
 
 def edit_book(request, id):
      if request.method == "GET":

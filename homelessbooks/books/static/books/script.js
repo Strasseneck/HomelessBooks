@@ -534,10 +534,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const checkbox = $(this).val();
       if (this.checked) {
         // Box selected
-        checkboxSelected(checkbox);
+        conditionCheckboxSelected(checkbox);
       } else {
         // Box deselected
-        checkboxDeselected(checkbox);
+        conditionCheckboxDeselected(checkbox);
       }
     });
 
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const rows = Array.from($(".inventory-row"));
         rows.forEach((row) => {
           const bookId = row.dataset.bookId;
-          toDelete.push(bookId)
+          toDelete.push(bookId);
         })
       }
       else {
@@ -560,17 +560,32 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     })
 
+    // Individual checkboxes
+    $(".inventory-checkbox").on("change", function () {
+      const bookId = this.dataset.bookId;
+      console.log(`checked ${bookId}`)
+      if (this.checked) {
+        // Add to delete array
+        toDelete.push(bookId);
+      }
+      // if it's been unchecked
+      else {
+        toDelete.indexOf(bookId);
+        toDelete.splice(index, 1);
+      }
+    })
+
     // Functions
 
     // Condition checkbox clicked
-    function checkboxSelected(checkbox) {
+    function conditionCheckboxSelected(checkbox) {
       // Add to array call sorting function
       conditionsChecked.push(checkbox);
       sortByCondition(conditionsChecked);
     }
 
     // Condition checkbox unclicked
-    function checkboxDeselected(checkbox) {
+    function conditionCheckboxDeselected(checkbox) {
       // Remove from array call sorting function
       const index = conditionsChecked.indexOf(checkbox);
       conditionsChecked.splice(index, 1);
@@ -625,7 +640,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function addChecksDelete() {
       // Make checkboxes visible
       $("#inventory-checkbox-header").attr("hidden", false);
-      $(".inventory-checkbox").attr("hidden", false);
+      $(".checkbox-row").attr("hidden", false);
       // Change Multiple button to delete button, remove event listener, add new event listener
       $("#multiple-delete-button")
         .attr("id", "delete-button")
@@ -637,6 +652,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Delete books
+    function deleteBooks(toDelete) {
+      // Remove event listener
+      $("#delete-button").off("click");
+
+      // Get token
+      const token = $('[name="csrfmiddlewaretoken"]').val();
+
+      // Convert array to list
+      const body = JSON.stringify(toDelete);
+
+      // Make Fetch request
+      fetch("/delete_book", {
+        method: "POST",
+        body: body,
+        headers: {
+          "X-CSRFToken": token,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          window.location.href = "/inventory";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
 
     // Display result function
     function displayResult(inventory) {
