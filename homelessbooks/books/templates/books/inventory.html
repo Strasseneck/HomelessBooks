@@ -35,10 +35,8 @@
                 <li><a class="dropdown-item" href="#">Date added ascending</a></li>
             </ul>
           </li>
-          <li>
-            <button type="button" class="btn btn-outline-primary btn-sm" id="multiple-delete-button">Multiple Delete</button>
-          </li>
         </ul>
+        <button type="button" class="btn btn-outline-primary btn-sm" id="multiple-delete-button">Multiple Delete</button>
         <div class="container-fluid" id="inventory-search-container">
           <input class="form-control me-2" id="inventory-search" type="search" placeholder="Search by keyword..." aria-label="Search">
         </div>
@@ -49,6 +47,9 @@
 <table class="table table-light table-striped" id="inventory-table">
     <thead>
       <tr id="inventory-header-row">
+        <th hidden="hidden" scope="col" id="inventory-checkbox-header">
+          <input class="form-check-input" type="checkbox" value="all" id="select-all-checkbox">
+        </th>
         <th scope="col">Title</th>
         <th scope="col">Author</th>
         <th scope="col">Publisher</th>
@@ -59,7 +60,10 @@
     </thead>
     <tbody id="inventory-table-body">
     {% for book in books %}
-      <tr class="inventory-row" id="row-{{ forloop.counter }}">
+      <tr class="inventory-row" id="row-{{ forloop.counter }}" data-book-id="{{ book.id }}" >
+        <td class="inventory-checkbox" id="checkbox-{{ forloop.counter }}" hidden="hidden">
+          <input class="form-check-input" type="checkbox" value="{{ book.id }}" id="select-{{ book.id }}-checkbox">
+        </td>
         <td id="link-{{ forloop.counter }}"><a href="book/{{ book.id }}">{{ book.title }}</a></td>
         <td id="author-{{ forloop.counter }}">{{ book.authors }}</td>
         <td id="publisher-{{ forloop.counter }}">{{ book.publisher }}</td>
