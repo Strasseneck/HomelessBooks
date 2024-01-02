@@ -196,36 +196,69 @@ def get_abebooks_price(request):
 
                # Get book 
                book = Book.objects.get(id=id)
+               request.session["bookId"] = book.id
      
                # Check for isbn_13
                if book.isbn_13:
-
                     # Extract isbn 13
                     isbn = int(book.isbn_13)
 
                # Check for isbn_10
                elif book.isbn_10:
-
                     # Extract isbn_10
                     isbn = int(book.isbn_10)
 
-                # Use abebooks module to get price
+               # Use abebooks module to get price
                ab = AbeBooks()
                results = ab.getPriceByISBN(isbn)
                if results["success"]:
-                    best_used = results["pricingInfoForBestUsed"]
-               return JsonResponse({"message": "Abebook price succesfully retrieved", "best_used": best_used})
-
+                    # Store in session
+                    request.session["abebooks_price_data"] = results
+                    # Return result and message
+                    return JsonResponse({"message": "Success"})
+               else: 
+                    # If no results return message
+                    return JsonResponse({"message": "Failure"})
+               
           except json.JSONDecodeError:
                return HttpResponseBadRequest("Invalid JSON format")
           
           except Book.DoesNotExist:
                return JsonResponse({"message": "Book not found"})  
-
      else:
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
-          
+
+def display_pricecheck_results(request):
+     # Check for data in session
+     results = request.session.get("abebooks_price_data")
+     results = results["pricingInfoForBestUsed"]
+
+     if results:
+          # Get book via stored id
+          id = request.session.get("bookId")
+          book = Book.objects.get(id=id)
+
+          # Get images
+          images = list(book.images.values_list('image', flat=True))
+          first_image = images.pop(0)
+
+          # Clear out session data
+          request.session.clear()
+
+          # Render template, passing data as context
+          return render(request, "books/displaypriceresults.html", {
+               "book": book,
+               "results": results,
+               "first_image": first_image,
+               "images": images
+          })
+
+     else:
+          bookId = request.session.get("bookId")
+          new_url = f"book/{bookId}"
+          return HttpResponseRedirect("new_url")
+     
 def book(request, id):
      if request.method == "GET":
           # Get book object

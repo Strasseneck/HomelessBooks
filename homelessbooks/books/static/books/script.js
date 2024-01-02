@@ -463,25 +463,27 @@ document.addEventListener("DOMContentLoaded", function () {
     // Functions
 
     // Price comparison
-    function priceComparison(id) {
+    async function priceComparison(id) {
       // Get token
       const token = $('[name="csrfmiddlewaretoken"]').val();
 
-      // Send request via fetch
-      fetch("/get_abebooks_price", {
-        method: "POST",
-        body: id,
-        headers: { "X-CSRFToken": token
-      },
-      })
-      .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      try {
+        // Send request via fetch
+        const response = await fetch("/get_abebooks_price", {
+            method: "POST",
+            body: id,
+            headers: { "X-CSRFToken": token},
+          });
+      
+        const data = await response.json();
+        console.log(data);
+        if (data.message === "Success") {
+          window.location.href = "display_pricecheck_results"
+        }
+        } 
+        catch (error) {
+          console.error("Error", error);
+        }
     }
 
     // Delete book function
