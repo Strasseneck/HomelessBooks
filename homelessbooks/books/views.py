@@ -1,5 +1,6 @@
 import json
 import os
+from abebooks import AbeBooks
 from html import unescape
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
@@ -171,7 +172,6 @@ def delete_book(request):
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
 
-
 def edit_book(request, id):
      if request.method == "GET":
           # Get book
@@ -188,6 +188,44 @@ def edit_book(request, id):
           # For none get requests
           return HttpResponseBadRequest("Invalid request method")
 
+def get_abebooks_price(request):
+     if request.method == "POST":
+          try:
+               # Extract book's id
+               id = request.body.decode("utf-8")
+
+               # Get book 
+               book = Book.objects.get(id=id)
+     
+               # Check for isbn_13
+               if book.isbn_13:
+
+                    # Extract isbn 13
+                    isbn = int(book.isbn_13)
+
+               # Check for isbn_10
+               elif book.isbn_10:
+
+                    # Extract isbn_10
+                    isbn = int(book.isbn_10)
+
+                # Use abebooks module to get price
+               ab = AbeBooks()
+               results = ab.getPriceByISBN(isbn)
+               if results["success"]:
+                    best_used = results["pricingInfoForBestUsed"]
+               return JsonResponse({"message": "Abebook price succesfully retrieved", "best_used": best_used})
+
+          except json.JSONDecodeError:
+               return HttpResponseBadRequest("Invalid JSON format")
+          
+          except Book.DoesNotExist:
+               return JsonResponse({"message": "Book not found"})  
+
+     else:
+          # For none post requests
+          return HttpResponseBadRequest("Invalid request method")
+          
 def book(request, id):
      if request.method == "GET":
           # Get book object

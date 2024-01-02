@@ -448,13 +448,41 @@ document.addEventListener("DOMContentLoaded", function () {
   else if (currentPath.startsWith("/book")) {
     //Event listeners
 
-    // Delete book button event listener
+    // Price Comparison
+    $("#price-comparison-button").on("click", function () {
+      const bookId = this.dataset.bookId;
+      priceComparison(bookId);
+    });
+
+    // Delete book button
     $("#delete-book-button").on("click", function () {
       const id = $(this).val();
       deleteBook(id);
     });
 
     // Functions
+
+    // Price comparison
+    function priceComparison(id) {
+      // Get token
+      const token = $('[name="csrfmiddlewaretoken"]').val();
+
+      // Send request via fetch
+      fetch("/get_abebooks_price", {
+        method: "POST",
+        body: id,
+        headers: { "X-CSRFToken": token
+      },
+      })
+      .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
 
     // Delete book function
     function deleteBook(id) {
