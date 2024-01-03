@@ -26,6 +26,11 @@
     height: 200px;
 }
 
+.img-thumbnail-inventory {
+    width: 100px;
+    height: 150px;
+}
+
 #save-book-button {
     margin-top: 1vh;
 }
@@ -43,6 +48,10 @@
 }
 
 /* Inventory Page */
+
+.book-link {
+    text-decoration: none;
+}
 
 #inventory-search-container {
     width: 30vw;
