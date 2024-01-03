@@ -1,6 +1,7 @@
 import json
 import os
 from abebooks import AbeBooks, AbeResult
+from booklooker import scrape_booklooker
 from html import unescape
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
@@ -255,6 +256,45 @@ def get_abebooks_price(request):
                     # If no results return message
                     return JsonResponse({"message": "Failure"})
                
+          except json.JSONDecodeError:
+               return HttpResponseBadRequest("Invalid JSON format")
+          
+          except Book.DoesNotExist:
+               return JsonResponse({"message": "Book not found"})  
+     else:
+          # For none post requests
+          return HttpResponseBadRequest("Invalid request method")
+
+def get_booklooker_price(request):
+     if request.method == "POST":
+          try:
+               # Extract book's id
+               id = request.body.decode("utf-8")
+
+               # Get book 
+               book = Book.objects.get(id=id)
+               request.session["bookId"] = book.id
+
+               # Extract author, publisher, title
+               author = book.authors.first() 
+               publisher = book.publisher
+               title = book.title
+
+               # Create dict
+               bookInfo = {
+                    "author": author, 
+                    "publisher": publisher, 
+                    "title": title
+               }
+
+               # Call scrape function
+               booklooker_result = scrape_booklooker(bookInfo)
+
+               # Store in session
+               request.session["booklooker_price_data"] = booklooker_result
+
+               return JsonResponse({"result": booklooker_result})
+
           except json.JSONDecodeError:
                return HttpResponseBadRequest("Invalid JSON format")
           

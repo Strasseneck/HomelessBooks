@@ -3,12 +3,12 @@ from bs4 import BeautifulSoup
 
 def scrape_booklooker(bookInfo):
         # Base search url
-        base_url = "https://www.booklooker.de/B%C3%BCcher/Angebote/autor={AUTHOR}&verlag={PUBLISHER}&titel={TITLE}&oldBooks=1"
+        base_url = "https://www.booklooker.de/B%C3%BCcher/Angebote/autor={AUTHOR}&verlag={PUBLISHER}&titel={TITLE}"
         
         # Extract info for plugging into url
-        author = bookInfo.author.replace(' ', '+')
-        publisher = bookInfo.publisher.replace(' ', '+')
-        title = bookInfo.titel.replace(' ', '+')
+        author = str(bookInfo["author"]).replace(' ', '+')
+        publisher = str(bookInfo["publisher"]).replace(' ', '+')
+        title = str(bookInfo["title"]).replace(' ', '+')
 
         # Create url for query by pluggin in values
         complete_url = base_url.format(AUTHOR=author, PUBLISHER=publisher, TITLE=title)
@@ -58,22 +58,24 @@ def scrape_booklooker(bookInfo):
                                         value_text = value.get_text(strip=True)
 
                                         # Check for condition
-                                        if name_text.lower() == "zustand":
+                                        if name_text == "Zustand:":
                                                 condition = value_text
 
-                                        elif name_text.lower() == "einband":
+                                        elif name_text == "Einband:":
                                                 binding = value_text
 
                                 # Check for seller name and location
-                                seller_name = soup.find("div", class_="sellerName")
-                                seller_info = seller_name.text if seller_name else None
+                                div = soup.find("div", class_="sellerName")
+                                seller_name = div.find("span", class_="notranslate")
+
+                                seller_name = seller_name.text if seller_name else None
                                 
                                 # Create result dictionary
                                 results = {
                                         "binding": binding,
                                         "condition": condition,
                                         "price": price,
-                                        "seller": seller_info
+                                        "seller": seller_name,
                                 }
 
                                 # Return results

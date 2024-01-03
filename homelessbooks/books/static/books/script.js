@@ -462,28 +462,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Functions
 
-    // Price comparison
-    async function priceComparison(id) {
+    // Price comparison functions
+    async function priceFetchRequests(id) {
       // Get token
       const token = $('[name="csrfmiddlewaretoken"]').val();
 
-      try {
-        // Send request via fetch
-        const response = await fetch("/get_abebooks_price", {
-            method: "POST",
-            body: id,
-            headers: { "X-CSRFToken": token},
-          });
+      // Abebooks fetch request
+      const abebooksFetch = fetch("/get_abebooks_price", {
+      method: "POST",
+      body: id,
+      headers: { "X-CSRFToken": token},
+      });
+
+      // Booklooker fetch request
+      const booklookerFetch = fetch("/get_booklooker_price", {
+        method: "POST", 
+        body: id, 
+        headers: { "X-CSRFToken": token},
+      });
+
+      // Return promises
+      return Promise.all([abebooksFetch, booklookerFetch]);
       
-        const data = await response.json();
-        console.log(data);
-        if (data.message === "success") {
-          window.location.href = "display_pricecheck_results"
-        }
-        } 
-        catch (error) {
-          console.error("Error", error);
-        }
+    }
+    async function priceComparison(id) {
+      try {
+        // Get pricing data from abe and booklooker
+        const [abebookResponse, booklookerResponse] = await priceFetchRequests(id)
+
+        // Handle responses
+        const abebooksData = await abebookResponse.json();
+        const booklookerData = await booklookerResponse.json();
+
+        console.log(abebooksData);
+        console.log(booklookerData);
+      } catch (error) {
+        console.error("Error", error);
+      }
     }
 
     // Delete book function
@@ -666,11 +681,12 @@ document.addEventListener("DOMContentLoaded", function () {
       return displayResult(returnedInventory);
     }
 
-    // Add selects and delete
+    // Add checkboxes and delete button
     function addChecksDelete() {
       // Make checkboxes visible
       $("#inventory-checkbox-header").attr("hidden", false);
       $(".checkbox-row").attr("hidden", false);
+
       // Change Multiple button to delete button, remove event listener, add new event listener
       $("#multiple-delete-button")
         .attr("id", "delete-button")
@@ -679,6 +695,35 @@ document.addEventListener("DOMContentLoaded", function () {
         .on("click", function () {
           deleteBooks(toDelete);
         })
+
+      // Add cancel button
+      const $cancelButton = $("<button>")
+        .addClass("btn btn-outline-primary btn-sm")
+        .attr("id", "cancel-button")
+        .text("Cancel")
+        .on("click", removeChecksDelete);
+
+      $("#navbarSupportedContent").find('#delete-button').before($cancelButton);
+    }
+
+    // Remove checkboxes and delete button
+    function removeChecksDelete() {
+      // Clear to delete
+      toDelete = [];
+      
+      // Make checkboxes invisible
+      $("#inventory-checkbox-header").attr("hidden", true);
+      $(".checkbox-row").attr("hidden", true);
+
+      // Change delete button back to multi delet, remove event listener, add new event listener
+      $("#delete-button")
+      .attr("id", "multiple-delete-button")
+      .text("Multiple Delete")
+      .off("click")
+      .on("click", addChecksDelete);
+
+      // Remove cancel button
+      $("#cancel-button").remove();
     }
 
     // Delete books
