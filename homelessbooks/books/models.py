@@ -1,6 +1,11 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 
+class Author(models.Model):
+    name = models.CharField(max_length = 100)
+    def __str__(self):
+        return self.name
+
 class Book(models.Model):
     bookid = models.CharField(max_length=8)
     isbn_10 = models.CharField(max_length=10)
@@ -8,7 +13,7 @@ class Book(models.Model):
     title = models.CharField(max_length=750)
     language = models.CharField(max_length=2)
     subtitle = models.CharField(max_length=750)
-    authors = models.CharField(max_length=750)
+    authors = models.ManyToManyField(Author)
     publisher = models.CharField(max_length=750)
     category = models.CharField(max_length=100)
     published_date = models.CharField(max_length=8)
