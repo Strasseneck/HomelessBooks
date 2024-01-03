@@ -148,6 +148,8 @@ def delete_book(request):
                # Extract content of body
                body = request.body.decode("utf-8")
                ids = json.loads(body)
+
+               print(ids)
                
                if isinstance(ids, list):
                     # List means multiple to delete
@@ -157,9 +159,9 @@ def delete_book(request):
                          # Delete book
                          book.delete()
 
-                         deleted_ids = json.dumps(ids)
-                         # Return json response
-                         return JsonResponse({"message": "Books deleted", "ids": deleted_ids})
+                    deleted_ids = json.dumps(ids)
+                    # Return json response
+                    return JsonResponse({"message": "Books deleted", "ids": deleted_ids})
 
                elif isinstance(ids, str):
                     # String means single id
