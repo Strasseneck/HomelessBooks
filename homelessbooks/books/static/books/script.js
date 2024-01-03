@@ -477,7 +477,7 @@ document.addEventListener("DOMContentLoaded", function () {
       
         const data = await response.json();
         console.log(data);
-        if (data.message === "Success") {
+        if (data.message === "success") {
           window.location.href = "display_pricecheck_results"
         }
         } 

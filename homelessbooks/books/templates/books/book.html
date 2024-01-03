@@ -35,7 +35,7 @@
           {% if book.subtitle != "" %}
             <p>{{ book.subtitle }}</p>
           {% endif %}
-          <p>Author: {{ book.authors }}</p>
+          <p>Author(s): {% for author in book.authors.all %} {{ author.name }} {% endfor %}</p>
           <p>Publisher: {{ book.publisher }}</p>
           <div class="accordion" id="book-accordian">
             <div class="accordion-item">

@@ -1,10 +1,9 @@
 import requests
 
-
 class AbeBooks:
 
     def __get_price(self, payload):
-        url = "https://www.abebooks.com/servlet/DWRestService/pricingservice"
+        url = "https://www.abebooks.de/servlet/DWRestService/pricingservice"
         resp = requests.post(url, data=payload)
         resp.raise_for_status()
         return resp.json()
@@ -60,12 +59,17 @@ class AbeBooks:
                    'container': container}
         return self.__get_price(payload)
 
-    def getRecommendationsByISBN(self, isbn):
-        """
-        Parameters
-        ----------
-        isbn (int) - a book's ISBN code
-        """
-        payload = {'pageId': 'plp',
-                   'itemIsbn13': isbn}
-        return self.__get_recomendations(payload)
+class AbeResult:
+    def __init__(self, data):
+        self.platform = "Abebooks"
+        self.location = data.get("vendorCountryNameInSurferLanguage", "")
+        self.condition = data.get("bookCondition", "")
+        self.currency = data.get("purchaseCurrencySymbol"),
+        self.price = data.get("bestPriceInPurchaseCurrencyValueOnly", "")
+        self.postage = data.get("bestShippingToDestinationPriceInPurchaseCurrencyValueOnly", "")
+        self.total = self.calculate_total(data)
+
+    def calculate_total(self, data):
+        total_price = data.get("bestPriceInPurchaseCurrencyValueOnly", "0")
+        shipping_price = data.get("bestShippingToDestinationPriceInPurchaseCurrencyValueOnly", "0")
+        return float(total_price) + float(shipping_price)
