@@ -1,4 +1,5 @@
 import requests
+from currency_symbols import CurrencySymbols
 
 class AbeBooks:
 
@@ -64,10 +65,17 @@ class AbeResult:
         self.platform = "Abebooks"
         self.location = data.get("vendorCountryNameInSurferLanguage", "")
         self.condition = data.get("bookCondition", "")
-        self.currency = data.get("purchaseCurrencySymbol"),
+        self.currency = self.get_currency_symbol(data)
         self.price = data.get("bestPriceInPurchaseCurrencyValueOnly", "")
         self.postage = data.get("bestShippingToDestinationPriceInPurchaseCurrencyValueOnly", "")
         self.total = self.calculate_total(data)
+
+    def get_currency_symbol(self, data):
+        cs = CurrencySymbols()
+        currency = data.get("purchaseCurrencySymbol")
+        currency = currency.strip("()',")
+        return cs.get_symbol(currency)
+
 
     def calculate_total(self, data):
         total_price = data.get("bestPriceInPurchaseCurrencyValueOnly", "0")
