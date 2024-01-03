@@ -23,7 +23,7 @@
           <label for="book-subtitles">Subtitle(s)</label>
           <input type="text" class="form-control form-control-sm" id="book-subtitles" name="book-subtitles" value="{{ book.subtitle }}">
           <label for="book-authors">Author(s)</label>
-          <input type="text" class="form-control form-control-sm" id="book-authors" name="book-authors" value="{{ book.authors }}">
+          <input type="text" class="form-control form-control-sm" id="book-authors" name="book-authors" value="{% for author in book.authors.all %} {{ author.name }} {% endfor %}">
           <label for="book-publisher">Publisher</label>
           <input type="text" class="form-control form-control-sm" id="book-publisher" name="book-publisher" value="{{ book.publisher }}">
           <div class="input-group" id="book-category">

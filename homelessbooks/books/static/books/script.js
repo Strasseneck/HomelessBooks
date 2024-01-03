@@ -187,6 +187,23 @@ async function getImages(id) {
   }
 }
 
+// Add category function
+function addCategory() {
+  // Remove dropdown
+  $("#category-dropdown").remove();
+
+  // Create input and insert
+  $("<input>")
+    .addClass("form-control form-control-sm")
+    .attr("type", "text")
+    .attr("id", "new-category-input")
+    .attr("name", "book-category")
+    .prependTo("#book-category");
+
+  // Remove listener
+  $("#add-category-button").off("click", addCategory);
+}
+
 // PAGE SPECIFIC FUNCTIONS
 document.addEventListener("DOMContentLoaded", function () {
   // ADD BOOK PAGE
@@ -264,23 +281,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Generate random book id for linking images and book
     function generateRandomUid() {
       $("#book-id").val(Math.random().toString(36).substring(2, 9));
-    }
-
-    // Add category function
-    function addCategory() {
-      // Remove dropdown
-      $("#category-dropdown").remove();
-
-      // Create input and insert
-      $("<input>")
-        .addClass("form-control form-control-sm")
-        .attr("type", "text")
-        .attr("id", "new-category-input")
-        .attr("name", "book-category")
-        .prependTo("#book-category");
-
-      // Remove listener
-      $("#add-category-button").off("click", addCategory);
     }
 
     // SEARCH FUNCTIONS
@@ -600,7 +600,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       // if it's been unchecked
       else {
-        toDelete.indexOf(bookId);
+        const index = toDelete.indexOf(bookId);
         toDelete.splice(index, 1);
       }
     })
