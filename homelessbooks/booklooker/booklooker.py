@@ -67,7 +67,6 @@ class BookLooker:
                    }
             return self.__get_first_book(payload)
 
-
 class BookLookerResult:
     def __init__(self, data):
         self.platform = "Booklooker"
