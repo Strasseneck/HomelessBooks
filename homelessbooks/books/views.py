@@ -351,31 +351,32 @@ def display_pricecheck_results(request):
 
      if bl_result is not None:
            # Extract bl result
-           bl_result_isbn = BookLookerResult(bl_result.get("results_isbn")) 
-           bl_result_apt = BookLookerResult(bl_result.get("results_apt"))
+           best_result_isbn = bl_result.get("results_isbn") 
+           best_result_apt = bl_result.get("results_apt")
 
-           if bl_result_isbn is not None:
-               # If exists assign to dict    
+           if best_result_isbn is not None:
+               # If exists assign to dict 
+               bl_result_isbn = BookLookerResult(best_result_isbn)   
                Booklooker["isbn"] =  bl_result_isbn
                
-           if bl_result_apt is not None: 
+           if best_result_apt is not None: 
                # If exists assign to dict 
+               bl_result_apt = BookLookerResult(best_result_apt)
                Booklooker["apt"] = bl_result_apt
 
      # Create dict for template
      pricecheck_results = {}      
                
-     if Abebooks is not None:
-          pricecheck_results["Abebooks"] = Abebooks
+     if Abebooks:
+          pricecheck_results["abebooks_results"] = Abebooks
      
-     if Booklooker is not None:
-          pricecheck_results["Booklooker"] = Booklooker
+     if Booklooker:
+          pricecheck_results["booklooker_results"] = Booklooker
 
      else:
           # Reload original book page
           bookId = request.session.get("bookId")
-          new_url = f"book/{bookId}"
-          return HttpResponseRedirect(new_url)
+          return HttpResponseRedirect(reverse("book", args=[bookId]))
 
      # Get book via stored id
      id = request.session.get("bookId")
@@ -384,6 +385,8 @@ def display_pricecheck_results(request):
      # Get images
      images = list(book.images.values_list('image', flat=True))
      first_image = images.pop(0)
+
+     print(json.dumps(pricecheck_results))
 
      # Render template, passing data as context
      return render(request, "books/displaypriceresults.html", {
