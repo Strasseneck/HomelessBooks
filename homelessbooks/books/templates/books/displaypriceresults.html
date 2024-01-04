@@ -31,12 +31,15 @@
         <div class="col-md-8">
           <!--book card body-->
           <div class="card-body">
-            <h3 class="card-title">{{ book.title }}</h3>  
-            <p>We've found these copies of the book for price comparison</p>
+            <h3 class="card-title">{{ book.title }}</h3>
+            {% if message %}
+              <p>{{ message }}</p>
+            {% else %}
+              <p>We've found these copies of the book for price comparison!</p>
+            {% endif %}
             {% for platform, details in pricecheck_results.items %}
             {% if platform == "Abebooks_results" %}
                 {% if details %}
-                {{ details }}
                     <div class="table-responsive">
                         <table class="table table-borderless">
                             <thead>

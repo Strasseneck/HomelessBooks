@@ -379,7 +379,7 @@ def display_pricecheck_results(request):
           request.session.clear()
 
           print(pricecheck_results)
-          
+
           # Render template, passing data as context
           return render(request, "books/displaypriceresults.html", {
                "book": book,
@@ -389,9 +389,24 @@ def display_pricecheck_results(request):
           })
      
      else:
-          # Reload original book page
-          bookId = request.session.get("bookId")
-          return HttpResponseRedirect(reverse("book", args=[bookId]))
+          # Get book via stored id
+          id = request.session.get("bookId")
+          book = Book.objects.get(id=id)
+
+          # Get images
+          images = list(book.images.values_list('image', flat=True))
+          first_image = images.pop(0)
+
+          # Clear out session data
+          request.session.clear()
+
+          # Render page with message
+          return render(request, "books/displaypriceresults.html", {
+               "book": book,
+               "message": "No pricing info for this book available, sorry",
+               "first_image": first_image,
+               "images": images
+          })
      
 def book(request, id):
      if request.method == "GET":
