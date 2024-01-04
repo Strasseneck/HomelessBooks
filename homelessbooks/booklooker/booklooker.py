@@ -68,6 +68,26 @@ class BookLooker:
             return self.__get_first_book(payload)
 
 
+class BookLookerResult:
+    def __init__(self, data):
+        self.platform = "Booklooker"
+        self.binding = data.get("binding", "")
+        self.condition = data.get("condition", "")
+        self.currency = self.get_currency_symbol(data)
+        self.price = self.strip_currency_symbol(data)
+        self.seller = data.get("seller", "")
+
+    def get_currency_symbol(self, data):
+        price = data.get("price", "")
+        currency_symbols = re.findall(r'[$€£¥₹]', price)
+        if currency_symbols:
+               return currency_symbols[0]
+        return ""
+
+    def strip_currency_symbol(self, data):
+           price = data.get("price", "")
+           return re.sub(r'[$€£¥₹]', "", price).strip()
+
 
                 
 
