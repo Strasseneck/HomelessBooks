@@ -1,3 +1,10 @@
+/* Layout */
+
+:root {
+    --main-bg-color: 
+}
+
+
 /* Add Book Page */
 
 #searches-container {
@@ -53,12 +60,29 @@
     text-decoration: none;
 }
 
+#cancel-button {
+    margin: 0.5vw;
+}
+
+#delete-button {
+    margin: 0.5vw;
+}
+
+#inventory-search {
+    border-width: 3px;
+}
+
+.condition-dropdown-li {
+    padding-left: 1vw;
+}
+
 #inventory-search-container {
     width: 30vw;
     margin-left: 2vw;
     margin-right: 1vw;
 }
 
-.condition-dropdown-li {
-    padding: 1vw;
+#inventory-navbar {
+    border-bottom-color: black;
+    border-bottom-width: 1vh;
 }

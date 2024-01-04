@@ -496,6 +496,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log(abebooksData);
         console.log(booklookerData);
+
+         // Check data and redirect if successful
+         if (abebooksData.message === "success" || booklookerData.result.message === "success") {
+          window.location.href = "display_pricecheck_results";
+      }
       } catch (error) {
         console.error("Error", error);
       }
@@ -698,7 +703,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Add cancel button
       const $cancelButton = $("<button>")
-        .addClass("btn btn-outline-primary btn-sm")
+        .addClass("btn btn-outline-primary rounded")
         .attr("id", "cancel-button")
         .text("Cancel")
         .on("click", removeChecksDelete);

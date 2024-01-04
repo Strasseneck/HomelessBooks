@@ -10,21 +10,73 @@
     </head>
     <body>
         <!--navbar-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'index' %}">Homeless Books</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <a class="navbar-brand" href="#">H O M E L E S S || B O O K S</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
-                <a class="nav-link" href="{% url 'add_book' %}">Add Book</a>
-                <a class="nav-link" href="{% url 'inventory' %}">Inventory</a>
+              </button>
+              <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="offcanvasNavbarLabel">H O M E L E S S || B O O K S</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
+                <div class="offcanvas-body">
+                        <ul class="list-unstyled ps-0">
+                          <li class="mb-1">
+                            <button class="btn btn-toggle btn-dark align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
+                              Home
+                            </button>
+                            <div class="collapse" id="home-collapse" style="">
+                              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                                <li><a href="{% url 'add_book' %}" class="link-light rounded">Add New Book</a></li>
+                                <li><a href="#" class="link-light rounded">Reports</a></li>
+                              </ul>
+                            </div>
+                          </li>
+                          <li class="mb-1">
+                            <button class="btn btn-toggle btn-dark align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                              Dashboard
+                            </button>
+                            <div class="collapse" id="dashboard-collapse" style="">
+                              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                                <li><a href="{% url 'inventory' %}" class="link-light rounded">Manage Inventory</a></li>
+                                <li><a href="#" class="link-light rounded">Weekly</a></li>
+                              </ul>
+                            </div>
+                          </li>
+                          <li class="mb-1">
+                            <button class="btn btn-toggle btn-dark align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                              Orders
+                            </button>
+                            <div class="collapse" id="orders-collapse" style="">
+                              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                                <li><a href="#" class="link-light rounded">New</a></li>
+                                <li><a href="#" class="link-light rounded">Processed</a></li>
+                                <li><a href="#" class="link-light rounded">Shipped</a></li>
+                                <li><a href="#" class="link-light rounded">Returned</a></li>
+                              </ul>
+                            </div>
+                          </li>
+                          <li class="border-top my-3"></li>
+                          <li class="mb-1">
+                            <button class="btn btn-toggle btn-dark align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                              Account
+                            </button>
+                            <div class="collapse" id="account-collapse" style="">
+                              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                                <li><a href="#" class="link-light rounded">Profile</a></li>
+                                <li><a href="#" class="link-light rounded">Sign out</a></li>
+                              </ul>
+                            </div>
+                          </li>
+                        
+                  
+                  
+                </div>
+              </div>
             </div>
-            </div>
-        </nav>
+          </nav>
 {% block body %} 
 {% endblock %}
 <!--js script-->

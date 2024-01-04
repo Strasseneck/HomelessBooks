@@ -3,9 +3,8 @@
 
 {% block body %}
 <!-- inventory navbar-->
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary" id="inventory-navbar">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Inventory</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -36,15 +35,15 @@
             </ul>
           </li>
         </ul>
-        <button type="button" class="btn btn-outline-primary btn-sm" id="multiple-delete-button">Multiple Delete</button>
+        <button type="button" class="btn btn-outline-secondary rounded" id="multiple-delete-button">Multiple Delete</button>
         <div class="container-fluid" id="inventory-search-container">
-          <input class="form-control me-2" id="inventory-search" type="search" placeholder="Search by keyword..." aria-label="Search">
+          <input class="form-control me-2 rounded-pill" id="inventory-search" type="search" placeholder="Search by keyword..." aria-label="Search">
         </div>
       </div>
     </div>
   </nav>
 <!--inventory table-->
-<table class="table table-light table-striped" id="inventory-table">
+<table class="table table-light table-hover rounded" id="inventory-table">
     <thead>
       <tr id="inventory-header-row">
         <th hidden="hidden" scope="col" id="inventory-checkbox-header">
@@ -77,4 +76,5 @@
       {% endfor %}
     </tbody>
   </table>
+
 {% endblock %}
