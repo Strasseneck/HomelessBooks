@@ -32,46 +32,70 @@
           <!--book card body-->
           <div class="card-body">
             <h3 class="card-title">{{ book.title }}</h3>  
-            {% if book.subtitle != "" %}
-              <p>{{ book.subtitle }}</p>
+            <p>We've found these copies of the book for price comparison</p>
+            {% for platform, details in pricecheck_results.items %}
+            {% if platform == "Abebooks_results" %}
+                {% if details %}
+                {{ details }}
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th colspan="5">Abebooks</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">Location</th>
+                                    <th scope="col">Condition</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Postage</th>
+                                    <th scope="col">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, value in details.items  %}
+                                    <tr>
+                                        <td>{{ value.location }}</td>
+                                        <td>{{ value.condition }}</td>
+                                        <td>{{ value.price }}</td>
+                                        <td>{{ value.postage }}</td>
+                                        <td>{{ value.currency }}{{ value.total }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            {% elif platform == "Booklooker_results" %}
+                {% if details %}
+                    <div class="table-responsive">
+                        <table class="table table">
+                            <thead>
+                                <tr>
+                                    <th colspan="4">Booklooker</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">Seller</th>
+                                    <th scope="col">Condition</th>
+                                    <th scope="col">Binding</th>
+                                    <th scope="col">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, value in details.items %} 
+                                    <tr>
+                                        <td>{{ value.seller }}</td>
+                                        <td>{{ value.condition }}</td>
+                                        <td>{{ value.binding }}</td>
+                                        <td>{{ value.currency }}{{ value.price }}</td>
+                                    </tr>   
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
             {% endif %}
-            <p>Author:{% for author in book.authors.all %} {{ author.name }} {% endfor %}</p>
-            <p>Publisher: {{ book.publisher }}</p>
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Platform</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Condition</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Postage</th>
-                    <th scope="col">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if abe_results.isbn %}
-                  <tr>
-                      <td>{{ abe_results.isbn.platform }}</td>
-                      <td>{{ abe_results.isbn.location }}</td>
-                      <td>{{ abe_results.isbn.condition }}</td>
-                      <td>{{ abe_results.isbn.price}}</td>
-                      <td>{{ abe_results.isbn.postage }}</td>
-                      <td>{{ abe_results.isbn.total }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if abe_results.at %}
-                    <tr>
-                      <td>{{ abe_results.at.platform }}</td>
-                      <td>{{ abe_results.at.location }}</td>
-                      <td>{{ abe_results.at.condition }}</td>
-                      <td>{{ abe_results.at.price}}</td>
-                      <td>{{ abe_results.at.postage }}</td>
-                      <td>{{ abe_results.at.total }}</td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-              </table>
-           
+        {% endfor %}
+
         </div>
       </div>
     </div>

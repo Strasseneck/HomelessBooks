@@ -148,8 +148,6 @@ def delete_book(request):
                # Extract content of body
                body = request.body.decode("utf-8")
                ids = json.loads(body)
-
-               print(ids)
                
                if isinstance(ids, list):
                     # List means multiple to delete
@@ -203,8 +201,6 @@ def edit_book(request, id):
           return HttpResponseBadRequest("Invalid request method")
 
 def get_abebooks_price(request):
-     # Clear out session data
-     request.session.clear()
      
      if request.method == "POST":
           try:
@@ -265,9 +261,7 @@ def get_abebooks_price(request):
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
 
-def get_booklooker_price(request):
-     # Clear out session data
-     request.session.clear()
+def get_booklooker_price(request):   
      if request.method == "POST":
           try:
                # Extract book's id
@@ -301,11 +295,11 @@ def get_booklooker_price(request):
                if results_isbn is not None or results_apt is not None:
                     booklookerResult = {}
                     if results_isbn:
-                         booklookerResult["results_isbn"]: results_isbn
+                         booklookerResult["results_isbn"] = results_isbn
                     
                     if results_apt:
-                        booklookerResult["results_apt"]: results_apt
-
+                        booklookerResult["results_apt"] = results_apt
+                    
                     # Store in session
                     request.session["booklookerResult"] = booklookerResult
 
@@ -326,8 +320,8 @@ def get_booklooker_price(request):
 
 def display_pricecheck_results(request):
      # Creat dicts
-     Abebooks = {}
-     Booklooker = {}
+     Abebooks_results = {}
+     Booklooker_results = {}
 
      # Check for data in session
      abe_result = request.session.get("abeResult")
@@ -341,13 +335,12 @@ def display_pricecheck_results(request):
           if best_used_abe_isbn is not None:
                # If exists assign to dict
                abe_result_isbn = AbeResult(best_used_abe_isbn)
-               Abebooks["isbn"] = abe_result_isbn
+               Abebooks_results["isbn"] = abe_result_isbn
          
           if best_used_abe_at is not None:
                # If exists assign to dict
                abe_result_at = AbeResult(best_used_abe_at)
-               Abebooks["at"] = abe_result_at
-          
+               Abebooks_results["at"] = abe_result_at
 
      if bl_result is not None:
            # Extract bl result
@@ -357,44 +350,48 @@ def display_pricecheck_results(request):
            if best_result_isbn is not None:
                # If exists assign to dict 
                bl_result_isbn = BookLookerResult(best_result_isbn)   
-               Booklooker["isbn"] =  bl_result_isbn
+               Booklooker_results["isbn"] =  bl_result_isbn
                
            if best_result_apt is not None: 
                # If exists assign to dict 
                bl_result_apt = BookLookerResult(best_result_apt)
-               Booklooker["apt"] = bl_result_apt
+               Booklooker_results["apt"] = bl_result_apt
 
      # Create dict for template
      pricecheck_results = {}      
-               
-     if Abebooks:
-          pricecheck_results["abebooks_results"] = Abebooks
-     
-     if Booklooker:
-          pricecheck_results["booklooker_results"] = Booklooker
 
+     if Abebooks_results or Booklooker_results:         
+          if Abebooks_results:
+               pricecheck_results["Abebooks_results"] = Abebooks_results
+          
+          if Booklooker_results:
+               pricecheck_results["Booklooker_results"] = Booklooker_results
+
+          # Get book via stored id
+          id = request.session.get("bookId")
+          book = Book.objects.get(id=id)
+
+          # Get images
+          images = list(book.images.values_list('image', flat=True))
+          first_image = images.pop(0)
+
+          # Clear out session data
+          request.session.clear()
+
+          print(pricecheck_results)
+          
+          # Render template, passing data as context
+          return render(request, "books/displaypriceresults.html", {
+               "book": book,
+               "pricecheck_results": pricecheck_results,
+               "first_image": first_image,
+               "images": images
+          })
+     
      else:
           # Reload original book page
           bookId = request.session.get("bookId")
           return HttpResponseRedirect(reverse("book", args=[bookId]))
-
-     # Get book via stored id
-     id = request.session.get("bookId")
-     book = Book.objects.get(id=id)
-
-     # Get images
-     images = list(book.images.values_list('image', flat=True))
-     first_image = images.pop(0)
-
-     print(json.dumps(pricecheck_results))
-
-     # Render template, passing data as context
-     return render(request, "books/displaypriceresults.html", {
-          "book": book,
-          "pricecheck_results": pricecheck_results,
-          "first_image": first_image,
-          "images": images
-     })
      
 def book(request, id):
      if request.method == "GET":
