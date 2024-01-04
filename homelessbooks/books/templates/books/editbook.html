@@ -3,7 +3,7 @@
 
 {% block body %}
 
-<div class="container-fluid" id="edit-book-view">
+<div class="container-fluid bg-light bg-gradient" id="edit-book-view">
   <div class="container-fluid" id="edit-book-forms-container">
     <div class="mb-3">
       <form name="edit-book-form" id="edit-book-form">
@@ -91,12 +91,12 @@
           <div class="input-group mb-3">
             {% csrf_token %}
             <input type="file" accept="image/*" class="form-control" id="image-upload" name="image">
-            <button class="btn btn-outline-primary btn-sm" id="image-upload-button" type="button">Upload</button>
+            <button class="btn btn-outline-secondary btn" id="image-upload-button" type="button">Upload</button>
           </div>    
       </div>
     </form>
       <div class="container">
-        <button class="btn btn-outline-primary btn-sm" id="save-book-button" type="button">Save Book</button>
+        <button class="btn btn-outline-secondary btn" id="save-book-button" type="button">Save Book</button>
       </div>
     </div>
   </div>

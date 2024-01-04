@@ -3,26 +3,13 @@
 
 {% block body %}
 <!-- inventory navbar-->
-<nav class="navbar navbar-expand-lg bg-body-tertiary" id="inventory-navbar">
+<nav class="navbar navbar-expand-lg bg-light bg-gradient" id="inventory-navbar">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown" id="condition-sort-dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Condition
-            </a>
-            <ul class="dropdown-menu">
-                {% for condition in conditions %}
-                    <li class="condition-dropdown-li">
-                      <input class="form-check-input condition-checkbox" type="checkbox" value="{{ condition }}">
-                      <label class="form-check-label" for="condition-checkbox">{{ condition|capfirst }}</label>
-                    </li>
-                {% endfor %}  
-            </ul>
-          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Order by
@@ -53,8 +40,22 @@
         <th scope="col">Author</th>
         <th scope="col">Publisher</th>
         <th scope="col">Category</th>
-        <th scope="col">Condition</th>
-        <th scope="col">Thumbnail</th>
+        <th scope="col">
+          <div class="dropdown" id="condition-sort-dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Condition
+          </a>
+          <ul class="dropdown-menu">
+              {% for condition in conditions %}
+                  <li class="condition-dropdown-li">
+                    <input class="form-check-input condition-checkbox" type="checkbox" value="{{ condition }}">
+                    <label class="form-check-label" for="condition-checkbox">{{ condition|capfirst }}</label>
+                  </li>
+              {% endfor %}  
+          </ul>
+        </div>
+      </th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody id="inventory-table-body">
@@ -70,7 +71,7 @@
         <td id="category-{{ forloop.counter }}">{{ book.category }}</td>
         <td id="condition-{{ forloop.counter }}">{{ book.condition|capfirst }}</td>
         {% if book.images.all %}
-            <td id="image-{{ forloop.counter }}"><img class="img-thumbnail-inventory" src="{{ book.images.first.image.url }}"></td>
+            <td id="image-{{ forloop.counter }}"><img class="img-thumbnail-inventory rounded" src="{{ book.images.first.image.url }}"></td>
         {% endif %}
       </tr>
       {% endfor %}

@@ -1,10 +1,5 @@
 /* Layout */
 
-:root {
-    --main-bg-color: 
-}
-
-
 /* Add Book Page */
 
 #searches-container {
@@ -33,18 +28,20 @@
     height: 200px;
 }
 
-.img-thumbnail-inventory {
-    width: 100px;
-    height: 150px;
-}
-
 #save-book-button {
     margin-top: 1vh;
 }
 
 /* Book Page */
-
+#image-carousel-indicators .carousel-item img {
+    margin: 1vh;
+    object-fit: cover;
+    object-position: center;
+    height: 50vh;
+    overflow: hidden;
+}
 #book-container {
+    padding: 5vh;
     display: flex;
     justify-content: center;
 }
@@ -70,6 +67,10 @@
 
 #inventory-search {
     border-width: 3px;
+}
+
+.img-thumbnail-inventory {
+   width: 100px;
 }
 
 .condition-dropdown-li {
