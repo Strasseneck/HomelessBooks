@@ -9,6 +9,11 @@ class AbeBooks:
         resp.raise_for_status()
         return resp.json()
 
+    def __get_recomendations(self, payload):
+        url = "https://www.abebooks.com/servlet/RecommendationsApi"
+        resp = requests.get(url, params=payload)
+        resp.raise_for_status()
+        return resp.json()
 
     def getPriceByISBN(self, isbn):
         """
@@ -34,6 +39,27 @@ class AbeBooks:
                    'container': 'oe-search-all'}
         return self.__get_price(payload)
 
+    def getPriceByAuthorTitleBinding(self, author, title, binding):
+        """
+        Parameters
+        ----------
+        author (str) - book author
+        title (str) - book title
+        binding(str) - one of 'hard', or 'soft'
+        """
+        if binding == "hard":
+            container = "priced-from-hard"
+        elif binding == "soft":
+            container = "priced-from-soft"
+        else:
+            raise ValueError(
+                    'Invalid parameter. Binding must be "hard" or "soft"')
+        payload = {'action': 'getPricingDataForAuthorTitleBindingRefinements',
+                   'an': author,
+                   'tn': title,
+                   'container': container}
+        return self.__get_price(payload)
+
 class AbeResult:
     def __init__(self, data):
         self.platform = "Abebooks"
@@ -52,7 +78,6 @@ class AbeResult:
 
 
     def calculate_total(self, data):
-        total_price = float(data.get("bestPriceInPurchaseCurrencyValueOnly", "0"))
-        shipping_price = float(data.get("bestShippingToDestinationPriceInPurchaseCurrencyValueOnly", "0"))
-        total = total_price + shipping_price
-        return "{:.2f}".format(total)
+        total_price = data.get("bestPriceInPurchaseCurrencyValueOnly", "0")
+        shipping_price = data.get("bestShippingToDestinationPriceInPurchaseCurrencyValueOnly", "0")
+        return float(total_price) + float(shipping_price)

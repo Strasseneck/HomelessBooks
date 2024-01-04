@@ -11,7 +11,6 @@ urlpatterns = [
     path("book/<int:id>", views.book, name="book"),
     path("get_images/<int:id>", views.get_images, name="get_images"),
     path("get_abebooks_price", views.get_abebooks_price, name="get_abebooks_price"),
-    path("get_booklooker_price", views.get_booklooker_price, name="get_booker_price"),
     path("book/display_pricecheck_results", views.display_pricecheck_results, name="display_pricecheck_results"),
     path("get_api_key", views.get_api_key, name="get_api_key"),
     path("inventory", views.inventory, name="inventory")

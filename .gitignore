@@ -1,0 +1,8 @@
+# Ignore Python bytecode cache
+__pycache__
+
+# Ignore media files in homelessbooks directory
+homelessbooks/media/
+
+# Ignore the virtual environment directory
+venv/
