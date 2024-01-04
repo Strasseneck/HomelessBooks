@@ -1,7 +1,7 @@
 import json
 import os
 from abebooks import AbeBooks, AbeResult
-from booklooker import scrape_booklooker
+from booklooker import BookLooker, BookLookerResult
 from html import unescape
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
@@ -11,7 +11,6 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
 from .models import Author, Book, BookImage
 
 def index(request):
@@ -236,25 +235,26 @@ def get_abebooks_price(request):
 
                title = book.title
                
-               # Use abebooks module to get prices
+               # Use abebooks class to get prices
                ab = AbeBooks()
-               # With isbn
                results_isbn = ab.getPriceByISBN(isbn)
                results_at = ab.getPriceByAuthorTitle(author, title)
+
                if results_isbn["success"] or results_at["success"]:
-                    # Store in session
-                    request.session["abebooks_price_data_isbn"] = results_isbn 
-                    request.session["abebooks_price_data_at"] = results_at
                     # Dict to return
-                    result = {
+                    abeResult = {
                          "results_isbn" : results_isbn,
                          "results_at": results_at
                     }
+
+                    # Store in session
+                    request.session["abeResult"] = abeResult
+
                     # Return message and result
-                    return JsonResponse({"message": "success", "result" : result})
+                    return JsonResponse({"message": "success", "result": abeResult})
                else: 
                     # If no results return message
-                    return JsonResponse({"message": "Failure"})
+                    return JsonResponse({"message": "failure"})
                
           except json.JSONDecodeError:
                return HttpResponseBadRequest("Invalid JSON format")
@@ -266,6 +266,8 @@ def get_abebooks_price(request):
           return HttpResponseBadRequest("Invalid request method")
 
 def get_booklooker_price(request):
+     # Clear out session data
+     request.session.clear()
      if request.method == "POST":
           try:
                # Extract book's id
@@ -275,25 +277,43 @@ def get_booklooker_price(request):
                book = Book.objects.get(id=id)
                request.session["bookId"] = book.id
 
+               # Check for isbn_13
+               if book.isbn_13:
+                    # Extract isbn 13
+                    isbn = int(book.isbn_13)
+
+               # Check for isbn_10
+               elif book.isbn_10:
+                    # Extract isbn_10
+                    isbn = int(book.isbn_10)
+
                # Extract author, publisher, title
-               author = book.authors.first() 
+               author = list(book.authors.all())[0].name
                publisher = book.publisher
                title = book.title
+               
+               # Use booklooker class to get prices
+               bl = BookLooker()
+               results_isbn = bl.getPriceDataByISBN(isbn)
+               results_apt = bl.getPriceDataByAuthorPublisherTitle(author, publisher, title)
 
-               # Create dict
-               bookInfo = {
-                    "author": author, 
-                    "publisher": publisher, 
-                    "title": title
-               }
 
-               # Call scrape function
-               booklooker_result = scrape_booklooker(bookInfo)
+               if results_isbn is not None or results_apt is not None:
+                    booklookerResult = {}
+                    if results_isbn:
+                         booklookerResult["results_isbn"]: results_isbn
+                    
+                    if results_apt:
+                        booklookerResult["results_apt"]: results_apt
 
-               # Store in session
-               request.session["booklooker_price_data"] = booklooker_result
+                    # Store in session
+                    request.session["booklookerResult"] = booklookerResult
 
-               return JsonResponse({"result": booklooker_result})
+                    # Return message and result
+                    return JsonResponse({"message": "success", "result": booklookerResult})
+               else:
+                    # If no results return message
+                    return JsonResponse({"message": "failure"})
 
           except json.JSONDecodeError:
                return HttpResponseBadRequest("Invalid JSON format")
@@ -305,47 +325,73 @@ def get_booklooker_price(request):
           return HttpResponseBadRequest("Invalid request method")
 
 def display_pricecheck_results(request):
+     # Creat dicts
+     Abebooks = {}
+     Booklooker = {}
+
      # Check for data in session
-     results_isbn = request.session.get("abebooks_price_data_isbn")
-     results_at = request.session.get("abebooks_price_data_at")
+     abe_result = request.session.get("abeResult")
+     bl_result = request.session.get("booklookerResult")
 
-     # Extract best used price
-     results_isbn = results_isbn["pricingInfoForBestUsed"]
-     results_at = results_at["pricingInfoForBestUsed"]
+     if abe_result is not None:
+          # Extract best used price
+          best_used_abe_isbn = abe_result.get("results_isbn")["pricingInfoForBestUsed"]
+          best_used_abe_at = abe_result.get("results_at")["pricingInfoForBestUsed"]
+          
+          if best_used_abe_isbn is not None:
+               # If exists assign to dict
+               abe_result_isbn = AbeResult(best_used_abe_isbn)
+               Abebooks["isbn"] = abe_result_isbn
+         
+          if best_used_abe_at is not None:
+               # If exists assign to dict
+               abe_result_at = AbeResult(best_used_abe_at)
+               Abebooks["at"] = abe_result_at
+          
 
-     # Create dicts for display
-     result_isbn = AbeResult(results_isbn)
-     result_at = AbeResult(results_at)
+     if bl_result is not None:
+           # Extract bl result
+           bl_result_isbn = BookLookerResult(bl_result.get("results_isbn")) 
+           bl_result_apt = BookLookerResult(bl_result.get("results_apt"))
 
-     # Store in dict
-     abe_results = {
-          "isbn": result_isbn,
-          "at": result_at,
-     }
+           if bl_result_isbn is not None:
+               # If exists assign to dict    
+               Booklooker["isbn"] =  bl_result_isbn
+               
+           if bl_result_apt is not None: 
+               # If exists assign to dict 
+               Booklooker["apt"] = bl_result_apt
 
-     # Check results exist
-     if results_isbn or results_at:
-          # Get book via stored id
-          id = request.session.get("bookId")
-          book = Book.objects.get(id=id)
-
-          # Get images
-          images = list(book.images.values_list('image', flat=True))
-          first_image = images.pop(0)
-
-          # Render template, passing data as context
-          return render(request, "books/displaypriceresults.html", {
-               "book": book,
-               "abe_results": abe_results,
-               "first_image": first_image,
-               "images": images
-          })
+     # Create dict for template
+     pricecheck_results = {}      
+               
+     if Abebooks is not None:
+          pricecheck_results["Abebooks"] = Abebooks
+     
+     if Booklooker is not None:
+          pricecheck_results["Booklooker"] = Booklooker
 
      else:
           # Reload original book page
           bookId = request.session.get("bookId")
           new_url = f"book/{bookId}"
           return HttpResponseRedirect(new_url)
+
+     # Get book via stored id
+     id = request.session.get("bookId")
+     book = Book.objects.get(id=id)
+
+     # Get images
+     images = list(book.images.values_list('image', flat=True))
+     first_image = images.pop(0)
+
+     # Render template, passing data as context
+     return render(request, "books/displaypriceresults.html", {
+          "book": book,
+          "pricecheck_results": pricecheck_results,
+          "first_image": first_image,
+          "images": images
+     })
      
 def book(request, id):
      if request.method == "GET":
