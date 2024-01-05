@@ -13,7 +13,7 @@
         <!--navbar-->
         <nav class="navbar navbar-dark bg-dark bg-gradient">
             <div class="container-fluid">
-              <a class="navbar-brand" href="#">H O M E L E S S || B O O K S</a>
+              <a class="navbar-brand" href="{% url 'index' %}">H O M E L E S S || B O O K S</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -30,6 +30,7 @@
                         </button>
                         <div class="collapse" id="home-collapse" style="">
                           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                            <li><a href="{% url 'index' %}" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Dashboard</a></li>
                             <li><a href="{% url 'add_book' %}" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Add New Book</a></li>
                             <li><a href="#" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Reports</a></li>
                           </ul>
@@ -37,11 +38,12 @@
                       </li>
                       <li class="mb-1">
                         <button class="btn btn-toggle btn-dark align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-                          Dashboard
+                          Inventory
                         </button>
                         <div class="collapse" id="dashboard-collapse" style="">
                           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
-                            <li><a href="{% url 'inventory' %}" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Manage Inventory</a></li>
+                            <li><a href="{% url 'inventory' %}" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">List View</a></li>
+                            <li><a href="{% url 'inventory' %}" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Grid View</a></li>
                             <li><a href="#" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Weekly</a></li>
                           </ul>
                         </div>

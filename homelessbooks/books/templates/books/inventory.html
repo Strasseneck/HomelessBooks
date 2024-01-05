@@ -4,78 +4,82 @@
 {% block body %}
 <!-- inventory navbar-->
 <nav class="navbar navbar-expand-lg bg-light bg-gradient" id="inventory-navbar">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Order by
-            </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Price descending</a></li>
-                <li><a class="dropdown-item" href="#">Price ascending</a></li>
-                <li><a class="dropdown-item" href="#">Date added descending</a></li>
-                <li><a class="dropdown-item" href="#">Date added ascending</a></li>
-            </ul>
-          </li>
-        </ul>
-        <button type="button" class="btn btn-outline-secondary rounded" id="multiple-delete-button">Multiple Delete</button>
-        <div class="container-fluid" id="inventory-search-container">
-          <input class="form-control me-2 rounded-pill" id="inventory-search" type="search" placeholder="Search by keyword..." aria-label="Search">
-        </div>
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Order by
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Price descending</a></li>
+            <li><a class="dropdown-item" href="#">Price ascending</a></li>
+            <li><a class="dropdown-item" href="#">Date added descending</a></li>
+            <li><a class="dropdown-item" href="#">Date added ascending</a></li>
+          </ul>
+        </li>
+      </ul>
+      <button type="button" class="btn btn-secondary rounded" id="multiple-delete-button">Multiple Delete</button>
+      <div class="container-fluid" id="inventory-search-container">
+        <input class="form-control me-2 rounded-pill" id="inventory-search" type="search"
+          placeholder="Search by keyword..." aria-label="Search">
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 <!--inventory table-->
 <table class="table table-light table-hover rounded" id="inventory-table">
-    <thead>
-      <tr id="inventory-header-row">
-        <th hidden="hidden" scope="col" id="inventory-checkbox-header">
-          <input class="form-check-input" type="checkbox" value="all" id="select-all-checkbox">
-        </th>
-        <th scope="col">Title</th>
-        <th scope="col">Author</th>
-        <th scope="col">Publisher</th>
-        <th scope="col">Category</th>
-        <th scope="col">
-          <div class="dropdown" id="condition-sort-dropdown">
+  <thead>
+    <tr id="inventory-header-row">
+      <th hidden="hidden" scope="col" id="inventory-checkbox-header">
+        <input class="form-check-input" type="checkbox" value="all" id="select-all-checkbox">
+      </th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">Publisher</th>
+      <th scope="col">Category</th>
+      <th scope="col">
+        <div class="dropdown" id="condition-sort-dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Condition
           </a>
           <ul class="dropdown-menu">
-              {% for condition in conditions %}
-                  <li class="condition-dropdown-li">
-                    <input class="form-check-input condition-checkbox" type="checkbox" value="{{ condition }}">
-                    <label class="form-check-label" for="condition-checkbox">{{ condition|capfirst }}</label>
-                  </li>
-              {% endfor %}  
+            {% for condition in conditions %}
+            <li class="condition-dropdown-li">
+              <input class="form-check-input condition-checkbox" type="checkbox" value="{{ condition }}">
+              <label class="form-check-label" for="condition-checkbox">{{ condition|capfirst }}</label>
+            </li>
+            {% endfor %}
           </ul>
         </div>
       </th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody id="inventory-table-body">
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody id="inventory-table-body">
     {% csrf_token %}
     {% for book in books %}
-      <tr class="inventory-row" id="row-{{ forloop.counter }}" data-book-id="{{ book.id }}" >
-        <td class="checkbox-row" id="checkbox-{{ forloop.counter }}" hidden="hidden">
-          <input class="form-check-input inventory-checkbox" type="checkbox" data-book-id="{{ book.id }}" id="select-{{ book.id }}-checkbox">
-        </td>
-        <td id="link-{{ forloop.counter }}"><a class="book-link" href="book/{{ book.id }}">{{ book.title }}</a></td>
-        <td id="author-{{ forloop.counter }}">{% for author in book.authors.all %} {{ author.name }} {% endfor %}</td>
-        <td id="publisher-{{ forloop.counter }}">{{ book.publisher }}</td>
-        <td id="category-{{ forloop.counter }}">{{ book.category }}</td>
-        <td id="condition-{{ forloop.counter }}">{{ book.condition|capfirst }}</td>
-        {% if book.images.all %}
-            <td id="image-{{ forloop.counter }}"><img class="img-thumbnail-inventory rounded" src="{{ book.images.first.image.url }}"></td>
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <tr class="inventory-row" id="row-{{ forloop.counter }}" data-book-id="{{ book.id }}">
+      <td class="checkbox-row" id="checkbox-{{ forloop.counter }}" hidden="hidden">
+        <input class="form-check-input inventory-checkbox" type="checkbox" data-book-id="{{ book.id }}"
+          id="select-{{ book.id }}-checkbox">
+      </td>
+      <td id="link-{{ forloop.counter }}"><a class="book-link" href="book/{{ book.id }}">{{ book.title }}</a></td>
+      <td id="author-{{ forloop.counter }}">{% for author in book.authors.all %} {{ author.name }} {% endfor %}</td>
+      <td id="publisher-{{ forloop.counter }}">{{ book.publisher }}</td>
+      <td id="category-{{ forloop.counter }}">{{ book.category }}</td>
+      <td id="condition-{{ forloop.counter }}">{{ book.condition|capfirst }}</td>
+      {% if book.images.all %}
+      <td id="image-{{ forloop.counter }}"><img class="img-thumbnail-inventory rounded"
+          src="{{ book.images.first.image.url }}"></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}

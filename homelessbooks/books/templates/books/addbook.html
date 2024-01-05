@@ -14,7 +14,7 @@
     <div class="input-group" id="isbn-search-form">
       <span class="input-group-text">ISBN</span>
       <input type="text" class="form-control form-control-sm" placeholder="ISBN number"id="isbn-search" name="isbn-search" max-length="15">      
-      <input type="submit" class="btn btn-outline-secondary btn" id="isbn-submit" value="Search" name="isbn-submit">
+      <input type="submit" class="btn btn-secondary btn" id="isbn-submit" value="Search" name="isbn-submit">
     </div>
     <!--author title search form-->
     <div class="input-group" id="title-author-search-form">
@@ -23,7 +23,7 @@
       <input type="text" class="form-control form-control-sm" placeholder="Book's author" id="author-search" name="author-search">
       <input type="text" class="form-control form-control-sm" placeholder="Book's publisher" id="publisher-search" name="publisher-search">
       <input type="text" class="form-control form-control-sm" placeholder="Year published" id="year-search" name="year-search">
-      <input type="submit" class="btn btn-outline-secondary btn" id="title-author-publisher-submit" value="Search" name="title-author-publisher-submit">
+      <input type="submit" class="btn btn-secondary btn" id="title-author-publisher-submit" value="Search" name="title-author-publisher-submit">
     </div>
   </div>
   <!--new book form-->
@@ -56,7 +56,7 @@
                 <option value="{{ category }}">{{ category }}</option>
                 {% endfor %}
               </select>
-              <button class="btn btn-outline-secondary" id="add-category-button" type="button">Add category</button>
+              <button class="btn btn-secondary" id="add-category-button" type="button">Add category</button>
             </div>
             <label for="book-publication-date">Publication Date</label>
             <input type="text" class="form-control form-control-sm" id="book-publication-date" name="book-publication-date">
@@ -118,12 +118,12 @@
             <div class="input-group mb-3">
               {% csrf_token %}
               <input type="file" accept="image/*" class="form-control" id="image-upload" name="image">
-              <button class="btn btn-outline-secondary btn" id="image-upload-button" type="button">Upload</button>
+              <button class="btn btn-secondary btn" id="image-upload-button" type="button">Upload</button>
             </div>    
         </div>
       </form>
         <div class="container">
-          <button class="btn btn-outline-secondary btn" id="save-book-button" type="button">Save Book</button>
+          <button class="btn btn-secondary btn" id="save-book-button" type="button">Save Book</button>
         </div>
       </div>
   </div>

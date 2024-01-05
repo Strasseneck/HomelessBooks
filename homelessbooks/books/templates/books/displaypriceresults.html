@@ -1,103 +1,103 @@
-{% extends "books/layout.html" %}
-{% load static %}
-
-{% block body %}
+{% extends "books/layout.html" %} {% load static %} {% block body %}
 <div class="container-fluid bg-light bg-gradient" id="book-container">
-    <!--image carousel-->
-      <div class="row g-0">
-        <div class="col-md-4">
-          <div id="image-carousel-indicators" class="carousel slide">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="/media/{{ first_image }}" class="d-block w-100" alt="{{book.title}} image">
-              </div>
-              {% for image in images %}
-              <div class="carousel-item">
-                <img src="/media/{{ image }}" class="d-block w-100" alt="{{ book.title}} image">
-              </div>
-              {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel-indicators" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#image-carousel-indicators" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
+  <div class="card mb-3" style="width: 60vw">
+  <!--image carousel-->
+  <div class="row g-0">
+    <div class="col-md-4">
+      <div id="image-carousel-indicators" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="/media/{{ first_image }}" class="d-block w-100" alt="{{book.title}} image" />
           </div>
+          {% for image in images %}
+          <div class="carousel-item">
+            <img src="/media/{{ image }}" class="d-block w-100" alt="{{ book.title}} image" />
+          </div>
+          {% endfor %}
         </div>
-        <div class="col-md-8">
-          <!--book card body-->
-          <div class="card-body">
-            <h3 class="card-title">{{ book.title }}</h3>
-            {% if message %}
-              <p>{{ message }}</p>
-            {% else %}
-              <p>We've found these copies of the book for price comparison!</p>
-            {% endif %}
-            {% for platform, details in pricecheck_results.items %}
-            {% if platform == "Abebooks_results" %}
-                {% if details %}
-                    <div class="table-responsive">
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th colspan="5">Abebooks</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Location</th>
-                                    <th scope="col">Condition</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Postage</th>
-                                    <th scope="col">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for key, value in details.items  %}
-                                    <tr>
-                                        <td>{{ value.location }}</td>
-                                        <td>{{ value.condition }}</td>
-                                        <td>{{ value.price }}</td>
-                                        <td>{{ value.postage }}</td>
-                                        <td>{{ value.currency }}{{ value.total }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endif %}
-            {% elif platform == "Booklooker_results" %}
-                {% if details %}
-                    <div class="table-responsive">
-                        <table class="table table">
-                            <thead>
-                                <tr>
-                                    <th colspan="4">Booklooker</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Seller</th>
-                                    <th scope="col">Condition</th>
-                                    <th scope="col">Binding</th>
-                                    <th scope="col">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for key, value in details.items %} 
-                                    <tr>
-                                        <td>{{ value.seller }}</td>
-                                        <td>{{ value.condition }}</td>
-                                        <td>{{ value.binding }}</td>
-                                        <td>{{ value.currency }}{{ value.price }}</td>
-                                    </tr>   
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel-indicators"
+          data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#image-carousel-indicators"
+          data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
       </div>
+    </div>
+    <div class="col-md-8">
+      <!--book card body-->
+      <div class="card-body">
+        <h3 class="card-title">{{ book.title }}</h3>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% else %}
+        <p>We've found these copies of the book for price comparison!</p>
+        {% endif %} {% for platform, details in pricecheck_results.items %} 
+        {% if platform == "Abebooks_results" %} {% if details %}
+        <div class="table-responsive">
+          <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th colspan="5">Abebooks</th>
+              </tr>
+              <tr>
+                <th scope="col">Location</th>
+                <th scope="col">Condition</th>
+                <th scope="col">Price</th>
+                <th scope="col">Postage</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for key, value in details.items %}
+              <tr>
+                <td>{{ value.location }}</td>
+                <td>{{ value.condition }}</td>
+                <td>{{ value.price }}</td>
+                <td>{{ value.postage }}</td>
+                <td>{{ value.currency }}{{ value.total }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+        {% elif platform == "Booklooker_results" %}
+        {% if details %}
+        <div class="table-responsive">
+          <table class="table table">
+            <thead>
+              <tr>
+                <th colspan="4">Booklooker</th>
+              </tr>
+              <tr>
+                <th scope="col">Seller</th>
+                <th scope="col">Condition</th>
+                <th scope="col">Binding</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for key, value in details.items %}
+              <tr>
+                <td>{{ value.seller }}</td>
+                <td>{{ value.condition }}</td>
+                <td>{{ value.binding }}</td>
+                <td>{{ value.currency }}{{ value.price }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
   </div>
+</div>
+</div>
 {% endblock %}

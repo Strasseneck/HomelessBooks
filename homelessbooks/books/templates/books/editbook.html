@@ -32,7 +32,7 @@
               <option value="{{ category }}" {% if book.category == category %}selected{% endif %}>{{ category }}</option>
               {% endfor %}
             </select>
-            <button class="btn btn-outline-secondary" id="add-category-button" type="button">Add category</button>
+            <button class="btn btn-secondary" id="add-category-button" type="button">Add category</button>
           </div>
           <label for="book-publication-date">Publication Date</label>
           <input type="text" class="form-control form-control-sm" id="book-publication-date" name="book-publication-date" value="{{ book.published_date }}">
@@ -91,12 +91,12 @@
           <div class="input-group mb-3">
             {% csrf_token %}
             <input type="file" accept="image/*" class="form-control" id="image-upload" name="image">
-            <button class="btn btn-outline-secondary btn" id="image-upload-button" type="button">Upload</button>
+            <button class="btn btn-secondary btn" id="image-upload-button" type="button">Upload</button>
           </div>    
       </div>
     </form>
       <div class="container">
-        <button class="btn btn-outline-secondary btn" id="save-book-button" type="button">Save Book</button>
+        <button class="btn btn-secondary btn" id="save-book-button" type="button">Save Book</button>
       </div>
     </div>
   </div>
