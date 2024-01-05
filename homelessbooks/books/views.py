@@ -473,7 +473,10 @@ def book(request, id):
 
           # Get images
           images = list(book.images.values_list('image', flat=True))
-          first_image = images.pop(0)
+          if images:
+               first_image = images.pop(0)
+          else:
+               first_image = None
 
           return render(request, "books/book.html", {
                "book": book,

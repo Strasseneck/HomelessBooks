@@ -8,13 +8,17 @@
         <div id="image-carousel-indicators" class="carousel slide">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="/media/{{ first_image }}" class="d-block w-100" alt="{{book.title}} image" />
+                {% if first_image %}
+                  <img src="/media/{{ first_image }}" class="d-block w-100" alt="{{book.title}} image"/>
+                {% else %}
+                  <img src="/media/book_images/No-Image-Placeholder.svg" class="d-block w-100" alt="{{book.title}} image"/>
+                {% endif %}
             </div>
-            {% for image in images %}
-            <div class="carousel-item">
-              <img src="/media/{{ image }}" class="d-block w-100" alt="{{ book.title}} image" />
-            </div>
-            {% endfor %}
+              {% for image in images %}
+              <div class="carousel-item">
+                <img src="/media/{{ image }}" class="d-block w-100" alt="{{ book.title}} image" />
+              </div>
+              {% endfor %} 
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel-indicators"
             data-bs-slide="prev">

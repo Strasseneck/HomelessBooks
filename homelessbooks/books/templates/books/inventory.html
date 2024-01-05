@@ -118,6 +118,9 @@
       {% if book.images.all %}
       <td id="image-{{ forloop.counter }}"><img class="img-thumbnail-inventory rounded"
           src="{{ book.images.first.image.url }}"></td>
+      {% else %}
+      <td id="image-{{ forloop.counter }}"><img class="img-thumbnail-inventory rounded"
+        src="/media/book_images/No-Image-Placeholder.svg"></td>
       {% endif %}
     </tr>
     {% endfor %}
