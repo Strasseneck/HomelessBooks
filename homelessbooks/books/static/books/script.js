@@ -703,7 +703,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Add cancel button
       const $cancelButton = $("<button>")
-        .addClass("btn btn-outline-secondary rounded")
+        .addClass("btn btn-secondary rounded")
         .attr("id", "cancel-button")
         .text("Cancel")
         .on("click", removeChecksDelete);

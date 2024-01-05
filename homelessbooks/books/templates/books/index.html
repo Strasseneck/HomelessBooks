@@ -13,10 +13,10 @@
                         <div class="card-body">
                             <h5 class="card-title">Your Activity</h5>
                             <p class="card-text">On this page you can get an overview of your activity on the site</p>
-                            <p class="card-text">Last book listed: last_book_listed.title and link</p>
+                            <p class="card-text">Last book listed: <a href="book/{{ last_book_listed.id}}">{{ last_book_listed.title }}</a></p>
                             <p class="card-text">Last book editied: insert book and link</p>
-                            <p class="card-text">Books added without images: count and link</p> 
-                            <p class="card-text">Total books listed: total</p> 
+                            <p class="card-text">Books added without images: {{ books_without_images }}</p> 
+                            <p class="card-text">Total books listed: {{ books_listed_count }}</p> 
                             <p class="card-text">Total books added: total</p>                              
                         </div>
                     </div>
@@ -28,7 +28,11 @@
                 <div class="card mb-3" id="oldest-listing-card" style="max-width: 540px;">
                     <div class="row g-0">
                         <div class="col-md-4">
-                        <img src="/media/{{ oldest_image }}" class="img-thumbnail rounded-start" alt="image for {{ oldest_listing.title }}">
+                        {% if oldest_image %}
+                            <img src="/media/{{ oldest_image }}" class="img-thumbnail rounded-start" alt="image for {{ oldest_listing.title }}">
+                        {% else %}
+                            <img src="/media/book_images/No-Image-Placeholder.svg" class="img-thumbnail rounded-start" alt="image for {{ oldest_listing.title }}">
+                        {% endif %}
                         </div>
                         <div class="col-md-8">
                         <div class="card-body">
@@ -44,7 +48,11 @@
                 <div class="card mb-3" id="newest-listing-card" style="max-width: 540px;">
                     <div class="row g-0">
                         <div class="col-md-4">
-                        <img src="/media/{{ newest_image }}" class="img-thumbnail rounded-start" alt="image for {{ newest_listing.title }}">
+                        {% if newest_image %}    
+                            <img src="/media/{{ newest_image }}" class="img-thumbnail rounded-start" alt="image for {{ newest_listing.title }}">
+                        {% else %}
+                            <img src="/media/book_images/No-Image-Placeholder.svg" class="img-thumbnail rounded-start" alt="image for {{ oldest_listing.title }}">
+                        {% endif %}
                         </div>
                         <div class="col-md-8">
                         <div class="card-body">

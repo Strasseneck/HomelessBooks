@@ -17,8 +17,15 @@ from books.models import Author, Book, BookImage
 def index(request):
     if request.user.is_authenticated: 
          # get user info
-         current_user = request.user.id
-         user = User.objects.filter(id=current_user).first()
+         user = request.user
+
+         # Books listed by user
+         books_listed = Book.objects.filter(created_by=user)
+         books_listed_count = books_listed.count()
+         last_book_listed = books_listed.order_by("-created_at").first()
+         books_without_images = books_listed.filter(images__isnull=True).count()
+
+         print(last_book_listed)
 
          # Get data for dashboard
          books_count = Book.objects.all().count()
@@ -31,9 +38,16 @@ def index(request):
           
               # Get images
               oldest_images = list(oldest_listing.images.values_list('image', flat=True))
-              oldest_image = oldest_images.pop(0)
+              if oldest_images:
+                    oldest_image = oldest_images.pop(0)
+              else:
+                   oldest_image = None
+
               newest_images = list(newest_listing.images.values_list('image', flat=True))
-              newest_image = newest_images.pop(0)
+              if newest_images:
+                    newest_image = newest_images.pop(0)
+              else:
+                   newest_image = None
 
          return render(request, "books/index.html", {
               "books_count": books_count,
@@ -41,7 +55,10 @@ def index(request):
               "oldest_image": oldest_image,
               "newest_listing": newest_listing,
               "newest_image": newest_image,
-              "user": user      
+              "user": user,
+              "books_listed_count": books_listed_count,
+              "last_book_listed": last_book_listed, 
+              "books_without_images": books_without_images
          })
     else:
           return render(request, "books/login.html")
@@ -147,6 +164,9 @@ def save_book(request):
                # Get the just added book
                book = Book.objects.get(id=book.id)
                book.images.set(images)
+
+               # Add edited by
+               book.edited_by = request.user
                book.save()
 
                # Check for images to delete
@@ -164,6 +184,8 @@ def save_book(request):
           else:
                # Make new book and save
                book = Book(**book_data)
+               # Add created by
+               book.created_by = request.user
                # Save book
                book.save()
                # Add authors

@@ -1,5 +1,11 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.utils import timezone
+
+def get_default_user():
+    user= User.objects.get(username='joe')
+    return user.id if user else None 
 
 class Author(models.Model):
     name = models.CharField(max_length = 100)
@@ -27,6 +33,9 @@ class Book(models.Model):
     binding = models.CharField(max_length=10)
     condition = models.CharField(max_length=10)
     images = models.ManyToManyField('BookImage', related_name='photos')
+    created_at = models.DateTimeField(default=timezone.now)
+    created_by = models.ForeignKey(User, default=get_default_user, related_name='%(class)s_created', on_delete=models.PROTECT)
+    edited_by = models.ForeignKey(User, null=True, blank=True, related_name='%(class)s_edited', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.title

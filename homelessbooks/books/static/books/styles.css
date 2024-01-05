@@ -1,5 +1,52 @@
 /* Layout */
 
+#main-navbar {
+    margin-bottom: 1vh;
+    -webkit-box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+    -moz-box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+    box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+}
+
+/* Login */
+
+.login {
+    margin: 2%;
+}
+
+#login-container {
+    padding: 10%;
+    height: 100vh;
+}
+
+#login-header {
+    color:whitesmoke 
+}
+
+/* Dashboard */
+
+#dashboard-view {
+    padding: 5vh;
+    padding-top: 2.5vh;
+    height: 90vh;
+}
+
+#dashboard-view  .card {
+    margin-bottom: 2.5vh;
+    -webkit-box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+    -moz-box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+    box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+}
+
+#dashboard-view > .row {
+    margin: 1vh;
+}
+
+#dashboard-header {
+    padding-bottom: 2vh;
+}
+
+
+
 /* Add Book Page */
 
 #searches-container {
@@ -33,6 +80,7 @@
 }
 
 /* Book Page */
+
 #image-carousel-indicators .carousel-item img {
     margin: 1vh;
     object-fit: cover;
@@ -40,6 +88,13 @@
     height: 50vh;
     overflow: hidden;
 }
+
+#book-card {
+    -webkit-box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+    -moz-box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+    box-shadow: -1px 4px 4px 0px rgba(145,140,145,1);
+}
+
 #book-container {
     padding: 5vh;
     display: flex;
