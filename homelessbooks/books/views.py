@@ -15,6 +15,16 @@ from .models import Author, Book, BookImage
 
 def index(request):
     if request.method == "GET":
+         
+         # Get user data
+         
+         # Get books data
+         books_count = Book.objects.all().count()
+
+
+
+
+
          return render(request, "books/index.html")
     else:
           # For none get requests
@@ -436,14 +446,18 @@ def get_api_key(request):
 
 def inventory(request):
     if request.method == "GET":
-          # Get all books and categories
+          # Get all books and all fields from dropdowns
           books = Book.objects.all()
           categories = sorted(set(Book.objects.values_list("category", flat=True)))
           conditions = sorted(set(Book.objects.values_list("condition", flat=True)))
+          publishers = sorted(set(Book.objects.values_list("publisher", flat=True)))
+          authors = Author.objects.all().values_list("name", flat=True)
           return render(request,"books/inventory.html", {
+               "authors": authors,
                "books": books,
                "categories": categories,
-               "conditions": conditions
+               "conditions": conditions,
+               "publishers": publishers
           })
     else:
          # For none get requests

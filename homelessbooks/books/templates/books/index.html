@@ -1,5 +1,5 @@
 {% extends "books/layout.html" %} {% load static %} {% block body %}
-<div class="container-fluid">
+<div class="container-fluid bg-light bg-gradient" id="dashboard-view">
     <div class="row">
         <div class="col">
             <div class="card mb-3" style="max-width: 540px;">
@@ -36,11 +36,59 @@
                 </div>
             </div>
         </div>
+        <div class="col">
+            <div class="container-fluid">
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="..." class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Here we see the logged in users details.</p>
+                                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-body">BOOK STATISTICS TABLE</div>
+                <table class="table table-light table-hover rounded" id="book-statistics-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Handle</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td colspan="2">Larry the Bird</td>
+                        <td>@twitter</td>
+                      </tr>
+                    </tbody>
+                  </table>
             </div>
         </div>
     </div>

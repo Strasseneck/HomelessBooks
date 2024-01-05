@@ -39,9 +39,51 @@
         <input class="form-check-input" type="checkbox" value="all" id="select-all-checkbox">
       </th>
       <th scope="col">Title</th>
-      <th scope="col">Author</th>
-      <th scope="col">Publisher</th>
-      <th scope="col">Category</th>
+      <th scope="col">
+        <div class="dropdown" id="author-sort-dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Author
+          </a>
+          <ul class="dropdown-menu">
+            {% for author in authors %}
+            <li class="author-dropdown-li">
+              <input class="form-check-input author-checkbox" type="checkbox" value="{{ author }}">
+              <label class="form-check-label" for="author-checkbox">{{ author|capfirst }}</label>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="dropdown" id="publisher-sort-dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Publisher
+          </a>
+          <ul class="dropdown-menu">
+            {% for publisher in publishers %}
+            <li class="author-dropdown-li">
+              <input class="form-check-input publisher-checkbox" type="checkbox" value="{{ publisher }}">
+              <label class="form-check-label" for="publisher-checkbox">{{ publisher|capfirst }}</label>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </th>
+      <th scope="col">
+        <div class="dropdown" id="condition-sort-dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Category
+          </a>
+          <ul class="dropdown-menu">
+            {% for category in categories %}
+            <li class="category-dropdown-li">
+              <input class="form-check-input category-checkbox" type="checkbox" value="{{ category }}">
+              <label class="form-check-label" for="category-checkbox">{{ category|capfirst }}</label>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </th>
       <th scope="col">
         <div class="dropdown" id="condition-sort-dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
