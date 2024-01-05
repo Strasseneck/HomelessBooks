@@ -11,25 +11,66 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from .models import Author, Book, BookImage
+from .models import User
+from books.models import Author, Book, BookImage
 
 def index(request):
-    if request.method == "GET":
-         
-         # Get user data
-         
-         # Get books data
+    if request.user.is_authenticated: 
+         # get user info
+         current_user = request.user.id
+         user = User.objects.filter(id=current_user).first()
+
+         # Get data for dashboard
          books_count = Book.objects.all().count()
 
+         # Get oldest and newest listing
+         oldest_listings = Book.objects.all().order_by("created_at")
+         if oldest_listings:
+              oldest_listing = oldest_listings.first()
+              newest_listing = oldest_listings.last()
+          
+              # Get images
+              oldest_images = list(oldest_listing.images.values_list('image', flat=True))
+              oldest_image = oldest_images.pop(0)
+              newest_images = list(newest_listing.images.values_list('image', flat=True))
+              newest_image = newest_images.pop(0)
 
-
-
-
-         return render(request, "books/index.html")
+         return render(request, "books/index.html", {
+              "books_count": books_count,
+              "oldest_listing": oldest_listing,
+              "oldest_image": oldest_image,
+              "newest_listing": newest_listing,
+              "newest_image": newest_image,
+              "user": user      
+         })
     else:
-          # For none get requests
-          return HttpResponseBadRequest("Invalid request method")
-         
+          return render(request, "books/login.html")
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        print(username, password)
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Successful authentication
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            # Invalid login details
+            return render(request, 'books/login.html', {'error_message': 'Invalid username or password'})
+
+    else:
+         return render(request, "books/login.html")
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+@login_required    
 def add_book(request):
         if request.method == "GET":       
              # Get categories
@@ -40,7 +81,8 @@ def add_book(request):
         else:
           # For none get requests
           return HttpResponseBadRequest("Invalid request method")
-   
+
+@login_required  
 def save_book(request):
      # Check it's post
      if request.method == "POST":
@@ -152,6 +194,7 @@ def save_book(request):
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
 
+@login_required
 def delete_book(request):
      if request.method == "POST":
           try:
@@ -194,6 +237,7 @@ def delete_book(request):
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
 
+@login_required
 def edit_book(request, id):
      if request.method == "GET":
           # Get book
@@ -210,6 +254,7 @@ def edit_book(request, id):
           # For none get requests
           return HttpResponseBadRequest("Invalid request method")
 
+@login_required
 def get_abebooks_price(request):
      
      if request.method == "POST":
@@ -271,6 +316,7 @@ def get_abebooks_price(request):
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
 
+@login_required
 def get_booklooker_price(request):   
      if request.method == "POST":
           try:
@@ -328,6 +374,7 @@ def get_booklooker_price(request):
           # For none post requests
           return HttpResponseBadRequest("Invalid request method")
 
+@login_required
 def display_pricecheck_results(request):
      # Creat dicts
      Abebooks_results = {}
@@ -417,7 +464,8 @@ def display_pricecheck_results(request):
                "first_image": first_image,
                "images": images
           })
-     
+
+@login_required    
 def book(request, id):
      if request.method == "GET":
           # Get book object
@@ -436,6 +484,7 @@ def book(request, id):
           # For none get requests
           return HttpResponseBadRequest("Invalid request method")
 
+@login_required
 def get_api_key(request):
     if request.method == "GET":
           google_api_key = os.environ.get("GOOGLE_BOOKS_API_KEY")
@@ -444,6 +493,7 @@ def get_api_key(request):
           # For none get requests
           return HttpResponseBadRequest("Invalid request method")
 
+@login_required
 def inventory(request):
     if request.method == "GET":
           # Get all books and all fields from dropdowns
@@ -463,6 +513,7 @@ def inventory(request):
          # For none get requests
          return HttpResponseBadRequest("Invalid request method")
 
+@login_required
 def get_images(request, id):
       if request.method == "GET":
           # Get book

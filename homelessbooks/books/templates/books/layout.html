@@ -9,9 +9,9 @@
         <link href="{% static 'books/styles.css' %}" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
-    <body>
+    <body class="bg-light bg-gradient">
         <!--navbar-->
-        <nav class="navbar navbar-dark bg-dark bg-gradient">
+        <nav class="navbar navbar-dark bg-dark" id="main-navbar">
             <div class="container-fluid">
               <a class="navbar-brand" href="{% url 'index' %}">H O M E L E S S || B O O K S</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">

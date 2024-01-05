@@ -2,7 +2,7 @@
 <div class="container-fluid bg-light bg-gradient" id="dashboard-view">
     <div class="row">
         <div class="container" id="dashboard-header">
-            <h2>Dashboard - Welcome back User!</h2>
+            <h2>Dashboard - Welcome back {{ user|capfirst }}!</h2>
         </div>
     </div>
     <div class="row">
@@ -11,10 +11,47 @@
                 <div class="row g-0">
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">Recent Activity</h5>
-                            <p class="card-text">On this page you can get an overview of recent activity on the site</p>
-                            <p class="card-text">Last book listed: last_book_listed.title and link and thumbnail</p>
-                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            <h5 class="card-title">Your Activity</h5>
+                            <p class="card-text">On this page you can get an overview of your activity on the site</p>
+                            <p class="card-text">Last book listed: last_book_listed.title and link</p>
+                            <p class="card-text">Last book editied: insert book and link</p>
+                            <p class="card-text">Books added without images: count and link</p> 
+                            <p class="card-text">Total books listed: total</p> 
+                            <p class="card-text">Total books added: total</p>                              
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="card mb-3" id="oldest-listing-card" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                        <img src="/media/{{ oldest_image }}" class="img-thumbnail rounded-start" alt="image for {{ oldest_listing.title }}">
+                        </div>
+                        <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><a class="btn btn-outline-dark" href="book/{{ oldest_listing.id }}">Oldest Listing</a></h5>
+                            <p class="card-text">{{ oldest_listing.title }} </p>
+                            <p class="card-text">{{ oldest_listing.created_at}}</p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card mb-3" id="newest-listing-card" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                        <img src="/media/{{ newest_image }}" class="img-thumbnail rounded-start" alt="image for {{ newest_listing.title }}">
+                        </div>
+                        <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><a class="btn btn-outline-dark" href="book/{{ newest_listing.id }}">Newest Listing</a></h5>
+                            <p class="card-text">{{ newest_listing.title }} </p>
+                            <p class="card-text">{{ newest_listing.created_at}}</p>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -22,6 +59,13 @@
         </div>
         <div class="col">
         <div class="container-fluid">
+            <div class="card mb-3" id="orders-card" style="max-width: 540px;">
+                <div class="card-body">
+                    <h5 class="card-title">Orders</h5>
+                    <p class="card-text">New: 3</p>
+                    <p class="card-text">Returns: 0</p>
+                </div>
+            </div>
             <div class="card mb-3" id="listings-card" style="max-width: 540px;">
                 <div class="card-body">
                     <h5 class="card-title">Listings</h5>
@@ -30,77 +74,35 @@
                     <p class="card-text">Books Without Images: 3</p>
                 </div>
             </div>
-        </div> 
         </div>
-        <div class="col">
-            <div class="container-fluid">
-                <div class="card mb-3" id="listings-card" style="max-width: 540px;">
-                    <div class="card-body">
-                        <h5 class="card-title">Listings</h5>
-                        <p class="card-text">Active Listings: 10</p>
-                        <p class="card-text">Unlisted Books: 5</p>
-                        <p class="card-text">Books Without Images: 3</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="container-fluid">
-                    <div class="card mb-3" id="user-info-card" style="max-width: 540px;">
-                        <div class="card-body">
-                            <h5 class="card-title">User's Listed Books</h5>
-                            <table class="table table-responsive table-light align-middle rounded">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Last Day</th>
-                                        <th scope="col">Last Week</th>
-                                        <th scope="col">Last Month</th>
-                                        <th scope="col">Last Year</th>
-                                        <th scope="col">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>4</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>9</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="card" id="book-stats-card">
-                        <div class="card-body bg-light bg-gradient">
-                            <strong>Inventory Details</strong>
-                        </div>
-                        <table class="table align-middle table-light table-hover rounded" id="book-statistics-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Total Books Listed</th>
-                                    <th scope="col">Total Books Sold</th>
-                                    <th scope="col">Books Listed in last Day</th>
-                                    <th scope="col">Books Listed in last Week</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{ books_count }}</td>
-                                    <td>50</td>
-                                    <td>4</td>
-                                    <td>20</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    {% endblock %}
+    <div class="row">
+    <div class="col">
+        <div class="card" id="book-stats-card">
+            <div class="card-body bg-light bg-gradient">
+                <strong>Inventory Details</strong>
+            </div>
+            <table class="table align-middle table-light table-hover rounded" id="book-statistics-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Total Books Listed</th>
+                        <th scope="col">Total Books Sold</th>
+                        <th scope="col">Books Listed in last Day</th>
+                        <th scope="col">Books Listed in last Week</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ books_count }}</td>
+                        <td>50</td>
+                        <td>4</td>
+                        <td>20</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
