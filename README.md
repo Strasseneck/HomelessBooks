@@ -18,6 +18,3 @@ This project marks the culmination of my second CS50 course, an application for 
 
 Got to take a break because of doing Codeworks course, so here's a few pics of the current look and design. I'll do a video when I have a chance.
 
-![Local Image](/homelessbooks/media/Homeless%20books.png)
-
-![Local Image](/homelessbooks/media/homeless_books2.png)
