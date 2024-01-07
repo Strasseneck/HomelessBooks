@@ -567,7 +567,7 @@ document.addEventListener("DOMContentLoaded", function () {
   else if (currentPath.startsWith("/inventory")) {
     // Variables
     let returnedInventory = [];
-    let conditionsChecked = [];
+    let sortCheckChecked = [];
     let toDelete = [];
 
     // Event listeners
@@ -578,16 +578,17 @@ document.addEventListener("DOMContentLoaded", function () {
       searchInventory(query);
     });
 
-    // Condition sort dropdown
-    $(".condition-checkbox").on("change", function () {
+    // Sort dropdowns
+    $(".sort-checkbox").on("change", function () {
       // Check if the value is currently clicked
       const checkbox = $(this).val();
+      console.log(checkbox)
       if (this.checked) {
         // Box selected
-        conditionCheckboxSelected(checkbox);
+        sortCheckboxSelected(checkbox);
       } else {
         // Box deselected
-        conditionCheckboxDeselected(checkbox);
+        sortCheckboxDeselected(checkbox);
       }
     });
 
@@ -627,41 +628,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Functions
 
-    // Condition checkbox clicked
-    function conditionCheckboxSelected(checkbox) {
+    // Sort checkbox clicked
+    function sortCheckboxSelected(checkbox) {
+      console.log(checkbox)
       // Add to array call sorting function
-      conditionsChecked.push(checkbox);
-      sortByCondition(conditionsChecked);
+      sortCheckChecked.push(checkbox);
+      sortByChecks(sortCheckChecked);
     }
 
     // Condition checkbox unclicked
-    function conditionCheckboxDeselected(checkbox) {
+    function sortCheckboxDeselected(checkbox) {
+      console.log(checkbox)
       // Remove from array call sorting function
-      const index = conditionsChecked.indexOf(checkbox);
-      conditionsChecked.splice(index, 1);
-      sortByCondition(conditionsChecked);
+      const index = sortCheckChecked.indexOf(checkbox);
+      sortCheckChecked.splice(index, 1);
+      sortByChecks(sortCheckChecked);
     }
 
     // Sort by condition
-    function sortByCondition(conditionsChecked) {
+    function sortByChecks(sortCheckChecked) {
+      returnedInventory = []
       // Clear out array
-      returnedInventory = [];
       const rows = Array.from($(".inventory-row"));
-      if (conditionsChecked.length !== 0) {
-        // Return all matching rows
-        rows.forEach((row) => {
-          const condition = `${row.cells[5].innerText.toLowerCase()}`;
-          if (conditionsChecked.includes(condition)) {
-            returnedInventory.push(row);
-          }
-        });
-      } else {
-        // Return all rows
-        rows.forEach((row) => {
-          returnedInventory.push(row);
-        });
+      if (sortCheckChecked.length !== 0) {
+          // Return all matching rows
+          rows.forEach((row) => {
+              const $cells = $(row).find("td");
+              $cells.each(function() {
+                  const content = $(this).text().trim();
+                  if (sortCheckChecked.includes(content)) {
+                      returnedInventory.push(row);
+                  } 
+              });
+          });
       }
-      displayResult(returnedInventory);
+      if (returnedInventory.length !== 0) {
+        displayResult(returnedInventory);
+      }
+      else {
+        displayResult(rows)
+      }
+     
+     
     }
 
     // Search inventory
@@ -762,6 +770,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Display result function
     function displayResult(inventory) {
+      console.log(inventory)
       // Get currently showing rows
       const currentRows = Array.from($(".inventory-row"));
       currentRows.forEach((row) => {

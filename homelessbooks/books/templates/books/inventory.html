@@ -40,60 +40,60 @@
       </th>
       <th scope="col">Title</th>
       <th scope="col">
-        <div class="dropdown" id="author-sort-dropdown">
+        <div class="dropdown sort" id="author-sort-dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Author
           </a>
           <ul class="dropdown-menu">
             {% for author in authors %}
             <li class="author-dropdown-li">
-              <input class="form-check-input author-checkbox" type="checkbox" value="{{ author }}">
-              <label class="form-check-label" for="author-checkbox">{{ author|capfirst }}</label>
+              <input class="form-check-input sort-checkbox" type="checkbox" value="{{ author }}">
+              <label class="form-check-label" for="sort-checkbox">{{ author|capfirst }}</label>
             </li>
             {% endfor %}
           </ul>
         </div>
       </th>
       <th scope="col">
-        <div class="dropdown" id="publisher-sort-dropdown">
+        <div class="dropdown sort" id="publisher-sort-dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Publisher
           </a>
           <ul class="dropdown-menu">
             {% for publisher in publishers %}
             <li class="author-dropdown-li">
-              <input class="form-check-input publisher-checkbox" type="checkbox" value="{{ publisher }}">
-              <label class="form-check-label" for="publisher-checkbox">{{ publisher|capfirst }}</label>
+              <input class="form-check-input sort-checkbox" type="checkbox" value="{{ publisher }}">
+              <label class="form-check-label" for="sort-checkbox">{{ publisher|capfirst }}</label>
             </li>
             {% endfor %}
           </ul>
         </div>
       </th>
       <th scope="col">
-        <div class="dropdown" id="condition-sort-dropdown">
+        <div class="dropdown sort" id="category-dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Category
           </a>
           <ul class="dropdown-menu">
             {% for category in categories %}
             <li class="category-dropdown-li">
-              <input class="form-check-input category-checkbox" type="checkbox" value="{{ category }}">
-              <label class="form-check-label" for="category-checkbox">{{ category|capfirst }}</label>
+              <input class="form-check-input sort-checkbox" type="checkbox" value="{{ category }}">
+              <label class="form-check-label" for="sort-checkbox">{{ category|capfirst }}</label>
             </li>
             {% endfor %}
           </ul>
         </div>
       </th>
       <th scope="col">
-        <div class="dropdown" id="condition-sort-dropdown">
+        <div class="dropdown sort" id=" condition-dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Condition
           </a>
           <ul class="dropdown-menu">
             {% for condition in conditions %}
             <li class="condition-dropdown-li">
-              <input class="form-check-input condition-checkbox" type="checkbox" value="{{ condition }}">
-              <label class="form-check-label" for="condition-checkbox">{{ condition|capfirst }}</label>
+              <input class="form-check-input sort-checkbox" type="checkbox" value="{{ condition }}">
+              <label class="form-check-label" for="sort-checkbox">{{ condition|capfirst }}</label>
             </li>
             {% endfor %}
           </ul>
@@ -114,7 +114,7 @@
       <td id="author-{{ forloop.counter }}">{% for author in book.authors.all %} {{ author.name }} {% endfor %}</td>
       <td id="publisher-{{ forloop.counter }}">{{ book.publisher }}</td>
       <td id="category-{{ forloop.counter }}">{{ book.category }}</td>
-      <td id="condition-{{ forloop.counter }}">{{ book.condition|capfirst }}</td>
+      <td id="condition-{{ forloop.counter }}">{{ book.condition }}</td>
       {% if book.images.all %}
       <td id="image-{{ forloop.counter }}"><img class="img-thumbnail-inventory rounded"
           src="{{ book.images.first.image.url }}"></td>
