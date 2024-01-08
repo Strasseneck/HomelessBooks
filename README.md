@@ -1,6 +1,6 @@
 # CS50W-Final-Project-Homeless-Books
 
-This project is both the final project for second CS50W Web Development with Javascript and Python and a an application with real utility for a friend's book-selling business. It's primary goal is to streamline book listing and pricing and efficiently manage the inventory.
+This project is both the final project for second CS50W Web Development with Javascript and Python and an application with real utility for a friend's book-selling business. It's primary goal is to streamline book listing and pricing and efficiently manage the inventory.
 
 ## Technology Stack
 
