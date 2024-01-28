@@ -1,6 +1,6 @@
 # CS50W-Final-Project-Homeless-Books
 
-This project marks the culmination of my second CS50 course, an application for a book-selling business. It's primary goal is to streamline book listings and efficiently manage the inventory.
+This project is both the final project for second CS50W Web Development with Javascript and Python and an application with real utility for a friend's book-selling business. It's primary goal is to streamline book listing and pricing and efficiently manage the inventory.
 
 ## Technology Stack
 
@@ -13,7 +13,7 @@ This project marks the culmination of my second CS50 course, an application for 
 - I've utilized the [Abebooks Rest API](https://github.com/ravila4/abebooks) to retrieve Abebooks price info and wrap it in a custom Class for rendering.
 - Custom web scraping module leveraging Beautiful Soup to scrape Booklooker for pricing and book information.
 - Dynamic and easy to understand user interface for sorting and interacting with the seller's inventory of books.
-- Custom dark theme and look use Css and Bootstrap based on the client's preferences.
+- Custom dark theme and look based on the client's preferences.
 
 ## Images
 
