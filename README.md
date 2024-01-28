@@ -1,10 +1,10 @@
-# CS50W-Final-Project-Homeless-Books
+# HomelessBooks
 
-This project is both the final project for second CS50W Web Development with Javascript and Python and an application with real utility for a friend's book-selling business. It's primary goal is to streamline book listing and pricing and efficiently manage the inventory.
+This project is both my capstone project for CS50W Web Development with Javascript and Python and an application with real utility for a friend's book-selling business. It's primary goal is to streamline book listing and pricing and efficiently manage the inventory.
 
 ## Technology Stack
 
-- **Backend:** Developed using Django, providing a robust foundation.
+- **Backend:** Developed using Django, providing a robust foundation, makes use of Python's requests library and Beautiful Soup for webscraping.
 - **Frontend:** Utilizes JavaScript, jQuery, and Bootstrap for a user-friendly interface.
 
 ## Key Features
