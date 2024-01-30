@@ -25,7 +25,7 @@ Incorporating these APIs required the use of asynchronous requests on the client
 
 As well as that my project has a distinctly more complex dashboard and inventory view than any other project on the course. The add book view allows for upload and saving of images that are rendered as both thumbnails and stored as full sized images. The inventory search bar and selections allow for a dynamic searching experience, that required some complex DOM manipulation. 
 
-Another element that adds to the complexity of the project is the way that it takes the data returned by the Google Books API and uses that in combination with the users own input and selection to dynamically generate the book's listing in the database, automating the step of writing a description before listing it on any book sellng site.
+Another element that adds to the complexity of the project is the way that it takes the data returned by the Google Books API and uses that in combination with the users own input and selection to dynamically generate the book's listing in the database, automating the step of writing a description before listing it on any book selling site.
 
 ## Images and Video Demo
 
