@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import sys
 import os
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,11 +24,12 @@ sys.path.append(os.path.join(BASE_DIR, 'booklooker'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9tkrx*cxz6u7dg5yxi6unb!*20z2qupmit(060b15x8_^7kitv'
+# # SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = config('SECRET_KEY')
+GOOGLE_BOOKS_API_KEY = config('GOOGLE_BOOKS_API_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = []
 

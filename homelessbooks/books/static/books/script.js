@@ -215,8 +215,13 @@ document.addEventListener("DOMContentLoaded", function () {
     generateRandomUid();
 
     // Get api key via fetch function
-    let googleApiKey = getApiKey();
-
+  let googleApiKey;
+  const setApiKey = async () => {
+    googleApiKey = await getApiKey();
+  }
+  setApiKey();
+   
+  
     // Event listeners
 
     // ISBN search button event listener
@@ -261,22 +266,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // Functions
 
     // Get api keys function
-    function getApiKey() {
-      fetch("/get_api_key")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Error retrieving API key");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          googleApiKey = data.google_api_key;
-        })
-        .catch((error) => {
-          console.error(error);
-          return null;
-        });
-    }
+  async function getApiKey() {
+      try {
+        const res = await fetch('/get_api_key');
+        const data = await res.json();
+        return data.google_api_key;
+      } catch (error) {
+        console.log(error)
+      }
+}
 
     // Generate random book id for linking images and book
     function generateRandomUid() {

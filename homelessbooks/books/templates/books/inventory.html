@@ -46,7 +46,7 @@
           </a>
           <ul class="dropdown-menu">
             {% for author in authors %}
-            <li class="author-dropdown-li">
+            <li class="dropdown-li">
               <input class="form-check-input sort-checkbox" type="checkbox" value="{{ author }}">
               <label class="form-check-label" for="sort-checkbox">{{ author|capfirst }}</label>
             </li>
@@ -61,7 +61,7 @@
           </a>
           <ul class="dropdown-menu">
             {% for publisher in publishers %}
-            <li class="author-dropdown-li">
+            <li class="dropdown-li">
               <input class="form-check-input sort-checkbox" type="checkbox" value="{{ publisher }}">
               <label class="form-check-label" for="sort-checkbox">{{ publisher|capfirst }}</label>
             </li>
@@ -76,7 +76,7 @@
           </a>
           <ul class="dropdown-menu">
             {% for category in categories %}
-            <li class="category-dropdown-li">
+            <li class="dropdown-li">
               <input class="form-check-input sort-checkbox" type="checkbox" value="{{ category }}">
               <label class="form-check-label" for="sort-checkbox">{{ category|capfirst }}</label>
             </li>
@@ -91,7 +91,7 @@
           </a>
           <ul class="dropdown-menu">
             {% for condition in conditions %}
-            <li class="condition-dropdown-li">
+            <li class="dropdown-li">
               <input class="form-check-input sort-checkbox" type="checkbox" value="{{ condition }}">
               <label class="form-check-label" for="sort-checkbox">{{ condition|capfirst }}</label>
             </li>

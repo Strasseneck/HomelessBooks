@@ -1,11 +1,13 @@
 import json
 import os
+from django.conf import settings 
 from abebooks import AbeBooks, AbeResult
 from booklooker import BookLooker, BookLookerResult
 from html import unescape
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.sessions.models import Session
 from django.db import IntegrityError
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
@@ -68,13 +70,14 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        print(username, password)
-
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             # Successful authentication
             login(request, user)
+            request.session['username'] = username
+            print(request.session)
+            request.session.save()
             return HttpResponseRedirect(reverse("index"))
         else:
             # Invalid login details
@@ -83,8 +86,10 @@ def login_view(request):
     else:
          return render(request, "books/login.html")
 
+@login_required
 def logout_view(request):
     logout(request)
+    Session.objects.filter(session_key=request.session.session_key).delete()
     return HttpResponseRedirect(reverse("index"))
 
 @login_required    
@@ -222,33 +227,37 @@ def delete_book(request):
           try:
                # Extract content of body
                body = request.body.decode("utf-8")
-               ids = json.loads(body)
+               bookid = json.loads(body)
+               book = Book.objects.get(id=bookid)
+               book.delete()
+               return JsonResponse({"message": "Book deleted", "id": bookid})
+
                
-               if isinstance(ids, list):
-                    # List means multiple to delete
-                    for id in ids:
-                         # Get book
-                         book = Book.objects.get(id=id)
-                         # Delete book
-                         book.delete()
+               # if isinstance(ids, list):
+               #      # List means multiple to delete
+               #      for id in ids:
+               #           # Get book
+               #           book = Book.objects.get(id=id)
+               #           # Delete book
+               #           book.delete()
 
-                    deleted_ids = json.dumps(ids)
-                    # Return json response
-                    return JsonResponse({"message": "Books deleted", "ids": deleted_ids})
+               #      deleted_ids = json.dumps(ids)
+               #      # Return json response
+               #      return JsonResponse({"message": "Books deleted", "ids": deleted_ids})
 
-               elif isinstance(ids, str):
-                    # String means single id
-                    # Get book
-                    book = Book.objects.get(id=ids)
+               # elif isinstance(ids, str):
+               #      # String means single id
+               #      # Get book
+               #      book = Book.objects.get(id=ids)
 
-                    # Delete book
-                    book.delete()
+               #      # Delete book
+               #      book.delete()
 
-                    # Return json response
-                    return JsonResponse({"message": "Book deleted", "id": id})
-               else:
-                    # Invalid format
-                    return HttpResponseBadRequest("Invalid IDs format")
+               #      # Return json response
+               #      return JsonResponse({"message": "Book deleted", "id": id})
+               # else:
+               #      # Invalid format
+               #      return HttpResponseBadRequest("Invalid IDs format")
                
           except json.JSONDecodeError:
                return HttpResponseBadRequest("Invalid JSON format")
@@ -512,7 +521,7 @@ def book(request, id):
 @login_required
 def get_api_key(request):
     if request.method == "GET":
-          google_api_key = os.environ.get("GOOGLE_BOOKS_API_KEY")
+          google_api_key = settings.GOOGLE_BOOKS_API_KEY
           return JsonResponse({"google_api_key": google_api_key})
     else:
           # For none get requests
