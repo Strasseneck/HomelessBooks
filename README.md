@@ -29,6 +29,6 @@ Another element that adds to the complexity of the project is the way that it ta
 
 ## Images and Video Demo
 
-
+[![Watch the video)](https://youtu.be/h8NpB0JFngs)
 
 
