@@ -29,6 +29,7 @@ Another element that adds to the complexity of the project is the way that it ta
 
 ## Images and Video Demo
 
-[![Watch the video)](https://youtu.be/h8NpB0JFngs)
+[<img src="https://img.youtube.com/vi/h8NpB0JFngs/hqdefault.jpg" width="600" height="300"
+/>](https://www.youtube.com/embed/h8NpB0JFngs)
 
 
